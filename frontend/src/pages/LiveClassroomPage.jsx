@@ -48,7 +48,7 @@ export default function LiveClassroomPage() {
     try {
       const res = await api.getLiveClassById(classId);
       if (res.success) {
-        setActiveClass(res.live_class);
+        setActiveClass(res.liveClass || res.live_class);
       }
     } catch (e) {
       console.error(e);
@@ -64,7 +64,7 @@ export default function LiveClassroomPage() {
       if (res.success) {
         setActiveClass(prev => ({
           ...prev,
-          messages: [...(prev.messages || []), res.message_data]
+          messages: [...(prev.messages || []), res.message || res.message_data]
         }));
         setChatMessage('');
       }
@@ -189,7 +189,9 @@ export default function LiveClassroomPage() {
               activeClass?.messages?.map((msg, idx) => (
                 <div key={idx} style={{ padding: '0.625rem', borderRadius: 'var(--radius-md)', backgroundColor: '#0f172a', border: '1px solid var(--border-color)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--secondary)' }}>{msg.user_name}</span>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--secondary)' }}>
+                      {msg.user_name || `${msg.first_name || ''} ${msg.last_name || ''}`.trim() || 'Officer'}
+                    </span>
                     <span style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>{msg.created_at ? new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Now'}</span>
                   </div>
                   <p style={{ fontSize: '0.8125rem', color: 'var(--text-main)', margin: 0 }}>{msg.message}</p>

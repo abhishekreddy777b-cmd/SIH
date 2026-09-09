@@ -95,7 +95,7 @@ export default function CertificatesPage() {
                 {cert.course_title}
               </h3>
               <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
-                Awarded to <strong>{cert.user_name || 'Trainee Officer'}</strong> on {new Date(cert.issue_date).toLocaleDateString()} by Ministry of Earth Sciences.
+                Awarded to <strong>{cert.user_name || 'Trainee Officer'}</strong> on {new Date(cert.issue_date || cert.issued_at || cert.created_at || Date.now()).toLocaleDateString()} by Ministry of Earth Sciences.
               </p>
 
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>

@@ -8,7 +8,7 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend
 } from 'recharts';
 import {
-  Gauge, BookMarked, FileCheck, Clock, TrendingUp, Video, ArrowRight, AlertTriangle, RefreshCw, Zap, Send
+  Gauge, BookMarked, FileCheck, Clock, TrendingUp, Video, ArrowRight, AlertTriangle, RefreshCw, Zap, Send, Sparkles
 } from 'lucide-react';
 
 export default function ScientistDashboard() {
@@ -64,12 +64,15 @@ export default function ScientistDashboard() {
   };
 
   // Format data for Radar Chart
-  const radarData = competencies.slice(0, 6).map(c => ({
-    subject: c.name.length > 16 ? c.name.substring(0, 16) + '...' : c.name,
-    current: c.current_score || 50,
-    target: c.target_score || 85,
-    fullMark: 100
-  }));
+  const radarData = competencies.slice(0, 6).map(c => {
+    const name = c.name || c.competency_name || 'Competency';
+    return {
+      subject: name.length > 16 ? name.substring(0, 16) + '...' : name,
+      current: c.current_score || c.score || 50,
+      target: c.target_score || 85,
+      fullMark: 100
+    };
+  });
 
   const activeGapsCount = skillGaps.filter(g => g.status === 'active').length;
   const avgCompetencyScore = competencies.length > 0

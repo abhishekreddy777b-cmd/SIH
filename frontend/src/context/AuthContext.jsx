@@ -38,8 +38,8 @@ export const AuthProvider = ({ children }) => {
     if (res.success) {
       localStorage.setItem('velora_token', res.token);
       setUser(res.user);
-      return res;
     }
+    return res;
   };
 
   const register = async (userData) => {
@@ -47,8 +47,8 @@ export const AuthProvider = ({ children }) => {
     if (res.success) {
       localStorage.setItem('velora_token', res.token);
       setUser(res.user);
-      return res;
     }
+    return res;
   };
 
   const switchDemoAccount = async (role) => {

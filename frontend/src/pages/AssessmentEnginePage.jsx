@@ -101,7 +101,9 @@ export default function AssessmentEnginePage() {
                     <div style={{ backgroundColor: '#0f172a', padding: '0.875rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
                         <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase', display: 'block' }}>Last Attempt Score</span>
-                        <strong style={{ fontSize: '1.1rem', color: attempt.passed ? '#34d399' : '#f87171' }}>{attempt.score_percentage}%</strong>
+                        <strong style={{ fontSize: '1.1rem', color: attempt.passed ? '#34d399' : '#f87171' }}>
+                          {attempt.percentage !== undefined ? attempt.percentage : attempt.score_percentage}%
+                        </strong>
                       </div>
                       <Badge variant={attempt.passed ? 'success' : 'danger'}>
                         {attempt.passed ? 'PASSED' : 'RE-TAKE REQUIRED'}

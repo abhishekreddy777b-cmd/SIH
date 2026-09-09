@@ -22,8 +22,7 @@ export default function Sidebar() {
 
   const trainerNav = [
     { label: 'Dashboard', path: '/trainer', icon: LayoutGrid },
-    { label: 'Course Builder', path: '/trainer/courses', icon: BookMarked },
-    { label: 'New Course', path: '/trainer/courses/new', icon: BookMarked },
+    { label: 'Course Builder', path: '/trainer/courses/new', icon: BookMarked },
     { label: 'Live Classes', path: '/live-classes', icon: Video },
     { label: 'Messages', path: '/messages', icon: Megaphone }
   ];

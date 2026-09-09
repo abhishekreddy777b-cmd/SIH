@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
       ORDER BY CASE WHEN lc.status = 'live' THEN 1 WHEN lc.status = 'scheduled' THEN 2 ELSE 3 END, lc.scheduled_at ASC
     `);
 
-    res.json({ success: true, count: classes.length, classes });
+    res.json({ success: true, count: classes.length, classes, live_classes: classes });
   } catch (err) {
     console.error('Fetch live classes error:', err);
     res.status(500).json({ success: false, message: 'Server error fetching live classes.' });

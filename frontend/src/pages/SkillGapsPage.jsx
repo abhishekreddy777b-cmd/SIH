@@ -104,28 +104,29 @@ export default function SkillGapsPage() {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {skillGaps.map(gap => {
-            const gapSeverity = gap.gap_score > 25 ? 'High Deficit' : gap.gap_score > 15 ? 'Moderate' : 'Minor';
-            const badgeVariant = gap.gap_score > 25 ? 'danger' : gap.gap_score > 15 ? 'warning' : 'primary';
+            const gapVal = gap.gap_score !== undefined ? gap.gap_score : (gap.gap !== undefined ? gap.gap : 0);
+            const gapSeverity = gapVal > 25 ? 'High Deficit' : gapVal > 15 ? 'Moderate' : 'Minor';
+            const badgeVariant = gapVal > 25 ? 'danger' : gapVal > 15 ? 'warning' : 'primary';
 
             return (
-              <div key={gap.id} className="velora-card velora-card-glass" style={{ borderLeft: `4px solid ${gap.gap_score > 25 ? 'var(--danger)' : 'var(--warning)'}` }}>
+              <div key={gap.id} className="velora-card velora-card-glass" style={{ borderLeft: `4px solid ${gapVal > 25 ? 'var(--danger)' : 'var(--warning)'}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
 
                   <div style={{ flex: 1, minWidth: '280px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                       <Badge variant={badgeVariant}>{gapSeverity}</Badge>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Category: {gap.category}</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Category: {gap.category || 'Competency Gap'}</span>
                     </div>
 
                     <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.35rem' }}>
-                      {gap.competency_name}
+                      {gap.competency_name || gap.name || 'Domain Competency'}
                     </h3>
                     <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-                      Target Score: <strong style={{ color: 'var(--secondary)' }}>{gap.target_score}</strong> | Current Score: <strong style={{ color: 'var(--text-main)' }}>{gap.current_score}</strong> | Gap Deficit: <strong style={{ color: '#f87171' }}>-{gap.gap_score} pts</strong>
+                      Target Score: <strong style={{ color: 'var(--secondary)' }}>{gap.target_score || 80}</strong> | Current Score: <strong style={{ color: 'var(--text-main)' }}>{gap.current_score || 0}</strong> | Gap Deficit: <strong style={{ color: '#f87171' }}>-{gapVal} pts</strong>
                     </p>
 
                     <div style={{ marginTop: '0.75rem', maxWidth: '400px' }}>
-                      <ProgressBar progress={gap.current_score} height="8px" color="linear-gradient(90deg, #f59e0b, #ef4444)" />
+                      <ProgressBar progress={gap.current_score || 0} height="8px" color="linear-gradient(90deg, #f59e0b, #ef4444)" />
                     </div>
                   </div>
 

@@ -73,10 +73,13 @@ export default function AdminDashboard() {
     { name: 'NCMRWF Modeling', trainees: 8 }
   ];
 
-  const categoryGapData = topGaps.length > 0 ? topGaps.slice(0, 5).map(g => ({
-    name: g.competency_name.length > 16 ? g.competency_name.substring(0, 16) + '...' : g.competency_name,
-    value: g.affected_trainees || 1
-  })) : [
+  const categoryGapData = topGaps.length > 0 ? topGaps.slice(0, 5).map(g => {
+    const name = g.competency_name || g.name || 'Competency Gap';
+    return {
+      name: name.length > 16 ? name.substring(0, 16) + '...' : name,
+      value: g.affected_trainees || g.gap_count || 1
+    };
+  }) : [
     { name: 'Numerical Weather', value: 14 },
     { name: 'Radar Meteorology', value: 8 },
     { name: 'Satellite Imagery', value: 11 }

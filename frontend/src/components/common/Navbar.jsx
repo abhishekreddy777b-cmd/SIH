@@ -160,7 +160,7 @@ export default function Navbar() {
         {user ? (
           <>
             {/* Notification Bell */}
-            <RouterLink to="/notifications" style={{ position: 'relative', display: 'flex', alignItems: 'center', color: 'var(--text-muted)', transition: 'var(--transition)' }} onMouseEnter={(e) => e.target.style.color = 'var(--warning)'} onMouseLeave={(e) => e.target.style.color = 'var(--text-muted)'}>
+            <RouterLink to="/notifications" style={{ position: 'relative', display: 'flex', alignItems: 'center', color: 'var(--text-muted)', transition: 'var(--transition)' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--warning)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>
               <Bell size={19} />
               {unreadNotifs > 0 && (
                 <span style={{
@@ -227,11 +227,11 @@ export default function Navbar() {
                   padding: '0.5rem',
                   zIndex: 1050
                 }}>
-                  <RouterLink to="/profile" onClick={() => setShowUserMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem', color: 'var(--text-main)', borderRadius: '6px', fontSize: '0.8rem', textDecoration: 'none', transition: 'var(--transition)' }} onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--primary-light)'} onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}>
+                  <RouterLink to="/profile" onClick={() => setShowUserMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem', color: 'var(--text-main)', borderRadius: '6px', fontSize: '0.8rem', textDecoration: 'none', transition: 'var(--transition)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-light)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
                     <User size={16} /> My Profile
                   </RouterLink>
                   <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '0.35rem 0' }}></div>
-                  <button onClick={logout} style={{ width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem', color: 'var(--danger)', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.8rem', borderRadius: '6px', transition: 'var(--transition)' }} onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--danger-light)'} onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}>
+                  <button onClick={logout} style={{ width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem', color: 'var(--danger)', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.8rem', borderRadius: '6px', transition: 'var(--transition)' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--danger-light)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
                     <LogOut size={16} /> Sign Out
                   </button>
                 </div>

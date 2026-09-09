@@ -95,7 +95,7 @@ export const api = {
 
   // Analytics & Admin
   getAnalyticsDashboard: () => request('/analytics/dashboard'),
-  exportAnalyticsCSV: () => `${API_BASE_URL}/analytics/export-csv`,
+  exportAnalyticsCSV: () => `${API_BASE_URL}/analytics/export-csv${localStorage.getItem('velora_token') ? `?token=${localStorage.getItem('velora_token')}` : ''}`,
 
   // Notifications & Announcements
   getNotifications: () => request('/notifications'),

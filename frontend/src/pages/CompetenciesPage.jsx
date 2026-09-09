@@ -89,8 +89,10 @@ export default function CompetenciesPage() {
       ) : (
         <div className="grid-cols-3">
           {filteredCompetencies.map(comp => {
-            const currentScore = comp.current_score || 0;
-            const targetScore = comp.target_score || 85;
+            const name = comp.name || comp.competency_name || 'Competency';
+            const level = comp.proficiency_level || comp.level || 'Beginner';
+            const currentScore = comp.current_score || comp.score || 0;
+            const targetScore = comp.target_score || 80;
             const hasGap = currentScore < targetScore;
             const gapAmount = targetScore - currentScore;
 
@@ -98,16 +100,16 @@ export default function CompetenciesPage() {
               <div key={comp.id} className="velora-card velora-card-interactive" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                    <Badge variant={getLevelVariant(comp.proficiency_level)}>
-                      {comp.proficiency_level || 'Beginner'}
+                    <Badge variant={getLevelVariant(level)}>
+                      {level}
                     </Badge>
                     <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--secondary)' }}>
-                      {comp.category}
+                      {comp.category || 'General'}
                     </span>
                   </div>
 
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
-                    {comp.name}
+                    {name}
                   </h3>
                   <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
                     {comp.description}

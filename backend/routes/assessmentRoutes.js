@@ -3,6 +3,25 @@ const router = express.Router();
 const db = require('../config/database');
 const { authenticateToken } = require('../middleware/auth');
 
+// GET /api/assessments/attempts/me - Current user's attempt history
+router.get('/attempts/me', authenticateToken, async (req, res) => {
+  try {
+    const attempts = await db.all(`
+      SELECT aa.*, a.title as assessment_title, a.passing_score, c.title as course_title
+      FROM assessment_attempts aa
+      JOIN assessments a ON aa.assessment_id = a.id
+      LEFT JOIN courses c ON a.course_id = c.id
+      WHERE aa.user_id = ?
+      ORDER BY aa.started_at DESC
+    `, [req.user.id]);
+
+    res.json({ success: true, count: attempts.length, attempts });
+  } catch (err) {
+    console.error('Fetch attempts error:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
 // GET /api/assessments - List assessments
 router.get('/', async (req, res) => {
   try {
@@ -90,10 +109,39 @@ router.post('/:id/submit', authenticateToken, async (req, res) => {
     const answerResults = [];
     const competencyPerformance = {}; // { [compId]: { scored: X, total: Y } }
 
+    // Handle answers as object or array
+    let answersObj = {};
+    if (Array.isArray(answers)) {
+      answers.forEach(item => {
+        answersObj[item.question_id] = item.selected_option !== undefined ? item.selected_option : item.selected_answer;
+      });
+    } else if (answers && typeof answers === 'object') {
+      answersObj = answers;
+    }
+
     for (const q of questions) {
       totalMarks += q.marks;
-      const selected = answers ? answers[q.id] : null;
-      const isCorrect = selected && selected.toString().trim() === q.correct_answer.toString().trim();
+      const selected = answersObj ? answersObj[q.id] : null;
+      let isCorrect = false;
+
+      if (selected !== undefined && selected !== null) {
+        let selStr = selected.toString().trim();
+        let targetStr = q.correct_answer.toString().trim();
+
+        // Check numeric index matching (if selected is index 0, 1, 2...)
+        let parsedOpts = [];
+        try {
+          parsedOpts = typeof q.options === 'string' ? JSON.parse(q.options) : q.options;
+        } catch (e) {
+          parsedOpts = [];
+        }
+
+        if (typeof selected === 'number' && parsedOpts[selected] !== undefined) {
+          selStr = parsedOpts[selected].toString().trim();
+        }
+
+        isCorrect = selStr.toLowerCase() === targetStr.toLowerCase();
+      }
 
       if (isCorrect) {
         score += q.marks;
@@ -179,6 +227,10 @@ router.post('/:id/submit', authenticateToken, async (req, res) => {
     res.json({
       success: true,
       message: passed ? 'Congratulations! You passed the assessment!' : 'Assessment completed. Review recommendations to improve.',
+      score_percentage: percentage,
+      score,
+      total_questions: questions.length,
+      passed: Boolean(passed),
       result: {
         attempt_id: attemptId,
         score,
@@ -191,25 +243,6 @@ router.post('/:id/submit', authenticateToken, async (req, res) => {
   } catch (err) {
     console.error('Submit assessment error:', err);
     res.status(500).json({ success: false, message: 'Server error submitting assessment.' });
-  }
-});
-
-// GET /api/assessments/attempts/me - Current user's attempt history
-router.get('/attempts/me', authenticateToken, async (req, res) => {
-  try {
-    const attempts = await db.all(`
-      SELECT aa.*, a.title as assessment_title, a.passing_score, c.title as course_title
-      FROM assessment_attempts aa
-      JOIN assessments a ON aa.assessment_id = a.id
-      LEFT JOIN courses c ON a.course_id = c.id
-      WHERE aa.user_id = ?
-      ORDER BY aa.started_at DESC
-    `, [req.user.id]);
-
-    res.json({ success: true, count: attempts.length, attempts });
-  } catch (err) {
-    console.error('Fetch attempts error:', err);
-    res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
 
