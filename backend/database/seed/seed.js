@@ -18,6 +18,7 @@ const bcrypt = require('bcryptjs');
 
 const schema = `
 DROP TABLE IF EXISTS learning_paths;
+DROP TABLE IF EXISTS user_moderation_history;
 DROP TABLE IF EXISTS messages;
 DROP TABLE IF EXISTS announcements;
 DROP TABLE IF EXISTS notifications;
@@ -68,6 +69,18 @@ CREATE TABLE IF NOT EXISTS users (
   status TEXT DEFAULT 'active',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS user_moderation_history (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  changed_by INTEGER NOT NULL,
+  old_status TEXT,
+  new_status TEXT NOT NULL,
+  reason TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (changed_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS trainee_profiles (

@@ -13,12 +13,13 @@ export default function CourseBuilderPage() {
 
   const [formData, setFormData] = useState({
     title: '',
-    category: 'Numerical Weather Prediction',
-    level: 'intermediate',
+    short_description: '',
+    category: 'Materials Characterization',
+    difficulty: 'intermediate',
     duration_hours: 4,
     description: '',
     competency_id: 1,
-    prerequisites: 'Basic Meteorology'
+    prerequisites: 'Basic scientific background'
   });
 
   useEffect(() => {
@@ -40,7 +41,19 @@ export default function CourseBuilderPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await api.createCourse(formData);
+      const payload = {
+        title: formData.title,
+        short_description: formData.short_description || formData.description?.slice(0, 160) || '',
+        description: formData.description,
+        category: formData.category,
+        difficulty: formData.difficulty,
+        duration_hours: Number(formData.duration_hours) || 4,
+        max_students: 100,
+        is_free: 1,
+        competencies: [Number(formData.competency_id)].filter(Boolean)
+      };
+
+      const res = await api.createCourse(payload);
       if (res.success) {
         toast.success('Course created successfully!');
         navigate('/trainer');
@@ -89,11 +102,11 @@ export default function CourseBuilderPage() {
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               >
-                <option value="Numerical Weather Prediction">Numerical Weather Prediction</option>
-                <option value="Radar Meteorology">Radar Meteorology</option>
-                <option value="Satellite Meteorology">Satellite Meteorology</option>
-                <option value="Oceanographic Modeling">Oceanographic Modeling</option>
-                <option value="Seismology & Tsunami Warning">Seismology & Tsunami Warning</option>
+                <option value="Materials Characterization">Materials Characterization</option>
+                <option value="Microstructural Analysis">Microstructural Analysis</option>
+                <option value="Surface Engineering">Surface Engineering</option>
+                <option value="Scientific Data Analysis">Scientific Data Analysis</option>
+                <option value="Laboratory Safety">Laboratory Safety</option>
               </select>
             </div>
 
@@ -101,8 +114,8 @@ export default function CourseBuilderPage() {
               <label className="form-label">Difficulty Level</label>
               <select
                 className="form-control"
-                value={formData.level}
-                onChange={(e) => setFormData({ ...formData, level: e.target.value })}
+                value={formData.difficulty}
+                onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
               >
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
@@ -135,6 +148,17 @@ export default function CourseBuilderPage() {
                 onChange={(e) => setFormData({ ...formData, duration_hours: parseInt(e.target.value) })}
               />
             </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Short Description</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Brief overview for course listings"
+              value={formData.short_description}
+              onChange={(e) => setFormData({ ...formData, short_description: e.target.value })}
+            />
           </div>
 
           <div className="form-group">

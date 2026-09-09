@@ -37,6 +37,7 @@ const messageRoutes = require('./routes/messageRoutes');
 const noteRoutes = require('./routes/noteRoutes');
 const bookmarkRoutes = require('./routes/bookmarkRoutes');
 const searchRoutes = require('./routes/searchRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 // Mount API Routes
 app.use('/api/auth', authRoutes);
@@ -58,6 +59,8 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/uploads', uploadRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health Check Endpoint
 app.get('/api/health', (req, res) => {

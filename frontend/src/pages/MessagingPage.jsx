@@ -21,9 +21,14 @@ export default function MessagingPage() {
     try {
       const res = await api.getConversations();
       if (res.success) {
-        setConversations(res.conversations || []);
-        if (res.conversations.length > 0) {
-          loadThread(res.conversations[0]);
+        const list = res.conversations || [];
+        setConversations(list);
+        if (list.length > 0) {
+          const firstPartner = list[0].user || list[0];
+          loadThread(firstPartner);
+        } else {
+          setActivePartner(null);
+          setThreadMessages([]);
         }
       }
     } catch (e) {
@@ -34,9 +39,12 @@ export default function MessagingPage() {
   };
 
   const loadThread = async (partner) => {
-    setActivePartner(partner);
+    const partnerUser = partner?.user || partner;
+    if (!partnerUser) return;
+
+    setActivePartner(partnerUser);
     try {
-      const res = await api.getMessageThread(partner.id);
+      const res = await api.getMessageThread(partnerUser.id);
       if (res.success) {
         setThreadMessages(res.messages || []);
       }
@@ -50,9 +58,14 @@ export default function MessagingPage() {
     if (!newMsg.trim() || !activePartner) return;
     setSending(true);
     try {
-      const res = await api.sendMessage({ receiver_id: activePartner.id, message: newMsg });
+      const res = await api.sendMessage({ receiver_id: activePartner.id, content: newMsg.trim() });
       if (res.success) {
-        setThreadMessages(prev => [...prev, res.message]);
+        const incomingMessage = res.message || { sender_id: activePartner.id, receiver_id: activePartner.id, content: newMsg.trim() };
+        setThreadMessages(prev => [...prev, {
+          ...incomingMessage,
+          message: incomingMessage.message || incomingMessage.content,
+          content: incomingMessage.content || incomingMessage.message
+        }]);
         setNewMsg('');
       }
     } catch (e) {
@@ -73,22 +86,31 @@ export default function MessagingPage() {
         {/* CONVERSATION PARTNERS SIDEBAR */}
         <div style={{ width: '240px', borderRight: '1px solid var(--border-color)', paddingRight: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase' }}>Conversations</span>
-          {conversations.map(conv => (
-            <div
-              key={conv.id}
-              onClick={() => loadThread(conv)}
-              style={{
-                padding: '0.625rem',
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: activePartner?.id === conv.id ? 'var(--primary-light)' : 'transparent',
-                cursor: 'pointer',
-                border: activePartner?.id === conv.id ? '1px solid var(--primary)' : '1px solid transparent'
-              }}
-            >
-              <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text-main)' }}>{conv.first_name} {conv.last_name}</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--secondary)' }}>{conv.role}</div>
+          {conversations.length === 0 ? (
+            <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', paddingTop: '0.5rem' }}>
+              No messages yet.
             </div>
-          ))}
+          ) : (
+            conversations.map(conv => {
+              const partner = conv.user || conv;
+              return (
+                <div
+                  key={partner.id}
+                  onClick={() => loadThread(conv)}
+                  style={{
+                    padding: '0.625rem',
+                    borderRadius: 'var(--radius-md)',
+                    backgroundColor: activePartner?.id === partner.id ? 'var(--primary-light)' : 'transparent',
+                    cursor: 'pointer',
+                    border: activePartner?.id === partner.id ? '1px solid var(--primary)' : '1px solid transparent'
+                  }}
+                >
+                  <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text-main)' }}>{partner.first_name} {partner.last_name}</div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--secondary)' }}>{partner.role}</div>
+                </div>
+              );
+            })
+          )}
         </div>
 
         {/* MESSAGES THREAD */}
@@ -110,7 +132,7 @@ export default function MessagingPage() {
                     fontSize: '0.85rem',
                     color: 'var(--text-main)'
                   }}>
-                    {m.message}
+                    {(m.message || m.content || '').trim()}
                   </div>
                 ))}
               </div>

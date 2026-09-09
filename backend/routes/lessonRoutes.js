@@ -151,6 +151,87 @@ router.post('/:id/complete', authenticateToken, async (req, res) => {
   }
 });
 
+// PUT /api/lessons/:id - Trainer/Admin Update Lesson
+router.put('/:id', authenticateToken, requireRole('trainer', 'admin'), async (req, res) => {
+  try {
+    const lesson = await db.get(`
+      SELECT l.*, cm.course_id, c.trainer_id
+      FROM lessons l
+      JOIN course_modules cm ON cm.id = l.module_id
+      JOIN courses c ON c.id = cm.course_id
+      WHERE l.id = ?
+    `, [req.params.id]);
+
+    if (!lesson) {
+      return res.status(404).json({ success: false, message: 'Lesson not found.' });
+    }
+
+    if (req.user.role === 'trainer' && lesson.trainer_id !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'You can only edit your own course lessons.' });
+    }
+
+    const {
+      title,
+      description,
+      content_type,
+      content_url,
+      content_text,
+      duration_minutes
+    } = req.body;
+
+    if (!title || !title.trim()) {
+      return res.status(400).json({ success: false, message: 'Lesson title is required.' });
+    }
+
+    await db.run(`
+      UPDATE lessons
+      SET title = ?, description = ?, content_type = ?, content_url = ?, content_text = ?, duration_minutes = ?
+      WHERE id = ?
+    `, [
+      title.trim(),
+      description || '',
+      content_type || lesson.content_type || 'reading',
+      content_url || '',
+      content_text || '',
+      duration_minutes || lesson.duration_minutes || 15,
+      req.params.id
+    ]);
+
+    const updatedLesson = await db.get('SELECT * FROM lessons WHERE id = ?', [req.params.id]);
+    res.json({ success: true, message: 'Lesson updated successfully.', lesson: updatedLesson });
+  } catch (err) {
+    console.error('Update lesson error:', err);
+    res.status(500).json({ success: false, message: 'Server error updating lesson.' });
+  }
+});
+
+// DELETE /api/lessons/:id - Trainer/Admin Delete Lesson
+router.delete('/:id', authenticateToken, requireRole('trainer', 'admin'), async (req, res) => {
+  try {
+    const lesson = await db.get(`
+      SELECT l.*, cm.course_id, c.trainer_id
+      FROM lessons l
+      JOIN course_modules cm ON cm.id = l.module_id
+      JOIN courses c ON c.id = cm.course_id
+      WHERE l.id = ?
+    `, [req.params.id]);
+
+    if (!lesson) {
+      return res.status(404).json({ success: false, message: 'Lesson not found.' });
+    }
+
+    if (req.user.role === 'trainer' && lesson.trainer_id !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'You can only delete your own course lessons.' });
+    }
+
+    await db.run('DELETE FROM lessons WHERE id = ?', [req.params.id]);
+    res.json({ success: true, message: 'Lesson deleted successfully.' });
+  } catch (err) {
+    console.error('Delete lesson error:', err);
+    res.status(500).json({ success: false, message: 'Server error deleting lesson.' });
+  }
+});
+
 // POST /api/lessons - Trainer Add Lesson to Module
 router.post('/', authenticateToken, requireRole('trainer', 'admin'), async (req, res) => {
   try {

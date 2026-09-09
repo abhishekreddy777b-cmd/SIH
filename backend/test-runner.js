@@ -79,6 +79,20 @@ async function runTestSuite() {
     const meRes = await request('/auth/me', 'GET', null, traineeToken);
     assert(meRes.data.user?.role === 'trainee', 'Verify Auth Middleware (/auth/me)');
 
+    // 2A. ADMIN MODERATION AUDIT TRAIL
+    const traineeDirectoryRes = await request('/users?role=trainee', 'GET', null, adminToken);
+    assert(traineeDirectoryRes.data.success && Array.isArray(traineeDirectoryRes.data.users) && traineeDirectoryRes.data.users.length > 0, 'List trainee personnel for moderation checks');
+
+    const moderationTargetId = traineeDirectoryRes.data.users[0].id;
+    const moderationStatusRes = await request(`/users/${moderationTargetId}/status`, 'PUT', {
+      status: 'flagged',
+      reason: 'Automated moderation audit trail validation.'
+    }, adminToken);
+    assert(moderationStatusRes.status === 200 && moderationStatusRes.data.success, 'Update user status with audit reason');
+
+    const moderationHistoryRes = await request(`/users/${moderationTargetId}/moderation-history`, 'GET', null, adminToken);
+    assert(Array.isArray(moderationHistoryRes.data.history) && moderationHistoryRes.data.history.some(entry => entry.reason && entry.new_status === 'flagged'), 'Fetch moderation history for user');
+
     // 3. COMPETENCIES & DYNAMIC SKILL GAP ENGINE
     console.log('\n📌 Test Suite 3: MoES Competency Matrix & Dynamic Skill Gap Engine');
 
@@ -101,13 +115,78 @@ async function runTestSuite() {
     const coursesRes = await request('/courses', 'GET', null, traineeToken);
     assert(coursesRes.data.courses?.length > 0, 'Fetch Courses Catalog');
 
-    const courseId = coursesRes.data.courses[0].id;
-    const courseDetailRes = await request(`/courses/${courseId}`, 'GET', null, traineeToken);
-    assert(courseDetailRes.data.course?.modules?.length > 0, 'Fetch Detailed Course Syllabus & Modules');
+    let courseId = null;
+    let courseDetailRes = null;
 
-    const firstLessonId = courseDetailRes.data.course.modules[0].lessons[0].id;
+    for (const course of coursesRes.data.courses) {
+      const detailRes = await request(`/courses/${course.id}`, 'GET', null, traineeToken);
+      if (detailRes.data.course?.modules?.length > 0 && detailRes.data.course.modules.some((module) => Array.isArray(module.lessons) && module.lessons.length > 0)) {
+        courseId = course.id;
+        courseDetailRes = detailRes;
+        break;
+      }
+    }
+
+    assert(courseId && courseDetailRes?.data.course?.modules?.length > 0, 'Fetch Detailed Course Syllabus & Modules');
+
+    const firstLessonId = courseDetailRes.data.course.modules.find((module) => Array.isArray(module.lessons) && module.lessons.length > 0)?.lessons[0].id;
     const completeLessonRes = await request(`/lessons/${firstLessonId}/complete`, 'POST', { time_spent_minutes: 15 }, traineeToken);
     assert(completeLessonRes.data.success && typeof completeLessonRes.data.progress_percentage === 'number', 'Complete Lesson & Real-Time Progress Update');
+
+    const trainerCoursesRes = await request('/courses/trainer/my-courses', 'GET', null, trainerToken);
+    assert(trainerCoursesRes.data.courses?.length > 0, 'Fetch Trainer Created Courses');
+
+    const trainerCourseId = trainerCoursesRes.data.courses[0].id;
+
+    const createModuleRes = await request(`/courses/${trainerCourseId}/modules`, 'POST', {
+      title: 'Automation Module',
+      description: 'Module created for regression testing.'
+    }, trainerToken);
+    assert(createModuleRes.status === 201 && createModuleRes.data.success, 'Create Module for Trainer Course');
+
+    const createdModuleId = createModuleRes.data.module.id;
+    const updateModuleRes = await request(`/courses/${trainerCourseId}/modules/${createdModuleId}`, 'PUT', {
+      title: 'Automation Module Updated',
+      description: 'Module description updated for regression testing.'
+    }, trainerToken);
+    assert(updateModuleRes.status === 200 && updateModuleRes.data.success, 'Update Existing Module');
+
+    const reorderModuleRes = await request(`/courses/${trainerCourseId}/modules/${createdModuleId}/reorder`, 'PUT', {
+      direction: 'up'
+    }, trainerToken);
+    assert(reorderModuleRes.status === 200 && reorderModuleRes.data.success && reorderModuleRes.data.module.order_index > 0, 'Reorder Module Within Course');
+
+    const deleteModuleRes = await request(`/courses/${trainerCourseId}/modules/${createdModuleId}`, 'DELETE', null, trainerToken);
+    assert(deleteModuleRes.status === 200 && deleteModuleRes.data.success, 'Delete Existing Module');
+
+    const createAssignmentRes = await request('/assignments', 'POST', {
+      course_id: trainerCourseId,
+      title: 'Automation QA Assignment',
+      description: 'Validate assignment workflow for trainer review.',
+      instructions: 'Submit a brief report summarizing your findings.',
+      deadline: new Date(Date.now() + 86400000).toISOString(),
+      max_score: 100
+    }, trainerToken);
+    assert(createAssignmentRes.status === 201 && createAssignmentRes.data.success, 'Create Assignment for Trainer Course');
+
+    const createdAssignmentId = createAssignmentRes.data.assignment.id;
+    const assignmentSubmissionsRes = await request(`/assignments/${createdAssignmentId}/submissions`, 'GET', null, trainerToken);
+    assert(assignmentSubmissionsRes.data.success && Array.isArray(assignmentSubmissionsRes.data.submissions), 'Fetch Assignment Submissions for Review');
+
+    const submitAssignmentRes = await request(`/assignments/${createdAssignmentId}/submit`, 'POST', {
+      submission_text: 'Automated test submission content.'
+    }, traineeToken);
+    assert(submitAssignmentRes.status === 201 && submitAssignmentRes.data.success, 'Submit Assignment for Review');
+
+    const updatedAssignmentsRes = await request(`/assignments/${createdAssignmentId}/submissions`, 'GET', null, trainerToken);
+    const newSubmissionId = updatedAssignmentsRes.data.submissions?.[0]?.id;
+    assert(newSubmissionId, 'Track User Submission Within Assignment Review');
+
+    const gradeRes = await request(`/assignments/submissions/${newSubmissionId}/grade`, 'POST', {
+      score: 92,
+      feedback: 'Well structured submission.'
+    }, trainerToken);
+    assert(gradeRes.data.success, 'Grade Submitted Assignment');
 
     // 5. TIMED ASSESSMENT SCORING ENGINE
     console.log('\n📌 Test Suite 5: Timed Assessment Engine & Automated Competency Boost');

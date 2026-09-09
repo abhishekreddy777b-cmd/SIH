@@ -29,7 +29,7 @@ export default function TrainerDashboard() {
     }
   };
 
-  const totalTrainees = courses.reduce((acc, curr) => acc + (curr.enrolled_count || 12), 0);
+  const totalTrainees = courses.reduce((acc, curr) => acc + (Number(curr.enrolled_count) || 0), 0);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -93,30 +93,36 @@ export default function TrainerDashboard() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {courses.map(course => (
-              <div key={course.id} style={{ padding: '1rem 1.25rem', borderRadius: 'var(--radius-md)', backgroundColor: '#0f172a', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                    <Badge variant="primary">{course.category}</Badge>
-                    <Badge variant="success">{course.level}</Badge>
-                  </div>
-                  <h4 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>{course.title}</h4>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    Target Competency: <strong style={{ color: 'var(--secondary)' }}>{course.competency_name}</strong>
-                  </span>
-                </div>
-
-                <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', display: 'block' }}>Enrolled</span>
-                    <strong style={{ fontSize: '1rem', color: 'var(--text-main)' }}>{course.enrolled_count || 12}</strong>
-                  </div>
-                  <Link to={`/courses/${course.id}`} className="btn btn-sm btn-outline">
-                    View Course <ArrowRight size={14} />
-                  </Link>
-                </div>
+            {courses.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '2rem 0', color: 'var(--text-muted)' }}>
+                No courses created yet.
               </div>
-            ))}
+            ) : (
+              courses.map(course => (
+                <div key={course.id} style={{ padding: '1rem 1.25rem', borderRadius: 'var(--radius-md)', backgroundColor: '#0f172a', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                      <Badge variant="primary">{course.category}</Badge>
+                      <Badge variant="success">{course.level}</Badge>
+                    </div>
+                    <h4 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>{course.title}</h4>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      Target Competency: <strong style={{ color: 'var(--secondary)' }}>{course.competency_name || 'Not assigned'}</strong>
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', display: 'block' }}>Enrolled</span>
+                      <strong style={{ fontSize: '1rem', color: 'var(--text-main)' }}>{Number(course.enrolled_count) || 0}</strong>
+                    </div>
+                    <Link to={`/courses/${course.id}`} className="btn btn-sm btn-outline">
+                      View Course <ArrowRight size={14} />
+                    </Link>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>

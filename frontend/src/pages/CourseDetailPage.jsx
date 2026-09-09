@@ -16,6 +16,9 @@ export default function CourseDetailPage() {
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [assignments, setAssignments] = useState([]);
+  const [submissionDrafts, setSubmissionDrafts] = useState({});
+  const [submittingAssignment, setSubmittingAssignment] = useState(null);
 
   useEffect(() => {
     fetchCourseDetails();
@@ -37,11 +40,24 @@ export default function CourseDetailPage() {
         const enrolled = enrollRes.enrollments.some(e => e.course_id === parseInt(id));
         setIsEnrolled(enrolled);
       }
+
+      await fetchAssignments();
     } catch (e) {
       console.error(e);
       toast.error('Failed to load course details');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAssignments = async () => {
+    try {
+      const res = await api.getAssignments(`course_id=${id}`);
+      if (res.success) {
+        setAssignments(res.assignments || []);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -57,6 +73,28 @@ export default function CourseDetailPage() {
       toast.error(e.message || 'Enrollment failed');
     } finally {
       setEnrolling(false);
+    }
+  };
+
+  const handleSubmitAssignment = async (assignmentId) => {
+    const text = (submissionDrafts[assignmentId] || '').trim();
+
+    if (!text) {
+      toast.error('Please enter a submission before sending.');
+      return;
+    }
+
+    setSubmittingAssignment(assignmentId);
+    try {
+      const res = await api.submitAssignment(assignmentId, { submission_text: text });
+      if (res.success) {
+        toast.success('Assignment submitted successfully.');
+        await fetchAssignments();
+      }
+    } catch (err) {
+      toast.error(err.message || 'Failed to submit assignment.');
+    } finally {
+      setSubmittingAssignment(null);
     }
   };
 
@@ -126,6 +164,72 @@ export default function CourseDetailPage() {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="velora-card">
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <BookOpen size={20} color="var(--primary)" /> Assignments & Practice Tasks
+        </h3>
+
+        {assignments.length ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+            {assignments.map((assignment) => (
+              <div key={assignment.id} style={{ border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', backgroundColor: '#0f172a' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                  <div>
+                    <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '1rem' }}>{assignment.title}</div>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                      {assignment.max_score || 100} points • {assignment.deadline ? new Date(assignment.deadline).toLocaleString() : 'No deadline'}
+                    </div>
+                  </div>
+                  {assignment.user_submission ? (
+                    <span style={{ fontSize: '0.75rem', color: 'var(--success)', fontWeight: 700 }}>
+                      Submitted • {assignment.user_submission.status}
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Not yet submitted</span>
+                  )}
+                </div>
+
+                <div style={{ color: 'var(--text-muted)', marginTop: '0.75rem', lineHeight: 1.5 }}>
+                  {assignment.description || 'No description provided.'}
+                </div>
+
+                {assignment.instructions ? (
+                  <div style={{ color: 'var(--text-muted)', marginTop: '0.5rem', lineHeight: 1.5 }}>
+                    <strong style={{ color: 'var(--text-main)' }}>Instructions:</strong> {assignment.instructions}
+                  </div>
+                ) : null}
+
+                {isEnrolled ? (
+                  <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <textarea
+                      rows={4}
+                      className="form-control"
+                      value={submissionDrafts[assignment.id] ?? assignment.user_submission?.submission_text ?? ''}
+                      onChange={(e) => setSubmissionDrafts(prev => ({ ...prev, [assignment.id]: e.target.value }))}
+                      placeholder="Write your assignment response here..."
+                    />
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleSubmitAssignment(assignment.id)}
+                      disabled={submittingAssignment === assignment.id}
+                      style={{ width: 'fit-content' }}
+                    >
+                      {submittingAssignment === assignment.id ? 'Submitting...' : 'Submit Assignment'}
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ marginTop: '0.75rem', color: 'var(--text-dim)', fontSize: '0.85rem' }}>
+                    Enroll in the course to submit this assignment.
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>No assignments are available for this course yet.</div>
+        )}
       </div>
 
       {/* SYLLABUS & MODULES */}

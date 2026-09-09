@@ -23,15 +23,16 @@ router.get('/', async (req, res) => {
 // POST /api/announcements - Admin Create Announcement
 router.post('/', authenticateToken, requireRole('admin'), async (req, res) => {
   try {
-    const { title, description, audience = 'all', priority = 'normal' } = req.body;
-    if (!title || !description) {
+    const { title, description, content, audience = 'all', priority = 'normal' } = req.body;
+    const message = description || content;
+    if (!title || !message) {
       return res.status(400).json({ success: false, message: 'Title and description are required.' });
     }
 
     const result = await db.run(`
       INSERT INTO announcements (title, description, audience, priority, created_by)
       VALUES (?, ?, ?, ?, ?)
-    `, [title, description, audience, priority, req.user.id]);
+    `, [title, message, audience, priority, req.user.id]);
 
     const newAnn = await db.get('SELECT * FROM announcements WHERE id = ?', [result.id]);
 

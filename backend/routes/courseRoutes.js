@@ -238,4 +238,225 @@ router.post('/', authenticateToken, requireRole('trainer', 'admin'), async (req,
   }
 });
 
+// PUT /api/courses/:id - Update course
+router.put('/:id', authenticateToken, requireRole('trainer', 'admin'), async (req, res) => {
+  try {
+    const course = await db.get('SELECT * FROM courses WHERE id = ?', [req.params.id]);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found.' });
+    }
+
+    if (req.user.role === 'trainer' && course.trainer_id !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'You can only edit your own courses.' });
+    }
+
+    const {
+      title,
+      short_description,
+      description,
+      category,
+      difficulty,
+      duration_hours,
+      max_students,
+      status,
+      is_free,
+      competencies
+    } = req.body;
+
+    if (!title || !category) {
+      return res.status(400).json({ success: false, message: 'Title and category are required.' });
+    }
+
+    await db.run(`
+      UPDATE courses
+      SET title = ?, short_description = ?, description = ?, category = ?, difficulty = ?, duration_hours = ?, max_students = ?, status = ?, is_free = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [title, short_description || '', description || '', category, difficulty || course.difficulty, duration_hours || course.duration_hours, max_students || course.max_students, status || course.status, is_free !== undefined ? is_free : course.is_free, req.params.id]);
+
+    await db.run('DELETE FROM course_competencies WHERE course_id = ?', [req.params.id]);
+    if (Array.isArray(competencies)) {
+      for (const compId of competencies) {
+        if (compId) {
+          await db.run('INSERT INTO course_competencies (course_id, competency_id) VALUES (?, ?)', [req.params.id, compId]);
+        }
+      }
+    }
+
+    const updatedCourse = await db.get('SELECT * FROM courses WHERE id = ?', [req.params.id]);
+    res.json({ success: true, message: 'Course updated successfully.', course: updatedCourse });
+  } catch (err) {
+    console.error('Update course error:', err);
+    res.status(500).json({ success: false, message: 'Server error updating course.' });
+  }
+});
+
+// DELETE /api/courses/:id - Delete course
+router.delete('/:id', authenticateToken, requireRole('trainer', 'admin'), async (req, res) => {
+  try {
+    const course = await db.get('SELECT * FROM courses WHERE id = ?', [req.params.id]);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found.' });
+    }
+
+    if (req.user.role === 'trainer' && course.trainer_id !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'You can only delete your own courses.' });
+    }
+
+    await db.run('DELETE FROM courses WHERE id = ?', [req.params.id]);
+    res.json({ success: true, message: 'Course deleted successfully.' });
+  } catch (err) {
+    console.error('Delete course error:', err);
+    res.status(500).json({ success: false, message: 'Server error deleting course.' });
+  }
+});
+
+// POST /api/courses/:id/modules - Add module to course
+router.post('/:id/modules', authenticateToken, requireRole('trainer', 'admin'), async (req, res) => {
+  try {
+    const course = await db.get('SELECT * FROM courses WHERE id = ?', [req.params.id]);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found.' });
+    }
+
+    if (req.user.role === 'trainer' && course.trainer_id !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'You can only manage your own course modules.' });
+    }
+
+    const { title, description } = req.body;
+    if (!title) {
+      return res.status(400).json({ success: false, message: 'Module title is required.' });
+    }
+
+    const orderRes = await db.get('SELECT COALESCE(MAX(order_index), 0) as max_order FROM course_modules WHERE course_id = ?', [req.params.id]);
+    await db.run(`
+      INSERT INTO course_modules (course_id, title, description, order_index)
+      VALUES (?, ?, ?, ?)
+    `, [req.params.id, title, description || '', (orderRes?.max_order || 0) + 1]);
+
+    const module = await db.get(`
+      SELECT * FROM course_modules
+      WHERE course_id = ?
+      ORDER BY id DESC
+      LIMIT 1
+    `, [req.params.id]);
+
+    res.status(201).json({ success: true, message: 'Module added successfully.', module });
+  } catch (err) {
+    console.error('Create module error:', err);
+    res.status(500).json({ success: false, message: 'Server error creating module.' });
+  }
+});
+
+// PUT /api/courses/:id/modules/:moduleId - Update a module
+router.put('/:id/modules/:moduleId', authenticateToken, requireRole('trainer', 'admin'), async (req, res) => {
+  try {
+    const course = await db.get('SELECT * FROM courses WHERE id = ?', [req.params.id]);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found.' });
+    }
+
+    if (req.user.role === 'trainer' && course.trainer_id !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'You can only manage your own course modules.' });
+    }
+
+    const module = await db.get('SELECT * FROM course_modules WHERE id = ? AND course_id = ?', [req.params.moduleId, req.params.id]);
+    if (!module) {
+      return res.status(404).json({ success: false, message: 'Module not found.' });
+    }
+
+    const { title, description } = req.body;
+    if (!title || !title.trim()) {
+      return res.status(400).json({ success: false, message: 'Module title is required.' });
+    }
+
+    await db.run(`
+      UPDATE course_modules
+      SET title = ?, description = ?
+      WHERE id = ?
+    `, [title.trim(), description || '', req.params.moduleId]);
+
+    const updatedModule = await db.get('SELECT * FROM course_modules WHERE id = ?', [req.params.moduleId]);
+    res.json({ success: true, message: 'Module updated successfully.', module: updatedModule });
+  } catch (err) {
+    console.error('Update module error:', err);
+    res.status(500).json({ success: false, message: 'Server error updating module.' });
+  }
+});
+
+// PUT /api/courses/:id/modules/:moduleId/reorder - Reorder a module within the course
+router.put('/:id/modules/:moduleId/reorder', authenticateToken, requireRole('trainer', 'admin'), async (req, res) => {
+  try {
+    const course = await db.get('SELECT * FROM courses WHERE id = ?', [req.params.id]);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found.' });
+    }
+
+    if (req.user.role === 'trainer' && course.trainer_id !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'You can only manage your own course modules.' });
+    }
+
+    const { direction } = req.body;
+    if (!['up', 'down'].includes(direction)) {
+      return res.status(400).json({ success: false, message: 'Direction must be either up or down.' });
+    }
+
+    const modules = await db.all(`
+      SELECT * FROM course_modules
+      WHERE course_id = ?
+      ORDER BY order_index ASC, id ASC
+    `, [req.params.id]);
+
+    const targetIndex = modules.findIndex((module) => module.id === Number(req.params.moduleId));
+    if (targetIndex === -1) {
+      return res.status(404).json({ success: false, message: 'Module not found.' });
+    }
+
+    if (direction === 'up' && targetIndex === 0) {
+      return res.status(400).json({ success: false, message: 'Module is already at the top of the course.' });
+    }
+
+    if (direction === 'down' && targetIndex === modules.length - 1) {
+      return res.status(400).json({ success: false, message: 'Module is already at the bottom of the course.' });
+    }
+
+    const swapIndex = direction === 'up' ? targetIndex - 1 : targetIndex + 1;
+    const targetModule = modules[targetIndex];
+    const swapModule = modules[swapIndex];
+
+    await db.run('UPDATE course_modules SET order_index = ? WHERE id = ?', [swapModule.order_index, targetModule.id]);
+    await db.run('UPDATE course_modules SET order_index = ? WHERE id = ?', [targetModule.order_index, swapModule.id]);
+
+    const updatedModule = await db.get('SELECT * FROM course_modules WHERE id = ?', [req.params.moduleId]);
+    res.json({ success: true, message: 'Module reordered successfully.', module: updatedModule });
+  } catch (err) {
+    console.error('Reorder module error:', err);
+    res.status(500).json({ success: false, message: 'Server error reordering module.' });
+  }
+});
+
+// DELETE /api/courses/:id/modules/:moduleId - Delete a module
+router.delete('/:id/modules/:moduleId', authenticateToken, requireRole('trainer', 'admin'), async (req, res) => {
+  try {
+    const course = await db.get('SELECT * FROM courses WHERE id = ?', [req.params.id]);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found.' });
+    }
+
+    if (req.user.role === 'trainer' && course.trainer_id !== req.user.id) {
+      return res.status(403).json({ success: false, message: 'You can only manage your own course modules.' });
+    }
+
+    const module = await db.get('SELECT * FROM course_modules WHERE id = ? AND course_id = ?', [req.params.moduleId, req.params.id]);
+    if (!module) {
+      return res.status(404).json({ success: false, message: 'Module not found.' });
+    }
+
+    await db.run('DELETE FROM course_modules WHERE id = ?', [req.params.moduleId]);
+    res.json({ success: true, message: 'Module deleted successfully.' });
+  } catch (err) {
+    console.error('Delete module error:', err);
+    res.status(500).json({ success: false, message: 'Server error deleting module.' });
+  }
+});
+
 module.exports = router;

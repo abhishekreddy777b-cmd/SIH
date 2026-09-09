@@ -26,7 +26,9 @@ import CertificatesPage from './pages/CertificatesPage';
 import CertificateVerifyPage from './pages/CertificateVerifyPage';
 import TrainerDashboard from './pages/TrainerDashboard';
 import CourseBuilderPage from './pages/CourseBuilderPage';
+import CourseEditorPage from './pages/CourseEditorPage';
 import AdminDashboard from './pages/AdminDashboard';
+import PersonnelPage from './pages/PersonnelPage';
 import MessagingPage from './pages/MessagingPage';
 import NotesPage from './pages/NotesPage';
 import NotificationsPage from './pages/NotificationsPage';
@@ -91,10 +93,11 @@ export default function App() {
             {/* Trainer Routes */}
             <Route path="/trainer" element={<ProtectedRoute allowedRoles={['trainer', 'admin']}><MainLayout><TrainerDashboard /></MainLayout></ProtectedRoute>} />
             <Route path="/trainer/courses/new" element={<ProtectedRoute allowedRoles={['trainer', 'admin']}><MainLayout><CourseBuilderPage /></MainLayout></ProtectedRoute>} />
+            <Route path="/trainer/courses/:id/edit" element={<ProtectedRoute allowedRoles={['trainer', 'admin']}><MainLayout><CourseEditorPage /></MainLayout></ProtectedRoute>} />
 
             {/* Admin Routes */}
             <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout><AdminDashboard /></MainLayout></ProtectedRoute>} />
-            <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout><AdminDashboard /></MainLayout></ProtectedRoute>} />
+            <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout><PersonnelPage /></MainLayout></ProtectedRoute>} />
             <Route path="/admin/announcements" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout><AdminDashboard /></MainLayout></ProtectedRoute>} />
 
             {/* Fallback */}

@@ -87,8 +87,13 @@ router.post('/send', authenticateToken, async (req, res) => {
     `, [req.user.id, receiver_id, content.trim()]);
 
     const newMsg = await db.get('SELECT * FROM messages WHERE id = ?', [result.id]);
+    const normalizedMessage = {
+      ...newMsg,
+      message: newMsg.content,
+      content: newMsg.content
+    };
 
-    res.status(201).json({ success: true, message: newMsg });
+    res.status(201).json({ success: true, message: normalizedMessage });
   } catch (err) {
     console.error('Send message error:', err);
     res.status(500).json({ success: false, message: 'Server error.' });

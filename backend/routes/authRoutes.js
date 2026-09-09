@@ -137,7 +137,21 @@ router.get('/me', authenticateToken, async (req, res) => {
 // PUT /api/auth/profile
 router.put('/profile', authenticateToken, async (req, res) => {
   try {
-    const { first_name, last_name, phone, department, designation, location, bio } = req.body;
+    const {
+      first_name,
+      last_name,
+      phone,
+      department,
+      designation,
+      location,
+      bio,
+      qualifications,
+      experience_years,
+      students_trained,
+      learning_hours,
+      current_streak,
+      longest_streak
+    } = req.body;
 
     await db.run(`
       UPDATE users
@@ -145,12 +159,75 @@ router.put('/profile', authenticateToken, async (req, res) => {
       WHERE id = ?
     `, [first_name, last_name, phone, department, designation, location, bio, req.user.id]);
 
+    let profile = null;
+
+    if (req.user.role === 'trainee') {
+      const existingProfile = await db.get('SELECT * FROM trainee_profiles WHERE user_id = ?', [req.user.id]);
+
+      if (existingProfile) {
+        await db.run(`
+          UPDATE trainee_profiles
+          SET learning_hours = ?, current_streak = ?, longest_streak = ?, last_activity_date = CURRENT_TIMESTAMP
+          WHERE user_id = ?
+        `, [
+          learning_hours !== undefined ? Number(learning_hours) : (existingProfile.learning_hours || 0),
+          current_streak !== undefined ? Number(current_streak) : (existingProfile.current_streak || 0),
+          longest_streak !== undefined ? Number(longest_streak) : (existingProfile.longest_streak || 0),
+          req.user.id
+        ]);
+      } else {
+        await db.run(`
+          INSERT INTO trainee_profiles (user_id, learning_hours, current_streak, longest_streak, last_activity_date)
+          VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+        `, [
+          req.user.id,
+          learning_hours !== undefined ? Number(learning_hours) : 0,
+          current_streak !== undefined ? Number(current_streak) : 0,
+          longest_streak !== undefined ? Number(longest_streak) : 0
+        ]);
+      }
+
+      profile = await db.get('SELECT * FROM trainee_profiles WHERE user_id = ?', [req.user.id]);
+    }
+
+    if (req.user.role === 'trainer') {
+      const existingProfile = await db.get('SELECT * FROM trainer_profiles WHERE user_id = ?', [req.user.id]);
+
+      if (existingProfile) {
+        await db.run(`
+          UPDATE trainer_profiles
+          SET qualifications = ?, experience_years = ?, students_trained = ?
+          WHERE user_id = ?
+        `, [
+          qualifications !== undefined ? qualifications : (existingProfile.qualifications || ''),
+          experience_years !== undefined ? Number(experience_years) : (existingProfile.experience_years || 0),
+          students_trained !== undefined ? Number(students_trained) : (existingProfile.students_trained || 0),
+          req.user.id
+        ]);
+      } else {
+        await db.run(`
+          INSERT INTO trainer_profiles (user_id, qualifications, experience_years, students_trained)
+          VALUES (?, ?, ?, ?)
+        `, [
+          req.user.id,
+          qualifications || '',
+          experience_years !== undefined ? Number(experience_years) : 0,
+          students_trained !== undefined ? Number(students_trained) : 0
+        ]);
+      }
+
+      profile = await db.get('SELECT * FROM trainer_profiles WHERE user_id = ?', [req.user.id]);
+    }
+
     const updatedUser = await db.get('SELECT id, email, role, first_name, last_name, avatar, phone, department, designation, location, bio, status FROM users WHERE id = ?', [req.user.id]);
 
     res.json({
       success: true,
       message: 'Profile updated successfully.',
-      user: updatedUser
+      user: {
+        ...updatedUser,
+        profile
+      }
     });
   } catch (err) {
     console.error('Update profile error:', err);

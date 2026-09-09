@@ -63,27 +63,18 @@ export default function AdminDashboard() {
     return <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--text-muted)' }}>Loading MoES Executive Analytics...</div>;
   }
 
-  const divisionData = deptStats.length > 0 ? deptStats.map(d => ({
+  const divisionData = deptStats.map(d => ({
     name: d.department.length > 15 ? d.department.substring(0, 15) + '...' : d.department,
     trainees: d.trainee_count
-  })) : [
-    { name: 'IMD Severe Weather', trainees: 14 },
-    { name: 'INCOIS Coastal', trainees: 9 },
-    { name: 'IITM Climate Tech', trainees: 12 },
-    { name: 'NCMRWF Modeling', trainees: 8 }
-  ];
+  }));
 
-  const categoryGapData = topGaps.length > 0 ? topGaps.slice(0, 5).map(g => {
+  const categoryGapData = topGaps.slice(0, 5).map(g => {
     const name = g.competency_name || g.name || 'Competency Gap';
     return {
       name: name.length > 16 ? name.substring(0, 16) + '...' : name,
       value: g.affected_trainees || g.gap_count || 1
     };
-  }) : [
-    { name: 'Numerical Weather', value: 14 },
-    { name: 'Radar Meteorology', value: 8 },
-    { name: 'Satellite Imagery', value: 11 }
-  ];
+  });
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>

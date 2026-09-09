@@ -7,8 +7,9 @@ function getAuthHeader() {
 
 async function request(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
+  const isFormData = options.body instanceof FormData;
   const headers = {
-    'Content-Type': 'application/json',
+    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
     ...getAuthHeader(),
     ...options.headers
   };
@@ -18,19 +19,20 @@ async function request(endpoint, options = {}) {
     headers
   };
 
-  if (config.body && typeof config.body === 'object') {
+  if (config.body && typeof config.body === 'object' && !(config.body instanceof FormData)) {
     config.body = JSON.stringify(config.body);
   }
 
   try {
     const response = await fetch(url, config);
-    const data = await response.json();
+    const contentType = response.headers.get('content-type') || '';
+    const data = contentType.includes('application/json') ? await response.json() : await response.text();
 
     if (!response.ok) {
-      throw new Error(data.message || 'API Request Failed');
+      throw new Error(typeof data === 'string' ? data : data.message || 'API Request Failed');
     }
 
-    return data;
+    return typeof data === 'string' ? { success: true, data } : data;
   } catch (err) {
     console.error(`API Error [${endpoint}]:`, err.message);
     throw err;
@@ -48,7 +50,8 @@ export const api = {
   getTrainers: () => request('/users/trainers'),
   getTrainerById: (id) => request(`/users/trainers/${id}`),
   getAllUsers: (params = '') => request(`/users?${params}`),
-  updateUserStatus: (id, status) => request(`/users/${id}/status`, { method: 'PUT', body: { status } }),
+  updateUserStatus: (id, status, reason = '') => request(`/users/${id}/status`, { method: 'PUT', body: { status, reason } }),
+  getModerationHistory: (id) => request(`/users/${id}/moderation-history`),
 
   // Competencies & Skill Gaps
   getCompetencies: (category = '') => request(`/competencies${category ? `?category=${category}` : ''}`),
@@ -62,10 +65,18 @@ export const api = {
   getCourseById: (id) => request(`/courses/${id}`),
   getTrainerCourses: () => request('/courses/trainer/my-courses'),
   createCourse: (courseData) => request('/courses', { method: 'POST', body: courseData }),
+  updateCourse: (id, courseData) => request(`/courses/${id}`, { method: 'PUT', body: courseData }),
+  deleteCourse: (id) => request(`/courses/${id}`, { method: 'DELETE' }),
+  addModuleToCourse: (courseId, moduleData) => request(`/courses/${courseId}/modules`, { method: 'POST', body: moduleData }),
+  updateModule: (courseId, moduleId, moduleData) => request(`/courses/${courseId}/modules/${moduleId}`, { method: 'PUT', body: moduleData }),
+  reorderModule: (courseId, moduleId, direction) => request(`/courses/${courseId}/modules/${moduleId}/reorder`, { method: 'PUT', body: { direction } }),
+  deleteModule: (courseId, moduleId) => request(`/courses/${courseId}/modules/${moduleId}`, { method: 'DELETE' }),
 
   getLessonById: (id) => request(`/lessons/${id}`),
   completeLesson: (id, payload) => request(`/lessons/${id}/complete`, { method: 'POST', body: payload }),
   createLesson: (lessonData) => request('/lessons', { method: 'POST', body: lessonData }),
+  updateLesson: (id, lessonData) => request(`/lessons/${id}`, { method: 'PUT', body: lessonData }),
+  deleteLesson: (id) => request(`/lessons/${id}`, { method: 'DELETE' }),
 
   // Enrollments
   getMyEnrollments: () => request('/enrollments/me'),
@@ -87,6 +98,16 @@ export const api = {
   joinLiveClass: (id) => request(`/live-classes/${id}/join`, { method: 'POST' }),
   sendChatMessage: (id, message) => request(`/live-classes/${id}/messages`, { method: 'POST', body: { message } }),
   votePoll: (pollId, selectedOption) => request(`/live-classes/polls/${pollId}/respond`, { method: 'POST', body: { selected_option: selectedOption } }),
+
+  // Assignments & Submissions
+  getAssignments: (params = '') => request(`/assignments${params ? `?${params}` : ''}`),
+  getAssignmentById: (id) => request(`/assignments/${id}`),
+  createAssignment: (assignmentData) => request('/assignments', { method: 'POST', body: assignmentData }),
+  updateAssignment: (id, assignmentData) => request(`/assignments/${id}`, { method: 'PUT', body: assignmentData }),
+  deleteAssignment: (id) => request(`/assignments/${id}`, { method: 'DELETE' }),
+  getAssignmentSubmissions: (id) => request(`/assignments/${id}/submissions`),
+  submitAssignment: (id, payload) => request(`/assignments/${id}/submit`, { method: 'POST', body: payload }),
+  gradeSubmission: (id, payload) => request(`/assignments/submissions/${id}/grade`, { method: 'POST', body: payload }),
 
   // Certificates & Verification
   getMyCertificates: () => request('/certificates/me'),
@@ -115,6 +136,19 @@ export const api = {
 
   getBookmarks: () => request('/bookmarks'),
   toggleBookmark: (itemId) => request('/bookmarks/toggle', { method: 'POST', body: { item_id: itemId, item_type: 'course' } }),
+
+  // Uploads
+  getCourseUploads: (courseId) => request(`/uploads/course/${courseId}`),
+  uploadCourseFile: (courseId, formData) => {
+    const payload = new FormData();
+    const file = formData.get('file');
+    payload.append('file', file);
+    if (courseId) payload.append('course_id', courseId);
+    if (formData.get('lesson_id')) payload.append('lesson_id', formData.get('lesson_id'));
+    if (formData.get('resource_type')) payload.append('resource_type', formData.get('resource_type'));
+    return request('/uploads/course', { method: 'POST', body: payload });
+  },
+  deleteUploadedFile: (id) => request(`/uploads/${id}`, { method: 'DELETE' }),
 
   // Search
   globalSearch: (q) => request(`/search?q=${encodeURIComponent(q)}`)
