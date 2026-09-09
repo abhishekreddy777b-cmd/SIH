@@ -21,7 +21,21 @@ router.get('/me', authenticateToken, async (req, res) => {
       ORDER BY e.enrolled_at DESC
     `, [userId]);
 
-    res.json({ success: true, count: enrollments.length, enrollments });
+    // Aliases expected by the React pages
+    const shaped = enrollments.map(e => {
+      const trainerName = `${e.trainer_first_name || ''} ${e.trainer_last_name || ''}`.trim() || null;
+      return {
+        ...e,
+        id: e.enrollment_id,
+        course_title: e.title,
+        progress_percentage: e.progress,
+        trainer_name: trainerName,
+        // keep consistency with older UI expectations
+        status: e.enrollment_status
+      };
+    });
+
+    res.json({ success: true, count: shaped.length, enrollments: shaped });
   } catch (err) {
     console.error('Fetch enrollments error:', err);
     res.status(500).json({ success: false, message: 'Server error fetching enrollments.' });

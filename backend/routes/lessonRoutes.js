@@ -22,13 +22,25 @@ router.get('/:id', authenticateToken, async (req, res) => {
     }
 
     const progress = await db.get(`
-      SELECT completed, notes, time_spent_minutes FROM lesson_progress WHERE user_id = ? AND lesson_id = ?
+      SELECT completed, notes, time_spent_minutes
+      FROM lesson_progress
+      WHERE user_id = ? AND lesson_id = ?
     `, [userId, lessonId]);
 
     const userNotes = await db.get(`
-      SELECT content FROM notes WHERE user_id = ? AND lesson_id = ? ORDER BY updated_at DESC
+      SELECT content
+      FROM notes
+      WHERE user_id = ? AND lesson_id = ?
+      ORDER BY updated_at DESC
+      LIMIT 1
     `, [userId, lessonId]);
 
+    // Aliases expected by the React pages
+    lesson.duration_mins = lesson.duration_minutes;
+    lesson.content_body = lesson.content_text;
+
+    const completed = progress?.completed ? 1 : 0;
+    lesson.is_completed = completed;
     lesson.user_progress = progress || { completed: 0, notes: '', time_spent_minutes: 0 };
     lesson.saved_notes = userNotes ? userNotes.content : '';
 
@@ -44,7 +56,14 @@ router.post('/:id/complete', authenticateToken, async (req, res) => {
   try {
     const lessonId = req.params.id;
     const userId = req.user.id;
-    const { time_spent_minutes = 15, notes = '' } = req.body;
+
+    // Frontend may send watch_time_mins; backend DB stores time_spent_minutes
+    const time_spent_minutes =
+      typeof req.body?.time_spent_minutes === 'number'
+        ? req.body.time_spent_minutes
+        : (typeof req.body?.watch_time_mins === 'number' ? req.body.watch_time_mins : 15);
+
+    const { notes = '' } = req.body;
 
     // Check if lesson exists
     const lesson = await db.get(`
@@ -60,13 +79,18 @@ router.post('/:id/complete', authenticateToken, async (req, res) => {
 
     // Insert or update lesson progress
     const existing = await db.get(`
-      SELECT id FROM lesson_progress WHERE user_id = ? AND lesson_id = ?
+      SELECT id
+      FROM lesson_progress
+      WHERE user_id = ? AND lesson_id = ?
     `, [userId, lessonId]);
 
     if (existing) {
       await db.run(`
         UPDATE lesson_progress
-        SET completed = 1, completed_at = CURRENT_TIMESTAMP, time_spent_minutes = time_spent_minutes + ?, notes = ?
+        SET completed = 1,
+            completed_at = CURRENT_TIMESTAMP,
+            time_spent_minutes = time_spent_minutes + ?,
+            notes = ?
         WHERE id = ?
       `, [time_spent_minutes, notes, existing.id]);
     } else {
@@ -100,14 +124,16 @@ router.post('/:id/complete', authenticateToken, async (req, res) => {
 
     await db.run(`
       UPDATE enrollments
-      SET progress = ?, completed_at = ${isFinished ? 'CURRENT_TIMESTAMP' : 'completed_at'}
+      SET progress = ?,
+          completed_at = ${isFinished ? 'CURRENT_TIMESTAMP' : 'completed_at'}
       WHERE user_id = ? AND course_id = ?
     `, [progressPercent, userId, lesson.course_id]);
 
     // Update trainee learning hours
     await db.run(`
       UPDATE trainee_profiles
-      SET learning_hours = learning_hours + ?, last_activity_date = CURRENT_TIMESTAMP
+      SET learning_hours = learning_hours + ?,
+          last_activity_date = CURRENT_TIMESTAMP
       WHERE user_id = ?
     `, [time_spent_minutes / 60, userId]);
 
@@ -115,6 +141,7 @@ router.post('/:id/complete', authenticateToken, async (req, res) => {
       success: true,
       message: 'Lesson marked as completed!',
       course_id: lesson.course_id,
+      course_progress: progressPercent,
       progress_percentage: progressPercent,
       is_completed: isFinished
     });

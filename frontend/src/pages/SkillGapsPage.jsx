@@ -66,7 +66,7 @@ export default function SkillGapsPage() {
       <div className="velora-card gradient-border-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
         <div>
           <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--warning)', textTransform: 'uppercase' }}>
-            AI Skill Gap Analyzer Engine
+            Skill Gap Analyzer Engine
           </span>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem' }}>
             Targeted Skill Gap Resolution
@@ -140,7 +140,7 @@ export default function SkillGapsPage() {
                     border: '1px solid var(--border-color)'
                   }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.5rem' }}>
-                      <Sparkles size={14} /> AI Recommended Resolution:
+                      <Sparkles size={14} /> Recommended Resolution:
                     </div>
 
                     {gap.recommended_course_id ? (

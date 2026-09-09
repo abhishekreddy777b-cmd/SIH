@@ -501,11 +501,11 @@ async function seed() {
 
     // Insert Trainers
     const trainers = [
-      { email: 'trainer@velora.demo', first_name: 'Dr. Rahul', last_name: 'Sharma', dept: 'Meteorology', desig: 'Senior Scientist', loc: 'New Delhi', qual: 'Ph.D. in Atmospheric Physics & Data Science', exp: 12, bio: 'Lead researcher in atmospheric modeling and Python data analysis.' },
-      { email: 'trainer2@velora.demo', first_name: 'Dr. Priya', last_name: 'Patel', dept: 'Oceanography', desig: 'Lead AI Researcher', loc: 'Pune', qual: 'Ph.D. in Computer Vision & Deep Learning', exp: 9, bio: 'Specialist in applying Machine Learning to environmental datasets.' },
-      { email: 'trainer3@velora.demo', first_name: 'Prof. Amit', last_name: 'Kumar', dept: 'Computer Science', desig: 'Principal Instructor', loc: 'Bengaluru', qual: 'M.Tech in Software Systems, IIT Bombay', exp: 15, bio: 'Expert instructor in Algorithms, Systems, and Cloud Architectures.' },
-      { email: 'trainer4@velora.demo', first_name: 'Dr. Sneha', last_name: 'Reddy', dept: 'Cybersecurity & IT', desig: 'Head of Information Security', loc: 'Hyderabad', qual: 'Ph.D. in Distributed Systems & Security', exp: 11, bio: 'Cybersecurity practitioner and database security architect.' },
-      { email: 'trainer5@velora.demo', first_name: 'Prof. Kavita', last_name: 'Nair', dept: 'Capacity Development', desig: 'Director of Education', loc: 'Chennai', qual: 'M.A. Organizational Communication & HR', exp: 14, bio: 'Specialized in executive communication, leadership, and pedagogy.' }
+      { email: 'trainer@velora.demo', first_name: 'Dr. Rahul', last_name: 'Sharma', dept: 'Materials Physics', desig: 'Senior Scientist', loc: 'New Delhi', qual: 'Ph.D. in Crystallography & X-Ray Physics', exp: 12, bio: 'Lead researcher in X-Ray diffraction, phase analysis, and materials characterization.' },
+      { email: 'trainer2@velora.demo', first_name: 'Dr. Priya', last_name: 'Patel', dept: 'Electron Microscopy', desig: 'Lead Microscopy Researcher', loc: 'Pune', qual: 'Ph.D. in High-Resolution TEM & Surface Characterization', exp: 9, bio: 'Specialist in HR-TEM imaging, focused ion beam milling, and nanomaterial analysis.' },
+      { email: 'trainer3@velora.demo', first_name: 'Prof. Amit', last_name: 'Kumar', dept: 'Physical Metallurgy', desig: 'Principal Instructor', loc: 'Bengaluru', qual: 'M.Tech in Metallurgical Engineering, IIT Bombay', exp: 15, bio: 'Expert instructor in mechanical testing, dislocation dynamics, and electron diffraction.' },
+      { email: 'trainer4@velora.demo', first_name: 'Dr. Sneha', last_name: 'Reddy', dept: 'Analytical Chemistry', desig: 'Head of Spectroscopy & Lab Safety', loc: 'Hyderabad', qual: 'Ph.D. in Spectroscopy & Hazardous Materials Protocol', exp: 11, bio: 'Analytical chemist specializing in thermal analysis (DSC/TGA) and laboratory safety.' },
+      { email: 'trainer5@velora.demo', first_name: 'Prof. Kavita', last_name: 'Nair', dept: 'Capacity Building', desig: 'Director of Scientific Publishing', loc: 'Chennai', qual: 'Ph.D. Scientific Communication & Research Methods', exp: 14, bio: 'Specialized in technical reporting, research documentation, and scientific ethics.' }
     ];
 
     const trainerIds = [];
@@ -527,15 +527,15 @@ async function seed() {
 
     // Insert Trainees
     const trainees = [
-      { email: 'trainee@velora.demo', first_name: 'Arjun', last_name: 'Singh', dept: 'Hydrology', desig: 'Scientific Assistant', loc: 'Dehradun', hours: 48.5, streak: 12 },
-      { email: 'trainee2@velora.demo', first_name: 'Ananya', last_name: 'Deshmukh', dept: 'Meteorology', desig: 'Junior Research Fellow', loc: 'Pune', hours: 32.0, streak: 5 },
-      { email: 'trainee3@velora.demo', first_name: 'Rohan', last_name: 'Verma', dept: 'Oceanography', desig: 'Project Assistant', loc: 'Goa', hours: 64.2, streak: 19 },
-      { email: 'trainee4@velora.demo', first_name: 'Meera', last_name: 'Iyer', dept: 'Data Management', desig: 'Data Analyst Trainee', loc: 'Chennai', hours: 22.0, streak: 3 },
-      { email: 'trainee5@velora.demo', first_name: 'Siddharth', last_name: 'Joshi', dept: 'Seismology', desig: 'Field Scientist', loc: 'Shillong', hours: 15.5, streak: 1 },
-      { email: 'trainee6@velora.demo', first_name: 'Pooja', last_name: 'Bhatia', dept: 'Hydrology', desig: 'Scientific Assistant', loc: 'Delhi', hours: 55.0, streak: 8 },
-      { email: 'trainee7@velora.demo', first_name: 'Vikash', last_name: 'Yadav', dept: 'IT Infrastructure', desig: 'Systems Trainee', loc: 'Kolkata', hours: 10.0, streak: 2 },
-      { email: 'trainee8@velora.demo', first_name: 'Divya', last_name: 'Menon', dept: 'Climate Modeling', desig: 'Research Associate', loc: 'Thiruvananthapuram', hours: 78.4, streak: 25 },
-      { email: 'trainee9@velora.demo', first_name: 'Karan', last_name: 'Malhotra', dept: 'Meteorology', desig: 'Meteorologist Technical', loc: 'Jaipur', hours: 41.0, streak: 7 },
+      { email: 'trainee@velora.demo', first_name: 'Arjun', last_name: 'Singh', dept: 'Materials Testing Lab', desig: 'Scientific Assistant', loc: 'Dehradun', hours: 48.5, streak: 12 },
+      { email: 'trainee2@velora.demo', first_name: 'Ananya', last_name: 'Deshmukh', dept: 'Microstructural Analysis', desig: 'Junior Research Fellow', loc: 'Pune', hours: 32.0, streak: 5 },
+      { email: 'trainee3@velora.demo', first_name: 'Rohan', last_name: 'Verma', dept: 'Crystallography Lab', desig: 'Project Assistant', loc: 'Goa', hours: 64.2, streak: 19 },
+      { email: 'trainee4@velora.demo', first_name: 'Meera', last_name: 'Iyer', dept: 'Thermal Analysis', desig: 'Laboratory Trainee', loc: 'Chennai', hours: 22.0, streak: 3 },
+      { email: 'trainee5@velora.demo', first_name: 'Siddharth', last_name: 'Joshi', dept: 'Metallography', desig: 'Field Scientist', loc: 'Shillong', hours: 15.5, streak: 1 },
+      { email: 'trainee6@velora.demo', first_name: 'Pooja', last_name: 'Bhatia', dept: 'Spectroscopy', desig: 'Scientific Assistant', loc: 'Delhi', hours: 55.0, streak: 8 },
+      { email: 'trainee7@velora.demo', first_name: 'Vikash', last_name: 'Yadav', dept: 'Lab Instrumentation', desig: 'Systems Trainee', loc: 'Kolkata', hours: 10.0, streak: 2 },
+      { email: 'trainee8@velora.demo', first_name: 'Divya', last_name: 'Menon', dept: 'Nanomaterials Division', desig: 'Research Associate', loc: 'Thiruvananthapuram', hours: 78.4, streak: 25 },
+      { email: 'trainee9@velora.demo', first_name: 'Karan', last_name: 'Malhotra', dept: 'Materials Physics', desig: 'Technical Specialist', loc: 'Jaipur', hours: 41.0, streak: 7 },
       { email: 'trainee10@velora.demo', first_name: 'Nisha', last_name: 'Gupta', dept: 'Capacity Building', desig: 'Coordination Officer', loc: 'Lucknow', hours: 18.2, streak: 4 }
     ];
 
@@ -558,18 +558,18 @@ async function seed() {
 
     console.log(`Created 1 Admin, ${trainerIds.length} Trainers, ${traineeIds.length} Trainees.`);
 
-    // 3. Insert Competencies
+    // 3. Insert Competencies (Materials Science Domain Blueprint)
     const competencyData = [
-      { name: 'Python Programming', category: 'Programming', description: 'Core Python syntax, libraries, functional and object-oriented programming paradigms.', icon: 'Code' },
-      { name: 'Data Analysis & Visualization', category: 'Data Science', description: 'Data processing with Pandas, NumPy, and charting with Matplotlib/Seaborn.', icon: 'BarChart' },
-      { name: 'Data Structures & Algorithms', category: 'Computer Science', description: 'Arrays, Stacks, Queues, Trees, Graphs, Sorting, and Algorithm Complexity.', icon: 'Cpu' },
-      { name: 'SQL & Relational Databases', category: 'Databases', description: 'Relational database design, SQL querying, joins, indexing, and normalization.', icon: 'Database' },
-      { name: 'Machine Learning Fundamentals', category: 'AI & ML', description: 'Supervised/unsupervised learning, classification, regression, model evaluation.', icon: 'Brain' },
-      { name: 'Deep Learning & Neural Networks', category: 'AI & ML', description: 'CNNs, RNNs, PyTorch, TensorFlow, and deep learning architectures.', icon: 'Zap' },
-      { name: 'Cloud Computing Essentials', category: 'Technology', description: 'Cloud infrastructure, AWS/Azure services, containerization with Docker.', icon: 'Cloud' },
-      { name: 'Cybersecurity Fundamentals', category: 'Security', description: 'Network security, authentication, encryption, threat analysis, and security hygiene.', icon: 'Shield' },
-      { name: 'Professional Communication', category: 'Professional', description: 'Technical documentation, scientific reporting, presentation skills, and teamwork.', icon: 'MessageSquare' },
-      { name: 'Statistical Methods & Modeling', category: 'Mathematics', description: 'Probability, hypothesis testing, regression analysis, time series analysis.', icon: 'Calculator' }
+      { name: 'X-Ray Diffraction (XRD) Characterization', category: 'Materials Characterization', description: 'Phase identification, crystallite size calculation, lattice parameters, and Rietveld refinement using XRD patterns.', icon: 'Layers' },
+      { name: 'Scanning Electron Microscopy (SEM) & EDS', category: 'Microscopy & Microanalysis', description: 'Surface morphology imaging, electron beam interaction, secondary/backscattered electrons, and elemental microanalysis via EDS.', icon: 'Search' },
+      { name: 'Transmission Electron Microscopy (TEM)', category: 'High-Resolution Imaging', description: 'Atomic-scale imaging, selected area electron diffraction (SAED), bright-field/dark-field imaging, and defect analysis.', icon: 'Zap' },
+      { name: 'Thermal Analysis (DSC / TGA / DTA)', category: 'Thermal Characterization', description: 'Differential Scanning Calorimetry, Thermogravimetric Analysis, phase transformations, glass transition, and thermal kinetics.', icon: 'Activity' },
+      { name: 'Mechanical Testing & Metallography', category: 'Physical Metallurgy', description: 'Tensile testing, hardness testing (Vickers/Rockwell), impact testing, microstructural preparation, and grain size analysis.', icon: 'Shield' },
+      { name: 'Spectroscopy & Surface Analysis', category: 'Analytical Chemistry', description: 'XPS, FTIR, UV-Vis spectroscopy, oxidation state identification, chemical bonding, and optical bandgap determination.', icon: 'BarChart' },
+      { name: 'Laboratory Safety & Hazard Protocol', category: 'Laboratory Safety', description: 'Chemical safety, high-voltage beam operation, cryogenic liquid handling, hazardous waste disposal, and safety compliance.', icon: 'Shield' },
+      { name: 'Scientific Data Reporting & Standards', category: 'Scientific Publishing', description: 'Technical documentation, scientific data archiving, lab notebook standards, publication preparation, and peer review.', icon: 'MessageSquare' },
+      { name: 'Crystallography & Crystal Physics', category: 'Solid State Physics', description: 'Bravais lattices, Miller indices, crystal symmetry groups, point defects, and X-ray scattering fundamentals.', icon: 'Cpu' },
+      { name: 'Materials Synthesis & Processing Tech', category: 'Process Engineering', description: 'Sol-gel synthesis, chemical vapor deposition (CVD), powder metallurgy, calcination, and sintering optimization.', icon: 'Database' }
     ];
 
     const competencyIds = [];
@@ -587,33 +587,32 @@ async function seed() {
 
     // 4. Map Trainer Competencies
     await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 96)`, [trainerIds[0], competencyIds[0]]);
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 92)`, [trainerIds[0], competencyIds[1]]);
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 88)`, [trainerIds[0], competencyIds[4]]);
+    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 92)`, [trainerIds[0], competencyIds[8]]);
+    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 88)`, [trainerIds[0], competencyIds[5]]);
     await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 90)`, [trainerIds[0], competencyIds[9]]);
 
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 95)`, [trainerIds[1], competencyIds[4]]);
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 94)`, [trainerIds[1], competencyIds[5]]);
+    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 98)`, [trainerIds[1], competencyIds[2]]);
+    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 95)`, [trainerIds[1], competencyIds[1]]);
     await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 90)`, [trainerIds[1], competencyIds[0]]);
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 91)`, [trainerIds[1], competencyIds[9]]);
 
     await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 98)`, [trainerIds[2], competencyIds[2]]);
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 89)`, [trainerIds[2], competencyIds[0]]);
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 93)`, [trainerIds[2], competencyIds[6]]);
+    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 94)`, [trainerIds[2], competencyIds[4]]);
+    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 91)`, [trainerIds[2], competencyIds[8]]);
 
     await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 96)`, [trainerIds[3], competencyIds[3]]);
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 97)`, [trainerIds[3], competencyIds[7]]);
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 87)`, [trainerIds[3], competencyIds[6]]);
+    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 97)`, [trainerIds[3], competencyIds[6]]);
+    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 89)`, [trainerIds[3], competencyIds[5]]);
 
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 98)`, [trainerIds[4], competencyIds[8]]);
-    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 85)`, [trainerIds[4], competencyIds[1]]);
+    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 98)`, [trainerIds[4], competencyIds[7]]);
+    await db.run(`INSERT INTO trainer_competencies (trainer_id, competency_id, proficiency_level) VALUES (?, ?, 92)`, [trainerIds[4], competencyIds[9]]);
 
     // 5. Map Trainee Competencies for Arjun Singh (Trainee 1)
-    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 78.0, 'intermediate', 65.0, datetime('now', '-10 days'))`, [traineeIds[0], competencyIds[0]]);
-    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 72.0, 'intermediate', 58.0, datetime('now', '-15 days'))`, [traineeIds[0], competencyIds[1]]);
-    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 48.0, 'developing', 45.0, datetime('now', '-5 days'))`, [traineeIds[0], competencyIds[2]]);   // Data Structures (GAP!)
-    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 52.0, 'developing', 50.0, datetime('now', '-7 days'))`, [traineeIds[0], competencyIds[3]]);   // SQL (GAP!)
-    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 65.0, 'intermediate', 60.0, datetime('now', '-12 days'))`, [traineeIds[0], competencyIds[4]]);
-    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 85.0, 'advanced', 80.0, datetime('now', '-20 days'))`, [traineeIds[0], competencyIds[8]]);
+    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 78.0, 'intermediate', 65.0, datetime('now', '-10 days'))`, [traineeIds[0], competencyIds[0]]); // XRD
+    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 72.0, 'intermediate', 58.0, datetime('now', '-15 days'))`, [traineeIds[0], competencyIds[1]]); // SEM
+    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 48.0, 'developing', 45.0, datetime('now', '-5 days'))`, [traineeIds[0], competencyIds[2]]);   // TEM (GAP!)
+    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 52.0, 'developing', 50.0, datetime('now', '-7 days'))`, [traineeIds[0], competencyIds[3]]);   // Thermal (GAP!)
+    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 65.0, 'intermediate', 60.0, datetime('now', '-12 days'))`, [traineeIds[0], competencyIds[4]]); // Mechanical
+    await db.run(`INSERT INTO trainee_competencies (trainee_id, competency_id, score, level, previous_score, assessed_at) VALUES (?, ?, 85.0, 'advanced', 80.0, datetime('now', '-20 days'))`, [traineeIds[0], competencyIds[7]]);     // Scientific Reporting
 
     for (let i = 1; i < traineeIds.length; i++) {
       for (let j = 0; j < 4; j++) {
@@ -631,21 +630,21 @@ async function seed() {
     await db.run(`
       INSERT INTO skill_gaps (user_id, competency_id, current_score, target_score, gap, status, identified_at)
       VALUES (?, ?, 48.0, 80.0, 32.0, 'active', datetime('now', '-5 days'))
-    `, [traineeIds[0], competencyIds[2]]);
+    `, [traineeIds[0], competencyIds[2]]); // TEM
 
     await db.run(`
       INSERT INTO skill_gaps (user_id, competency_id, current_score, target_score, gap, status, identified_at)
       VALUES (?, ?, 52.0, 80.0, 28.0, 'active', datetime('now', '-7 days'))
-    `, [traineeIds[0], competencyIds[3]]);
+    `, [traineeIds[0], competencyIds[3]]); // Thermal
 
     // 7. Insert Courses
     const coursesData = [
       {
-        title: 'Python for Data Analysis & Scientific Computing',
-        short_description: 'Master Python libraries like Pandas, NumPy, and Matplotlib for processing environmental and meteorological data.',
-        description: 'Comprehensive course designed for scientists, engineers, and analysts at MoES and IMD. Learn to ingest, clean, manipulate, and visualize large-scale scientific datasets using Python.',
+        title: 'X-Ray Diffraction (XRD) Principles & Rietveld Refinement',
+        short_description: 'Master powder XRD, phase identification, lattice parameter determination, and peak profile fitting for materials analysis.',
+        description: 'Comprehensive course for materials scientists and laboratory technical staff. Learn X-ray physics, diffractometer alignment, Bragg law calculations, PDF database search-match, and quantitative phase analysis.',
         trainer_id: trainerIds[0],
-        category: 'Data Science',
+        category: 'Materials Characterization',
         difficulty: 'intermediate',
         duration_hours: 24,
         status: 'published',
@@ -654,14 +653,14 @@ async function seed() {
         average_rating: 4.9,
         total_reviews: 42,
         is_free: 1,
-        competencies: [competencyIds[0], competencyIds[1]]
+        competencies: [competencyIds[0], competencyIds[8]]
       },
       {
-        title: 'Data Structures & Algorithms in Practice',
-        short_description: 'Master core computer science fundamentals: Stacks, Queues, Trees, Hash Tables, and algorithm optimization.',
-        description: 'Essential computer science module for building high-performance data pipelines and backend processing software. Focuses on spatial data indexing, search algorithms, and computational efficiency.',
+        title: 'Transmission Electron Microscopy (TEM) & Microstructure Analysis',
+        short_description: 'Master electron optics, bright-field/dark-field imaging, SAED pattern indexing, and nanoscale defect analysis.',
+        description: 'Advanced characterization module focusing on TEM beam alignment, electron transparency preparation, crystal defect imaging (dislocations, stacking faults), and selected area electron diffraction.',
         trainer_id: trainerIds[2],
-        category: 'Computer Science',
+        category: 'High-Resolution Imaging',
         difficulty: 'beginner',
         duration_hours: 30,
         status: 'published',
@@ -670,14 +669,14 @@ async function seed() {
         average_rating: 4.8,
         total_reviews: 58,
         is_free: 1,
-        competencies: [competencyIds[2], competencyIds[0]]
+        competencies: [competencyIds[2], competencyIds[1]]
       },
       {
-        title: 'Machine Learning Fundamentals for Scientists',
-        short_description: 'Build predictive models with Scikit-Learn, regression, decision trees, and ensemble methods.',
-        description: 'Practical introduction to applied Machine Learning. Learn how to formulate predictive tasks, train models, validate accuracy, and deploy classification and regression systems on real datasets.',
+        title: 'Scanning Electron Microscopy & EDS Microanalysis',
+        short_description: 'Surface morphology imaging, secondary/backscattered electron detection, and elemental mapping via EDS.',
+        description: 'Practical training on SEM operation, vacuum systems, secondary electron topographic imaging, atomic-number contrast via backscattered electrons, and quantitative EDS spectrum processing.',
         trainer_id: trainerIds[1],
-        category: 'AI & ML',
+        category: 'Microscopy & Microanalysis',
         difficulty: 'intermediate',
         duration_hours: 36,
         status: 'published',
@@ -686,14 +685,14 @@ async function seed() {
         average_rating: 4.9,
         total_reviews: 35,
         is_free: 1,
-        competencies: [competencyIds[4], competencyIds[0], competencyIds[9]]
+        competencies: [competencyIds[1], competencyIds[0], competencyIds[5]]
       },
       {
-        title: 'Advanced SQL & Database Design',
-        short_description: 'Master relational queries, complex joins, indexing, transaction isolation, and schema optimization.',
-        description: 'Enterprise database architecture course tailored for data managers. Master SQL syntax, performance tuning, spatial queries, and robust database administration principles.',
+        title: 'Thermal Analysis (DSC & TGA) for Advanced Materials',
+        short_description: 'Differential Scanning Calorimetry, Thermogravimetric Analysis, phase transition thermodynamics, and degradation kinetics.',
+        description: 'Curriculum covering thermal characterization instrumentation, baseline calibration, glass transition temperature determination, heat capacity measurement, and atmosphere-controlled thermogravimetry.',
         trainer_id: trainerIds[3],
-        category: 'Databases',
+        category: 'Thermal Characterization',
         difficulty: 'advanced',
         duration_hours: 20,
         status: 'published',
@@ -705,11 +704,11 @@ async function seed() {
         competencies: [competencyIds[3]]
       },
       {
-        title: 'Deep Learning & Neural Networks',
-        short_description: 'Implement Convolutional Neural Networks (CNN) and Recurrent Networks (RNN) using PyTorch.',
-        description: 'Advanced course covering neural network architectures, backpropagation, image classification, satellite imagery analysis, and time-series forecasting with LSTM networks.',
+        title: 'Advanced Metallography & Mechanical Behavior of Materials',
+        short_description: 'Tensile test stress-strain analysis, Vickers/Rockwell microhardness, microstructural etching, and fracture mechanics.',
+        description: 'Physical metallurgy course focused on metallurgical sample mounting, polishing, chemical etching, optical metallography, yield strength determination, and creep-fatigue failure analysis.',
         trainer_id: trainerIds[1],
-        category: 'AI & ML',
+        category: 'Physical Metallurgy',
         difficulty: 'advanced',
         duration_hours: 40,
         status: 'published',
@@ -718,14 +717,14 @@ async function seed() {
         average_rating: 4.9,
         total_reviews: 21,
         is_free: 1,
-        competencies: [competencyIds[5], competencyIds[4]]
+        competencies: [competencyIds[4], competencyIds[2]]
       },
       {
-        title: 'Statistical Methods for Data Science',
-        short_description: 'Probability distributions, hypothesis testing, ANOVA, confidence intervals, and time-series.',
-        description: 'Comprehensive statistical modeling curriculum covering descriptive and inferential statistics required for rigorous scientific experimentation and data reporting.',
+        title: 'X-Ray Photoelectron & Optical Spectroscopy Methods',
+        short_description: 'XPS chemical state analysis, FTIR vibrational modes, UV-Vis absorption, and bandgap energy determination.',
+        description: 'Analytical chemistry module for surface spectroscopy, core-level binding energy binding shifts, oxidation state quantitative determination, and infrared absorption spectrum interpretation.',
         trainer_id: trainerIds[0],
-        category: 'Mathematics',
+        category: 'Analytical Chemistry',
         difficulty: 'intermediate',
         duration_hours: 22,
         status: 'published',
@@ -734,14 +733,14 @@ async function seed() {
         average_rating: 4.6,
         total_reviews: 18,
         is_free: 1,
-        competencies: [competencyIds[9], competencyIds[1]]
+        competencies: [competencyIds[5], competencyIds[0]]
       },
       {
-        title: 'Cloud Computing Essentials & Docker',
-        short_description: 'Deploy microservices, manage Docker containers, and leverage cloud infrastructure for scale.',
-        description: 'Learn modern cloud operations: virtualization, containerization, Kubernetes basics, cloud storage solutions, and deployment strategies for scientific web applications.',
+        title: 'Laboratory Safety & High-Energy Equipment Protocols',
+        short_description: 'High-voltage beam safety, X-ray radiation shielding, cryogenic liquid handling, and chemical hygiene protocols.',
+        description: 'Essential safety training for research facilities. Covers radiation safety monitoring, high-vacuum systems, pressurized gas cylinder handling, and emergency response procedures.',
         trainer_id: trainerIds[2],
-        category: 'Technology',
+        category: 'Laboratory Safety',
         difficulty: 'beginner',
         duration_hours: 18,
         status: 'published',
@@ -753,11 +752,11 @@ async function seed() {
         competencies: [competencyIds[6]]
       },
       {
-        title: 'Cybersecurity Fundamentals & Network Defense',
-        short_description: 'Protect organizational assets, secure APIs, implement access control, and conduct security audits.',
-        description: 'Essential cybersecurity guidelines for modern government agencies and scientific platforms. Covers threat modeling, encryption, IAM, and defensive web security.',
+        title: 'Chemical & High-Voltage Hazard Mitigation in Labs',
+        short_description: 'Hazardous chemical waste disposal, fume hood ventilation standards, and high-voltage power supply isolation.',
+        description: 'Comprehensive lab governance course addressing toxic solvent storage, MSDS safety data compliance, high-voltage interlocks for electron guns, and MoES laboratory audit standards.',
         trainer_id: trainerIds[3],
-        category: 'Security',
+        category: 'Laboratory Safety',
         difficulty: 'intermediate',
         duration_hours: 25,
         status: 'published',
@@ -766,14 +765,14 @@ async function seed() {
         average_rating: 4.7,
         total_reviews: 22,
         is_free: 1,
-        competencies: [competencyIds[7]]
+        competencies: [competencyIds[6]]
       },
       {
-        title: 'Professional Technical Communication & Leadership',
-        short_description: 'Effective scientific writing, stakeholder presentations, technical documentation, and team management.',
-        description: 'Empower scientific staff to present complex findings clearly, write high-impact technical documentation, and collaborate effectively across inter-departmental initiatives.',
+        title: 'Scientific Data Reporting & Research Documentation',
+        short_description: 'Technical report structuring, experimental uncertainty quantification, lab notebook standards, and publishing.',
+        description: 'Training scientific staff in high-impact scientific writing, error analysis reporting, data archiving compliance, peer-review response preparation, and research ethics.',
         trainer_id: trainerIds[4],
-        category: 'Professional',
+        category: 'Scientific Publishing',
         difficulty: 'beginner',
         duration_hours: 15,
         status: 'published',
@@ -782,14 +781,14 @@ async function seed() {
         average_rating: 4.9,
         total_reviews: 65,
         is_free: 1,
-        competencies: [competencyIds[8]]
+        competencies: [competencyIds[7]]
       },
       {
-        title: 'Web Development with JavaScript & React',
-        short_description: 'Build modern responsive web applications, interactive dashboards, and REST API integrations.',
-        description: 'Hands-on frontend engineering course focusing on single-page applications, UI design systems, state management, and modern JavaScript features.',
+        title: 'Advanced Materials Synthesis & Nanomaterial Processing',
+        short_description: 'Sol-gel chemical synthesis, chemical vapor deposition (CVD), powder metallurgy, and calcination control.',
+        description: 'Synthesis technology course covering phase diagram interpretation, solid-state reaction kinetics, high-temperature furnace sintering, and controlled atmosphere processing.',
         trainer_id: trainerIds[4],
-        category: 'Programming',
+        category: 'Process Engineering',
         difficulty: 'beginner',
         duration_hours: 28,
         status: 'published',
@@ -798,7 +797,7 @@ async function seed() {
         average_rating: 4.8,
         total_reviews: 39,
         is_free: 1,
-        competencies: [competencyIds[8], competencyIds[0]]
+        competencies: [competencyIds[9], competencyIds[0]]
       }
     ];
 
@@ -821,52 +820,52 @@ async function seed() {
     console.log(`Created ${courseIds.length} Courses with competencies.`);
 
     // 8. Modules & Lessons for Course 1 & Course 2
-    await db.run(`INSERT INTO course_modules (course_id, title, description, order_index, duration_minutes) VALUES (?, 'Module 1: Python Fundamentals & Data Structures', 'Basic syntax, lists, tuples, dictionaries, and memory model.', 1, 120)`, [courseIds[0]]);
-    await db.run(`INSERT INTO course_modules (course_id, title, description, order_index, duration_minutes) VALUES (?, 'Module 2: Data Manipulation with Pandas & NumPy', 'N-dimensional arrays, Series, DataFrames, indexing, and aggregations.', 2, 180)`, [courseIds[0]]);
-    await db.run(`INSERT INTO course_modules (course_id, title, description, order_index, duration_minutes) VALUES (?, 'Module 3: Data Visualization & Reporting', 'Matplotlib plots, Seaborn statistical charts, and exporting figures.', 3, 150)`, [courseIds[0]]);
+    await db.run(`INSERT INTO course_modules (course_id, title, description, order_index, duration_minutes) VALUES (?, 'Module 1: XRD Fundamentals & Lattice Geometry', 'Basic diffractometer setup, Bragg law, lattice spacing, and beam geometry.', 1, 120)`, [courseIds[0]]);
+    await db.run(`INSERT INTO course_modules (course_id, title, description, order_index, duration_minutes) VALUES (?, 'Module 2: Phase Identification & PDF Database', 'Search-match analysis using JCPDS/ICDD Powder Diffraction File records.', 2, 180)`, [courseIds[0]]);
+    await db.run(`INSERT INTO course_modules (course_id, title, description, order_index, duration_minutes) VALUES (?, 'Module 3: Profile Fitting & Scherrer Analysis', 'Peak broadening analysis, crystallite size extraction, and microstrain calculation.', 3, 150)`, [courseIds[0]]);
 
     const m1 = await db.get('SELECT id FROM course_modules WHERE course_id = ? AND order_index = 1', [courseIds[0]]);
     const m2 = await db.get('SELECT id FROM course_modules WHERE course_id = ? AND order_index = 2', [courseIds[0]]);
 
     await db.run(`
       INSERT INTO lessons (module_id, title, description, content_type, content_text, duration_minutes, order_index)
-      VALUES (?, 'Introduction to Python & Scientific Computing Environment', 'Overview of Anaconda, Jupyter Notebooks, and virtual environments.', 'reading', 'Python is the premier language for scientific computing. In this module, we set up Python 3.11 with Conda environments and inspect core language structures.', 30, 1)
+      VALUES (?, 'Introduction to X-Ray Diffraction & Bragg Law', 'Overview of characteristic X-rays, Bragg diffraction condition nλ = 2d sinθ, and crystal planes.', 'reading', 'X-Ray Diffraction is a non-destructive analytical technique used to determine crystallographic structure and chemical phase of materials. In this lesson, we study Bragg Law physics and d-spacing equations for cubic and lower symmetry lattices.', 30, 1)
     `, [m1.id]);
 
     await db.run(`
       INSERT INTO lessons (module_id, title, description, content_type, content_url, content_text, duration_minutes, order_index)
-      VALUES (?, 'Python Data Structures: Lists, Tuples, Sets, & Dictionaries', 'In-depth exploration of built-in collections and time complexity.', 'video', 'https://www.youtube.com/embed/rfscVS0vtbw', 'Mastering built-in Python collection types is fundamental for processing structured data records.', 45, 2)
+      VALUES (?, 'Diffractometer Components, Slits & X-Ray Tube Operation', 'Bragg-Brentano geometry, divergence slits, monochromators, and detector types.', 'video', 'https://www.youtube.com/embed/rfscVS0vtbw', 'Mastering optical alignment in a Bragg-Brentano diffractometer is critical for acquiring accurate peak positions and minimizing displacement errors.', 45, 2)
     `, [m1.id]);
 
     await db.run(`
       INSERT INTO lessons (module_id, title, description, content_type, content_text, duration_minutes, order_index)
-      VALUES (?, 'Functions, Modules, and Exception Handling', 'Writing clean modular code with type hints and defensive error handling.', 'reading', 'Functions encapsulate logic. Defensive programming using try/except blocks prevents batch scripts from crashing on corrupted atmospheric readings.', 45, 3)
+      VALUES (?, 'Phase Identification & Powder Diffraction File Indexing', 'Search-match algorithms, ICDD database lookup, and multi-phase mixture identification.', 'reading', 'Phase identification relies on matching observed 2θ angles and relative peak intensities against standard PDF card databases. We demonstrate multi-phase phase fraction analysis.', 45, 3)
     `, [m1.id]);
 
     await db.run(`
       INSERT INTO lessons (module_id, title, description, content_type, content_text, duration_minutes, order_index)
-      VALUES (?, 'NumPy Fundamentals & Fast Matrix Operations', 'Vectorized math operations and multi-dimensional grid slicing.', 'reading', 'NumPy arrays provide memory-efficient storage and fast C-optimized math operations for gridded satellite data.', 60, 1)
+      VALUES (?, 'Crystallite Size & Microstrain Calculation via Scherrer Equation', 'Instrumental peak broadening correction, FWHM determination, and Williamson-Hall plots.', 'reading', 'Peak broadening in XRD patterns arises from finite crystallite size and lattice microstrain. The Scherrer equation D = Kλ/(β cosθ) quantifies domain sizes below 100 nm.', 60, 1)
     `, [m2.id]);
 
-    const l1 = await db.get('SELECT id FROM lessons WHERE title LIKE ?', ['%Introduction to Python%']);
-    const l2 = await db.get('SELECT id FROM lessons WHERE title LIKE ?', ['%Python Data Structures%']);
-    const l3 = await db.get('SELECT id FROM lessons WHERE title LIKE ?', ['%Functions, Modules%']);
-    const l4 = await db.get('SELECT id FROM lessons WHERE title LIKE ?', ['%NumPy Fundamentals%']);
+    const l1 = await db.get('SELECT id FROM lessons WHERE title LIKE ?', ['%Introduction to X-Ray%']);
+    const l2 = await db.get('SELECT id FROM lessons WHERE title LIKE ?', ['%Diffractometer Components%']);
+    const l3 = await db.get('SELECT id FROM lessons WHERE title LIKE ?', ['%Phase Identification%']);
+    const l4 = await db.get('SELECT id FROM lessons WHERE title LIKE ?', ['%Crystallite Size%']);
 
     console.log('Fetched lessons:', { l1, l2, l3, l4 });
 
-    // Course 2 modules & lessons
-    await db.run(`INSERT INTO course_modules (course_id, title, description, order_index, duration_minutes) VALUES (?, 'Module 1: Linear Data Structures', 'Arrays, Linked Lists, Stacks, and Queues.', 1, 150)`, [courseIds[1]]);
-    await db.run(`INSERT INTO course_modules (course_id, title, description, order_index, duration_minutes) VALUES (?, 'Module 2: Trees & Graphs', 'Binary search trees, Heaps, BFS, DFS, and Dijkstra algorithm.', 2, 210)`, [courseIds[1]]);
+    // Course 2 (TEM) modules & lessons
+    await db.run(`INSERT INTO course_modules (course_id, title, description, order_index, duration_minutes) VALUES (?, 'Module 1: Electron Optics & TEM Principles', 'Electron guns, electromagnetic lenses, aberration correction, and sample thinning.', 1, 150)`, [courseIds[1]]);
+    await db.run(`INSERT INTO course_modules (course_id, title, description, order_index, duration_minutes) VALUES (?, 'Module 2: Diffraction & High-Resolution Imaging', 'SAED pattern indexing, bright-field vs dark-field contrast, and lattice imaging.', 2, 210)`, [courseIds[1]]);
 
     const c2m1 = await db.get('SELECT id FROM course_modules WHERE course_id = ? AND order_index = 1', [courseIds[1]]);
 
     await db.run(`
       INSERT INTO lessons (module_id, title, description, content_type, content_text, duration_minutes, order_index)
-      VALUES (?, 'Stacks and Queues: Concepts and Applications', 'Understanding LIFO vs FIFO principles and memory allocation.', 'reading', 'A Queue follows First-In First-Out (FIFO) processing, essential for task scheduling and message queues. A Stack follows Last-In First-Out (LIFO).', 45, 1)
+      VALUES (?, 'Transmission Electron Microscopy Principles', 'Understanding electron wavelength, specimen transparency requirements, and lens aberrations.', 'reading', 'TEM operates by transmitting high-energy electrons (100-300 kV) through an ultrathin specimen (<100 nm). Image contrast depends on mass-thickness, diffraction contrast, and phase contrast.', 45, 1)
     `, [c2m1.id]);
 
-    const c2l1 = await db.get('SELECT id FROM lessons WHERE title LIKE ?', ['%Stacks and Queues%']);
+    const c2l1 = await db.get('SELECT id FROM lessons WHERE title LIKE ?', ['%Transmission Electron Microscopy Principles%']);
 
     // 9. Enrollments & Progress for Arjun Singh (Trainee 1)
     await db.run(`
@@ -885,21 +884,21 @@ async function seed() {
     `, [traineeIds[0], courseIds[9]]);
 
     // Lesson Progress for Arjun Singh
-    await db.run(`INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, notes, time_spent_minutes) VALUES (?, ?, 1, datetime('now', '-18 days'), 'Mastered Python built-in data types.', 35)`, [traineeIds[0], l1.id]);
-    await db.run(`INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, notes, time_spent_minutes) VALUES (?, ?, 1, datetime('now', '-15 days'), 'Tuples are immutable; lists are mutable.', 50)`, [traineeIds[0], l2.id]);
-    await db.run(`INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, notes, time_spent_minutes) VALUES (?, ?, 1, datetime('now', '-10 days'), 'Try/except blocks are critical for batch pipelines.', 45)`, [traineeIds[0], l3.id]);
-    await db.run(`INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, notes, time_spent_minutes) VALUES (?, ?, 1, datetime('now', '-8 days'), 'NumPy broadcasting rules are useful for matrix math.', 65)`, [traineeIds[0], l4.id]);
-    await db.run(`INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, notes, time_spent_minutes) VALUES (?, ?, 1, datetime('now', '-4 days'), 'Queue follows FIFO structure!', 45)`, [traineeIds[0], c2l1.id]);
+    await db.run(`INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, notes, time_spent_minutes) VALUES (?, ?, 1, datetime('now', '-18 days'), 'Mastered Bragg Law and d-spacing calculations.', 35)`, [traineeIds[0], l1.id]);
+    await db.run(`INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, notes, time_spent_minutes) VALUES (?, ?, 1, datetime('now', '-15 days'), 'Bragg-Brentano geometry minimizes displacement errors.', 50)`, [traineeIds[0], l2.id]);
+    await db.run(`INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, notes, time_spent_minutes) VALUES (?, ?, 1, datetime('now', '-10 days'), 'PDF card matching is crucial for multi-phase samples.', 45)`, [traineeIds[0], l3.id]);
+    await db.run(`INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, notes, time_spent_minutes) VALUES (?, ?, 1, datetime('now', '-8 days'), 'Scherrer formula applies to crystallite size < 100 nm.', 65)`, [traineeIds[0], l4.id]);
+    await db.run(`INSERT INTO lesson_progress (user_id, lesson_id, completed, completed_at, notes, time_spent_minutes) VALUES (?, ?, 1, datetime('now', '-4 days'), 'TEM specimens must be under 100 nm thick for electron transparency.', 45)`, [traineeIds[0], c2l1.id]);
 
-    // 10. Assessments & Questions
+    // 10. Assessments & Questions (Materials Science Domain)
     await db.run(`
       INSERT INTO assessments (title, description, course_id, duration_minutes, passing_score, total_marks, is_baseline, status, created_by)
-      VALUES ('MoES Baseline Competency Evaluation 2026', 'Comprehensive diagnostic baseline assessment covering programming, data analysis, computer science, and databases.', NULL, 45, 60, 100, 1, 'published', ?)
+      VALUES ('MoES Baseline Competency Evaluation 2026', 'Comprehensive diagnostic baseline assessment covering materials characterization, TEM imaging, thermal analysis, and diffraction methods.', NULL, 45, 60, 100, 1, 'published', ?)
     `, [adminId]);
 
     await db.run(`
       INSERT INTO assessments (title, description, course_id, duration_minutes, passing_score, total_marks, is_baseline, status, created_by)
-      VALUES ('Data Structures & Algorithms Knowledge Check', 'Evaluate your knowledge of Stacks, Queues, Trees, and Algorithmic Complexity.', ?, 30, 60, 20, 0, 'published', ?)
+      VALUES ('Transmission Electron Microscopy (TEM) Knowledge Check', 'Evaluate your knowledge of electron optics, SAED pattern indexing, sample prep, and image contrast.', ?, 30, 60, 20, 0, 'published', ?)
     `, [courseIds[1], trainerIds[2]]);
 
     const aBase = await db.get('SELECT id FROM assessments WHERE is_baseline = 1');
@@ -908,93 +907,93 @@ async function seed() {
     const questionsList = [
       {
         assessment_id: aBase.id,
-        question_text: 'Which data structure operates strictly on a First-In, First-Out (FIFO) basis?',
-        options: JSON.stringify(['Stack', 'Queue', 'Tree', 'Graph']),
-        correct_answer: 'Queue',
+        question_text: 'In Transmission Electron Microscopy (TEM), which phenomenon primarily enables atomic-resolution lattice image contrast in thin crystalline samples?',
+        options: JSON.stringify(['Coherent Bragg Scattering and Phase Contrast', 'Secondary Electron Emission', 'Thermal Ionization', 'X-Ray Fluorescence']),
+        correct_answer: 'Coherent Bragg Scattering and Phase Contrast',
         marks: 5,
         competency_id: competencyIds[2],
-        explanation: 'A Queue processes items in the exact order they arrive (FIFO), whereas a Stack processes items in Last-In First-Out (LIFO) order.'
+        explanation: 'TEM phase contrast relies on coherent Bragg scattering of high-energy electrons passing through ultrathin specimen sections.'
       },
       {
         assessment_id: aBase.id,
-        question_text: 'In Python, which of the following data structures is IMMUTABLE?',
-        options: JSON.stringify(['List', 'Dictionary', 'Tuple', 'Set']),
-        correct_answer: 'Tuple',
+        question_text: 'What does Bragg Law (nλ = 2d sinθ) calculate in X-Ray Diffraction (XRD) analysis?',
+        options: JSON.stringify(['Interplanar spacing (d) of crystal lattice planes', 'Sample mass density', 'Thermal expansion coefficient', 'Electron kinetic energy']),
+        correct_answer: 'Interplanar spacing (d) of crystal lattice planes',
         marks: 5,
         competency_id: competencyIds[0],
-        explanation: 'Tuples cannot be modified after creation, making them immutable.'
+        explanation: 'Bragg Law relates diffraction angle θ and X-ray wavelength λ to the interplanar spacing d of crystal planes.'
       },
       {
         assessment_id: aBase.id,
-        question_text: 'Which SQL clause is used to combine rows from two or more tables based on a related column between them?',
-        options: JSON.stringify(['GROUP BY', 'JOIN', 'ORDER BY', 'HAVING']),
-        correct_answer: 'JOIN',
+        question_text: 'In Differential Scanning Calorimetry (DSC), an endothermic heat flow peak during heating typically signifies:',
+        options: JSON.stringify(['Melting or endothermic phase transformation', 'Exothermic crystallization', 'Oxidation reaction', 'Sample decomposition under oxygen']),
+        correct_answer: 'Melting or endothermic phase transformation',
         marks: 5,
         competency_id: competencyIds[3],
-        explanation: 'SQL JOIN clauses (INNER, LEFT, RIGHT, FULL) are used to query data across multiple tables using foreign key relationships.'
+        explanation: 'Endothermic processes absorb thermal energy from the furnace, producing a characteristic heat capacity peak during melting or phase changes.'
       },
       {
         assessment_id: aBase.id,
-        question_text: 'What is the worst-case time complexity of searching for an element in an unsorted array of size N?',
-        options: JSON.stringify(['O(1)', 'O(log N)', 'O(N)', 'O(N^2)']),
-        correct_answer: 'O(N)',
+        question_text: 'Which signal in a Scanning Electron Microscope (SEM) provides surface topographic detail with the highest spatial resolution?',
+        options: JSON.stringify(['Secondary Electrons (SE)', 'Backscattered Electrons (BSE)', 'Characteristic X-Rays', 'Auger Electrons']),
+        correct_answer: 'Secondary Electrons (SE)',
         marks: 5,
-        competency_id: competencyIds[2],
-        explanation: 'In an unsorted array, you may need to inspect all N elements in the worst case (Linear Search O(N)).'
+        competency_id: competencyIds[1],
+        explanation: 'Low-energy secondary electrons originate within a few nanometers of the sample surface, producing high-resolution topographical contrast.'
       },
       {
         assessment_id: aBase.id,
-        question_text: 'In Supervised Machine Learning, what type of problem involves predicting a continuous numerical target value?',
-        options: JSON.stringify(['Classification', 'Clustering', 'Regression', 'Dimensionality Reduction']),
-        correct_answer: 'Regression',
+        question_text: 'Which hardness testing method utilizes a square-based diamond pyramid indenter with a 136-degree face angle?',
+        options: JSON.stringify(['Vickers Hardness Test', 'Rockwell B Test', 'Mohs Hardness Scale', 'Shore Durometer Test']),
+        correct_answer: 'Vickers Hardness Test',
         marks: 5,
         competency_id: competencyIds[4],
-        explanation: 'Regression predicts continuous quantities (e.g., rainfall in mm), while classification predicts discrete class labels.'
+        explanation: 'The Vickers microhardness test uses a 136-degree diamond pyramid indenter suitable for thin metallic and ceramic microstructures.'
       },
       {
         assessment_id: aDS.id,
-        question_text: 'Which data structure is best suited for implementing a function call stack or undo operation?',
-        options: JSON.stringify(['Queue', 'Stack', 'Array', 'Binary Tree']),
-        correct_answer: 'Stack',
+        question_text: 'What sample thickness requirement is essential for high-resolution Transmission Electron Microscopy (HR-TEM)?',
+        options: JSON.stringify(['Less than 100 nanometers', 'Greater than 1 millimeter', '5 to 10 micrometers', '1 centimeter']),
+        correct_answer: 'Less than 100 nanometers',
         marks: 4,
         competency_id: competencyIds[2],
-        explanation: 'Stacks use Last-In First-Out (LIFO) order, matching the natural semantics of nested function calls and undo buffers.'
+        explanation: 'Specimens must be electron-transparent, typically under 100 nm (or <50 nm for atomic HR-TEM).'
       },
       {
         assessment_id: aDS.id,
-        question_text: 'What is the average time complexity for searching an element in a balanced Binary Search Tree (BST)?',
-        options: JSON.stringify(['O(1)', 'O(log N)', 'O(N)', 'O(N log N)']),
-        correct_answer: 'O(log N)',
+        question_text: 'Selected Area Electron Diffraction (SAED) in a TEM is primarily used to determine:',
+        options: JSON.stringify(['Crystal symmetry and structure of localized specimen areas', 'Elemental chemical composition percentage', 'Surface roughness profile', 'Sample magnetic susceptibility']),
+        correct_answer: 'Crystal symmetry and structure of localized specimen areas',
         marks: 4,
         competency_id: competencyIds[2],
-        explanation: 'A balanced BST halves the search space at each comparison node, leading to O(log N) search time.'
+        explanation: 'SAED uses a field-limiting aperture to obtain diffraction spot patterns from micro- and nano-sized crystal domains.'
       },
       {
         assessment_id: aDS.id,
-        question_text: 'Which algorithm traversal strategy visits all direct neighbors of a graph node before moving deeper?',
-        options: JSON.stringify(['Depth-First Search (DFS)', 'Breadth-First Search (BFS)', 'Pre-order Traversal', 'Post-order Traversal']),
-        correct_answer: 'Breadth-First Search (BFS)',
+        question_text: 'In Focused Ion Beam (FIB) milling for TEM specimen preparation, which ion species is most commonly utilized?',
+        options: JSON.stringify(['Gallium (Ga+)', 'Argon (Ar+)', 'Helium (He+)', 'Xenon (Xe+)']),
+        correct_answer: 'Gallium (Ga+)',
         marks: 4,
         competency_id: competencyIds[2],
-        explanation: 'BFS uses a Queue to explore graph nodes level-by-level (level order).'
+        explanation: 'Gallium Liquid Metal Ion Sources (LMIS) provide precise, high-density ion beams for site-specific TEM cross-section extraction.'
       },
       {
         assessment_id: aDS.id,
-        question_text: 'What happens when an item is pushed onto a Stack that has exceeded its maximum allocated memory space?',
-        options: JSON.stringify(['Stack Underflow', 'Stack Overflow', 'Memory Leak', 'Null Pointer Exception']),
-        correct_answer: 'Stack Overflow',
+        question_text: 'What type of TEM image contrast is formed by excluding diffracted beams using an objective aperture?',
+        options: JSON.stringify(['Bright-Field Contrast', 'Dark-Field Contrast', 'High-Angle Annular Dark-Field', 'Phase Contrast']),
+        correct_answer: 'Bright-Field Contrast',
         marks: 4,
         competency_id: competencyIds[2],
-        explanation: 'Stack Overflow occurs when call stack space or array allocation limits are exceeded.'
+        explanation: 'Bright-field imaging selects only the unscattered electron beam, causing strongly diffracting or dense crystal regions to appear dark.'
       },
       {
         assessment_id: aDS.id,
-        question_text: 'In a Priority Queue, which element is dequeued first?',
-        options: JSON.stringify(['The element inserted earliest', 'The element inserted latest', 'The element with the highest priority score', 'A random element']),
-        correct_answer: 'The element with the highest priority score',
+        question_text: 'What is the primary cause of spherical aberration (Cs) in electromagnetic electron lenses?',
+        options: JSON.stringify(['Off-axis peripheral rays bending more strongly than axial rays', 'Electron beam thermal energy spread', 'Specimen surface charging', 'Column vacuum fluctuations']),
+        correct_answer: 'Off-axis peripheral rays bending more strongly than axial rays',
         marks: 4,
         competency_id: competencyIds[2],
-        explanation: 'Priority Queues order elements by priority score rather than insertion sequence.'
+        explanation: 'Spherical aberration occurs because magnetic lens field strength increases with radial displacement from the optical axis.'
       }
     ];
 
@@ -1006,47 +1005,47 @@ async function seed() {
       `, [q.assessment_id, q.question_text, q.question_type || 'mcq', q.options, q.correct_answer, q.marks, q.competency_id, q.explanation, idx + 1]);
     }
 
-    // 11. Recommendations for Arjun Singh
+    // 11. Recommendations for Arjun Singh (Materials Science Domain)
     await db.run(`
       INSERT INTO course_recommendations (user_id, course_id, match_score, reason)
-      VALUES (?, ?, 96.0, 'Identified skill gap in Data Structures (48% score). Enrolling in this course directly targets your primary growth area.')
+      VALUES (?, ?, 96.0, 'Identified skill gap in Transmission Electron Microscopy (TEM) (48% score). Enrolling in this course directly targets your primary growth area.')
     `, [traineeIds[0], courseIds[1]]);
 
     await db.run(`
       INSERT INTO course_recommendations (user_id, course_id, match_score, reason)
-      VALUES (?, ?, 91.0, 'Identified skill gap in SQL & Relational Databases (52% score). Recommended for data management proficiency.')
+      VALUES (?, ?, 91.0, 'Identified skill gap in Thermal Analysis (DSC/TGA) (52% score). Recommended for material characterization proficiency.')
     `, [traineeIds[0], courseIds[3]]);
 
     await db.run(`
       INSERT INTO trainer_recommendations (user_id, trainer_id, match_score, reason)
-      VALUES (?, ?, 95.0, 'Prof. Amit Kumar holds 98% proficiency in Data Structures & Algorithms, matching your top skill gap.')
+      VALUES (?, ?, 95.0, 'Prof. Amit Kumar holds 98% proficiency in TEM & Microstructure Analysis, matching your top skill gap.')
     `, [traineeIds[0], trainerIds[2]]);
 
     await db.run(`
       INSERT INTO trainer_recommendations (user_id, trainer_id, match_score, reason)
-      VALUES (?, ?, 92.0, 'Dr. Sneha Reddy holds 96% proficiency in Relational Databases and SQL architecture.')
+      VALUES (?, ?, 92.0, 'Dr. Sneha Reddy holds 97% proficiency in Thermal Characterization and DSC/TGA analysis.')
     `, [traineeIds[0], trainerIds[3]]);
 
     // 12. Live Classes
     await db.run(`
       INSERT INTO live_classes (course_id, trainer_id, title, description, scheduled_at, end_time, status, max_participants, meeting_type)
-      VALUES (?, ?, 'Advanced Python Data Structures & Memory Models', 'Live practical session detailing list memory buffers, set hash tables, and custom queue classes.', datetime('now', '-30 minutes'), datetime('now', '+60 minutes'), 'live', 50, 'virtual')
+      VALUES (?, ?, 'Advanced XRD Rietveld Refinement & Profile Fitting', 'Live practical session detailing background subtraction, instrument broadening, and lattice strain extraction.', datetime('now', '-30 minutes'), datetime('now', '+60 minutes'), 'live', 50, 'virtual')
     `, [courseIds[0], trainerIds[0]]);
 
     await db.run(`
       INSERT INTO live_classes (course_id, trainer_id, title, description, scheduled_at, end_time, status, max_participants, meeting_type)
-      VALUES (?, ?, 'Data Structures Masterclass: Trees & Graph Traversal', 'Interactive workshop on BFS/DFS graph search algorithms with live coding.', datetime('now', '+1 day'), datetime('now', '+1 day', '+90 minutes'), 'scheduled', 100, 'virtual')
+      VALUES (?, ?, 'TEM Microstructure Masterclass: SAED Pattern Indexing', 'Interactive workshop on selected area electron diffraction spot patterns and lattice plane indexing.', datetime('now', '+1 day'), datetime('now', '+1 day', '+90 minutes'), 'scheduled', 100, 'virtual')
     `, [courseIds[1], trainerIds[2]]);
 
     const classLive = await db.get('SELECT id FROM live_classes WHERE status = "live"');
 
-    await db.run(`INSERT INTO class_messages (class_id, user_id, message) VALUES (?, ?, 'Welcome everyone to today live session on Python memory structures!')`, [classLive.id, trainerIds[0]]);
-    await db.run(`INSERT INTO class_messages (class_id, user_id, message) VALUES (?, ?, 'Good morning Dr. Sharma! Excited to learn about queue performance.')`, [classLive.id, traineeIds[0]]);
-    await db.run(`INSERT INTO class_messages (class_id, user_id, message) VALUES (?, ?, 'Will we cover priority queues today?')`, [classLive.id, traineeIds[1]]);
+    await db.run(`INSERT INTO class_messages (class_id, user_id, message) VALUES (?, ?, 'Welcome everyone to today live session on X-Ray Diffraction Rietveld Refinement!')`, [classLive.id, trainerIds[0]]);
+    await db.run(`INSERT INTO class_messages (class_id, user_id, message) VALUES (?, ?, 'Good morning Dr. Sharma! Excited to learn about profile fitting.')`, [classLive.id, traineeIds[0]]);
+    await db.run(`INSERT INTO class_messages (class_id, user_id, message) VALUES (?, ?, 'Will we cover asymmetric peak broadening models today?')`, [classLive.id, traineeIds[1]]);
 
     await db.run(`
       INSERT INTO polls (class_id, question, options, created_by, status)
-      VALUES (?, 'Which data structure operates strictly on a FIFO principle?', '["Stack","Queue","Tree","Graph"]', ?, 'active')
+      VALUES (?, 'What does Bragg Law (nλ = 2d sinθ) primarily calculate?', '["Sample Mass","Lattice Spacing (d)","Grain Count","Melting Point"]', ?, 'active')
     `, [classLive.id, trainerIds[0]]);
 
     const poll1 = await db.get('SELECT id FROM polls WHERE class_id = ?', [classLive.id]);
@@ -1058,30 +1057,30 @@ async function seed() {
     // 13. Assignments & Submissions
     await db.run(`
       INSERT INTO assignments (course_id, title, description, instructions, deadline, max_score, created_by)
-      VALUES (?, 'Assignment 1: Build a Custom Queue & Stack Module in Python', 'Implement a double-ended queue class supporting push, pop, peek, and length methods.', 'Submit a single .py file containing your class definition and unit test cases.', datetime('now', '+5 days'), 100, ?)
+      VALUES (?, 'Assignment 1: TEM Micrograph Indexing & Lattice Spacing Report', 'Calculate lattice interplanar spacing d from given SAED spot pattern measurements.', 'Submit a PDF report detailing d-spacing calculations, zone axis indexing, and error analysis.', datetime('now', '+5 days'), 100, ?)
     `, [courseIds[1], trainerIds[2]]);
 
     const assign1 = await db.get('SELECT id FROM assignments WHERE course_id = ?', [courseIds[1]]);
 
     await db.run(`
       INSERT INTO submissions (assignment_id, user_id, submission_text, score, feedback, status, submitted_at, graded_at)
-      VALUES (?, ?, 'class Queue:\n  def __init__(self):\n    self.items = []\n  def enqueue(self, item):\n    self.items.append(item)\n  def dequeue(self):\n    return self.items.pop(0)', 95, 'Excellent submission Arjun! Clean FIFO implementation.', 'graded', datetime('now', '-2 days'), datetime('now', '-1 day'))
+      VALUES (?, ?, 'TEM SAED Indexing Report:\n1. Camera constant Lλ = 2.45 mm·nm\n2. Measured ring radius R1 = 12.3 mm -> d1 = 0.199 nm (200 plane)\n3. Zone axis [011] confirmed.', 95, 'Excellent report Arjun! Accurately indexed the cubic lattice reflections.', 'graded', datetime('now', '-2 days'), datetime('now', '-1 day'))
     `, [assign1.id, traineeIds[0]]);
 
     // 14. Certificate for Arjun Singh
     const certId = 'VELORA-2026-98421';
     await db.run(`
       INSERT INTO certificates (user_id, course_id, certificate_id, trainer_name, course_title, trainee_name, issued_at)
-      VALUES (?, ?, ?, 'Prof. Kavita Nair', 'Web Development with JavaScript & React', 'Arjun Singh', datetime('now', '-5 days'))
+      VALUES (?, ?, ?, 'Prof. Kavita Nair', 'Advanced Materials Synthesis & Nanomaterial Processing', 'Arjun Singh', datetime('now', '-5 days'))
     `, [traineeIds[0], courseIds[9], certId]);
 
     // 15. Notifications for Arjun Singh
     const notifs = [
-      { title: 'New Recommendation Available', desc: 'Based on your recent assessment, "Data Structures & Algorithms in Practice" was recommended for you.', type: 'recommendation', link: '/recommendations' },
-      { title: 'Live Class Started!', desc: 'Dr. Rahul Sharma has started "Advanced Python Data Structures". Click to join now.', type: 'class', link: '/live-class/' + classLive.id },
-      { title: 'Certificate Issued! 🎓', desc: 'Congratulations! Your certificate for Web Development is now available.', type: 'certificate', link: '/certificates' },
-      { title: 'Skill Gap Identified', desc: 'Your Data Structures score is currently 48%. Target level is 80%.', type: 'system', link: '/skill-gaps' },
-      { title: 'Assignment Graded', desc: 'Your submission for Assignment 1 scored 95/100.', type: 'course', link: '/my-learning' }
+      { title: 'New Recommendation Available', desc: 'Based on your recent assessment, "Transmission Electron Microscopy (TEM)" was recommended for you.', type: 'recommendation', link: '/recommendations' },
+      { title: 'Live Class Started!', desc: 'Dr. Rahul Sharma has started "Advanced XRD Rietveld Refinement". Click to join now.', type: 'class', link: '/live-class/' + classLive.id },
+      { title: 'Certificate Issued! 🎓', desc: 'Congratulations! Your official VELORA certificate for Materials Synthesis is now available.', type: 'certificate', link: '/certificates' },
+      { title: 'Skill Gap Identified', desc: 'Your Transmission Electron Microscopy (TEM) score is currently 48%. Target level is 80%.', type: 'system', link: '/skill-gaps' },
+      { title: 'Assignment Graded', desc: 'Your submission for TEM Micrograph Indexing scored 95/100.', type: 'course', link: '/my-learning' }
     ];
 
     for (const n of notifs) {
@@ -1094,29 +1093,29 @@ async function seed() {
     // 16. Announcements
     await db.run(`
       INSERT INTO announcements (title, description, audience, priority, created_by)
-      VALUES ('Welcome to VELORA Capacity Connect Portal', 'Official launch of the Ministry of Earth Sciences (MoES) and India Meteorological Department digital capacity building platform.', 'all', 'high', ?)
+      VALUES ('Welcome to VELORA Capacity Connect Portal', 'Official launch of the Ministry of Earth Sciences (MoES) materials science & technical capacity building platform.', 'all', 'high', ?)
     `, [adminId]);
 
     await db.run(`
       INSERT INTO announcements (title, description, audience, priority, created_by)
-      VALUES ('Annual Competency Assessment Drive 2026', 'All technical staff and scientific trainees are requested to complete their baseline competency assessment by the end of the month.', 'trainees', 'normal', ?)
+      VALUES ('Annual Materials Science Competency Drive 2026', 'All technical staff and scientific research assistants are requested to complete their baseline competency assessment by the end of the month.', 'trainees', 'normal', ?)
     `, [adminId]);
 
     // 17. Messages
     await db.run(`
       INSERT INTO messages (sender_id, receiver_id, content, read)
-      VALUES (?, ?, 'Hello Dr. Sharma! I had a quick question regarding memory allocation in Python lists vs tuples.', 1)
+      VALUES (?, ?, 'Hello Dr. Sharma! I had a quick question regarding instrumental peak broadening in XRD Scherrer calculations.', 1)
     `, [traineeIds[0], trainerIds[0]]);
 
     await db.run(`
       INSERT INTO messages (sender_id, receiver_id, content, read)
-      VALUES (?, ?, 'Hi Arjun! Python tuples have a fixed memory allocation and smaller overhead compared to dynamic lists.', 1)
+      VALUES (?, ?, 'Hi Arjun! You should subtract the instrumental broadening in quadrature: beta_sample^2 = beta_measured^2 - beta_instrumental^2.', 1)
     `, [trainerIds[0], traineeIds[0]]);
 
     // 18. Notes
     await db.run(`
       INSERT INTO notes (user_id, lesson_id, course_id, content)
-      VALUES (?, ?, ?, 'Remember: Queue follows FIFO (First-In First-Out) structure. Essential for processing scientific sensor data buffers.')
+      VALUES (?, ?, ?, 'Remember: TEM specimens must be under 100 nm thick for electron transparency. Critical for atomic HR-TEM lattice imaging.')
     `, [traineeIds[0], c2l1.id, courseIds[1]]);
 
     // 19. Bookmarks

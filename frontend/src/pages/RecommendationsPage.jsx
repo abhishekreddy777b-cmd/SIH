@@ -24,7 +24,7 @@ export default function RecommendationsPage() {
       }
     } catch (e) {
       console.error(e);
-      toast.error('Failed to fetch AI recommendations');
+      toast.error('Failed to fetch capacity recommendations');
     } finally {
       setLoading(false);
     }
@@ -35,7 +35,7 @@ export default function RecommendationsPage() {
     try {
       const res = await api.generateRecommendations();
       if (res.success) {
-        toast.success(`AI Recommendation Engine updated! Generated ${res.generated_count} tailored pathways.`);
+        toast.success(`Recommendation Engine updated! Generated ${res.generated_count} tailored pathways.`);
         fetchRecommendations();
       }
     } catch (e) {
@@ -55,7 +55,7 @@ export default function RecommendationsPage() {
             Adaptive Learning Path Engine
           </span>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem' }}>
-            AI-Powered Capacity Recommendations
+            Rules-Based Capacity Recommendations
           </h1>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
             Intelligent mapping between your active skill gaps, career goals, and specialized micro-learning modules.

@@ -212,7 +212,7 @@ export default function ScientistDashboard() {
             </div>
 
             {enrollments.length === 0 ? (
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>No active enrollments. Explore AI recommendations below to get started.</p>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>No active enrollments. Explore capacity recommendations below to get started.</p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {enrollments.slice(0, 3).map(en => (
@@ -238,14 +238,14 @@ export default function ScientistDashboard() {
 
         </div>
 
-        {/* RIGHT COLUMN: AI RECOMMENDATIONS & UPCOMING LIVE CLASSES */}
+        {/* RIGHT COLUMN: CAPACITY RECOMMENDATIONS & UPCOMING LIVE CLASSES */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
-          {/* AI RECOMMENDATIONS */}
+          {/* Recommendations */}
           <div className="velora-card gradient-border-top">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Sparkles size={18} color="var(--accent)" /> AI Capacity Recommendations
+                <Sparkles size={18} color="var(--accent)" /> Capacity Recommendations
               </h3>
               <Link to="/recommendations" style={{ fontSize: '0.75rem', color: 'var(--accent)' }}>View All →</Link>
             </div>

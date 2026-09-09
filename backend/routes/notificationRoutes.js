@@ -7,17 +7,30 @@ const { authenticateToken } = require('../middleware/auth');
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const notifications = await db.all(`
-      SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 30
+      SELECT *
+      FROM notifications
+      WHERE user_id = ?
+      ORDER BY created_at DESC
+      LIMIT 30
     `, [req.user.id]);
 
     const unreadCount = await db.get(`
-      SELECT COUNT(*) as count FROM notifications WHERE user_id = ? AND read = 0
+      SELECT COUNT(*) as count
+      FROM notifications
+      WHERE user_id = ? AND read = 0
     `, [req.user.id]);
+
+    // Aliases expected by the React pages
+    const shaped = notifications.map(n => ({
+      ...n,
+      message: n.description,
+      is_read: n.read
+    }));
 
     res.json({
       success: true,
       unread_count: unreadCount ? unreadCount.count : 0,
-      notifications
+      notifications: shaped
     });
   } catch (err) {
     console.error('Fetch notifications error:', err);

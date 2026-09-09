@@ -14,7 +14,17 @@ router.get('/me', authenticateToken, async (req, res) => {
       ORDER BY cert.issued_at DESC
     `, [req.user.id]);
 
-    res.json({ success: true, count: certificates.length, certificates });
+    const shaped = certificates.map(cert => {
+      return {
+        ...cert,
+        // aliases expected by the React pages
+        certificate_number: cert.certificate_id,
+        user_name: cert.trainee_name,
+        issue_date: cert.issued_at
+      };
+    });
+
+    res.json({ success: true, count: shaped.length, certificates: shaped });
   } catch (err) {
     console.error('Fetch certificates error:', err);
     res.status(500).json({ success: false, message: 'Server error.' });
@@ -44,7 +54,12 @@ router.get('/verify/:certId', async (req, res) => {
     res.json({
       success: true,
       verified: true,
-      certificate: cert
+      certificate: {
+        ...cert,
+        recipient_name: cert.trainee_name,
+        certificate_number: cert.certificate_id,
+        issue_date: cert.issued_at
+      }
     });
   } catch (err) {
     console.error('Verify certificate error:', err);

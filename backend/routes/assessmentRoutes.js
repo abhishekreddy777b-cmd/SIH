@@ -27,7 +27,9 @@ router.get('/', async (req, res) => {
   try {
     const assessments = await db.all(`
       SELECT a.*, c.title as course_title,
-             (SELECT COUNT(*) FROM questions WHERE assessment_id = a.id) as question_count
+             c.category as category,
+             a.duration_minutes as time_limit_mins,
+             (SELECT COUNT(*) FROM questions WHERE assessment_id = a.id) as total_questions
       FROM assessments a
       LEFT JOIN courses c ON a.course_id = c.id
       WHERE a.status = 'published'
@@ -47,7 +49,10 @@ router.get('/:id', authenticateToken, async (req, res) => {
     const assessmentId = req.params.id;
 
     const assessment = await db.get(`
-      SELECT a.*, c.title as course_title
+      SELECT a.*, c.title as course_title,
+             c.category as category,
+             a.duration_minutes as time_limit_mins,
+             (SELECT COUNT(*) FROM questions WHERE assessment_id = a.id) as total_questions
       FROM assessments a
       LEFT JOIN courses c ON a.course_id = c.id
       WHERE a.id = ?

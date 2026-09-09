@@ -9,9 +9,20 @@ router.get('/me', authenticateToken, async (req, res) => {
     const userId = req.user.id;
 
     const courseRecs = await db.all(`
-      SELECT cr.id, cr.match_score, cr.reason, cr.created_at,
-             c.id as course_id, c.title, c.short_description, c.thumbnail, c.category, c.difficulty, c.duration_hours, c.average_rating,
-             u.first_name as trainer_first_name, u.last_name as trainer_last_name
+      SELECT cr.id,
+             cr.match_score,
+             cr.reason,
+             cr.created_at,
+             c.id as course_id,
+             c.title as course_title,
+             c.short_description,
+             c.thumbnail,
+             c.category,
+             c.difficulty,
+             c.duration_hours,
+             c.average_rating,
+             u.first_name as trainer_first_name,
+             u.last_name as trainer_last_name
       FROM course_recommendations cr
       JOIN courses c ON cr.course_id = c.id
       LEFT JOIN users u ON c.trainer_id = u.id
@@ -19,10 +30,32 @@ router.get('/me', authenticateToken, async (req, res) => {
       ORDER BY cr.match_score DESC
     `, [userId]);
 
+    const shapedCourseRecs = courseRecs.map(r => {
+      const trainerName = `${r.trainer_first_name || ''} ${r.trainer_last_name || ''}`.trim() || null;
+      return {
+        ...r,
+        // aliases expected by the React pages
+        gap_reason: r.reason,
+        trainer_name: trainerName,
+        rating: r.average_rating
+      };
+    });
+
     const trainerRecs = await db.all(`
-      SELECT tr.id, tr.match_score, tr.reason, tr.created_at,
-             u.id as trainer_id, u.first_name, u.last_name, u.avatar, u.department, u.designation, u.location,
-             tp.qualifications, tp.experience_years, tp.average_rating
+      SELECT tr.id,
+             tr.match_score,
+             tr.reason,
+             tr.created_at,
+             u.id as trainer_id,
+             u.first_name,
+             u.last_name,
+             u.avatar,
+             u.department,
+             u.designation,
+             u.location,
+             tp.qualifications,
+             tp.experience_years,
+             tp.average_rating
       FROM trainer_recommendations tr
       JOIN users u ON tr.trainer_id = u.id
       JOIN trainer_profiles tp ON u.id = tp.user_id
@@ -32,7 +65,9 @@ router.get('/me', authenticateToken, async (req, res) => {
 
     res.json({
       success: true,
-      course_recommendations: courseRecs,
+      // Back-compat alias expected by RecommendationsPage
+      recommendations: shapedCourseRecs,
+      course_recommendations: shapedCourseRecs,
       trainer_recommendations: trainerRecs
     });
   } catch (err) {
@@ -59,6 +94,9 @@ router.post('/generate', authenticateToken, async (req, res) => {
       return res.json({
         success: true,
         message: 'No active skill gaps identified. Keep learning!',
+        generated_count: 0,
+        // Back-compat alias expected by RecommendationsPage
+        recommendations: [],
         course_recommendations: [],
         trainer_recommendations: []
       });
@@ -118,7 +156,7 @@ router.post('/generate', authenticateToken, async (req, res) => {
     res.json({
       success: true,
       message: 'Personalized recommendations generated successfully.',
-      count: generatedCourseRecs.length + generatedTrainerRecs.length
+      generated_count: generatedCourseRecs.length + generatedTrainerRecs.length
     });
   } catch (err) {
     console.error('Generate recommendations error:', err);

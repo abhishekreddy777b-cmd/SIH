@@ -17,7 +17,7 @@ export default function Footer() {
           <div>
             <span style={{ fontWeight: 800, color: '#fff' }}>VELORA — CAPACITY CONNECT</span>
             <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>
-              Next-Gen AI Capacity-Building Ecosystem • Ministry of Earth Sciences (MoES) / IMD
+              Capacity-Building Ecosystem • Ministry of Earth Sciences (MoES) / IMD
             </div>
           </div>
         </div>

@@ -48,7 +48,7 @@ export default function LandingPage() {
           </h1>
 
           <p style={{ fontSize: '1.125rem', color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '2.5rem', maxWidth: '820px', margin: '0 auto 2.5rem' }}>
-            VELORA Capacity Connect operationalizes the complete learning lifecycle—from competency assessment to skill gap identification, AI-driven recommendations, live training, and verifiable national certifications across Weather Forecasting, Seismology, Oceanography, and Climate Systems.
+            VELORA Capacity Connect operationalizes the complete learning lifecycle—from competency assessment to skill gap identification, rules-based recommendations, live training, and verifiable national certifications across Weather Forecasting, Seismology, Oceanography, and Climate Systems.
           </p>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
@@ -102,7 +102,7 @@ export default function LandingPage() {
           {[
             { label: '45+ MoES Competencies', value: 'Tracked & Benchmarked', icon: Gauge, color: '#0066cc' },
             { label: 'Dynamic Skill Gap Engine', value: 'Target vs Current Analysis', icon: Workflow, color: '#00a8cc' },
-            { label: 'AI Recommendations', value: 'Personalized Learning Paths', icon: Zap, color: '#0099ff' },
+            { label: 'Capacity Recommendations', value: 'Personalized Learning Paths', icon: Zap, color: '#0099ff' },
             { label: 'Live Training Sessions', value: 'Interactive Classroom Hub', icon: Cloud, color: '#00b386' },
             { label: 'Timed Assessments', value: 'Auto-Score with Competency Boost', icon: TrendingUp, color: '#ff9900' },
             { label: 'Verifiable Certificates', value: 'Cryptographic Registry', icon: FileCheck, color: '#0066cc' }

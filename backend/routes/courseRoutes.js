@@ -44,6 +44,15 @@ router.get('/', optionalAuth, async (req, res) => {
       `, [course.id]);
       course.competencies = competencies;
 
+      // Aliases expected by the React pages
+      course.level = course.difficulty;
+      course.rating = course.average_rating;
+      course.competency_name = competencies?.[0]?.name || null;
+
+      const first = course.trainer_first_name || '';
+      const last = course.trainer_last_name || '';
+      course.trainer_name = `${first} ${last}`.trim() || null;
+
       if (req.user) {
         const enrollment = await db.get(`
           SELECT status, progress FROM enrollments WHERE user_id = ? AND course_id = ?
@@ -70,6 +79,31 @@ router.get('/trainer/my-courses', authenticateToken, requireRole('trainer', 'adm
       ORDER BY c.created_at DESC
     `, [req.user.id]);
 
+    for (const course of courses) {
+      // Aliases expected by the React trainer portal
+      course.level = course.difficulty;
+      course.rating = course.average_rating;
+
+      const competencies = await db.all(`
+        SELECT comp.id, comp.name, comp.category, comp.icon
+        FROM course_competencies cc
+        JOIN competencies comp ON cc.competency_id = comp.id
+        WHERE cc.course_id = ?
+      `, [course.id]);
+
+      course.competency_name = competencies?.[0]?.name || null;
+
+      // Keep enrolled_count consistent with UI
+      if (course.real_enrolled_count !== undefined) {
+        course.enrolled_count = course.real_enrolled_count;
+      }
+
+      // Compose a trainer display name (some UI relies on this)
+      const first = course.trainer_first_name || '';
+      const last = course.trainer_last_name || '';
+      course.trainer_name = `${first} ${last}`.trim() || null;
+    }
+
     res.json({ success: true, count: courses.length, courses });
   } catch (err) {
     console.error('Fetch trainer courses error:', err);
@@ -84,8 +118,15 @@ router.get('/:id', optionalAuth, async (req, res) => {
 
     const course = await db.get(`
       SELECT c.*,
-             u.id as trainer_id, u.first_name as trainer_first_name, u.last_name as trainer_last_name, u.avatar as trainer_avatar, u.department as trainer_department, u.bio as trainer_bio,
-             tp.qualifications as trainer_qualifications, tp.average_rating as trainer_rating
+             u.id as trainer_id,
+             u.first_name as trainer_first_name,
+             u.last_name as trainer_last_name,
+             u.avatar as trainer_avatar,
+             u.department as trainer_department,
+             u.designation as trainer_designation,
+             u.bio as trainer_bio,
+             tp.qualifications as trainer_qualifications,
+             tp.average_rating as trainer_rating
       FROM courses c
       LEFT JOIN users u ON c.trainer_id = u.id
       LEFT JOIN trainer_profiles tp ON u.id = tp.user_id
@@ -95,6 +136,11 @@ router.get('/:id', optionalAuth, async (req, res) => {
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found.' });
     }
+
+    // Aliases expected by the React pages
+    course.level = course.difficulty;
+    course.rating = course.average_rating;
+    course.trainer_name = `${course.trainer_first_name || ''} ${course.trainer_last_name || ''}`.trim() || null;
 
     // Fetch competencies
     const competencies = await db.all(`
@@ -112,18 +158,27 @@ router.get('/:id', optionalAuth, async (req, res) => {
     // Fetch lessons for each module
     for (const mod of modules) {
       const lessons = await db.all(`
-        SELECT id, module_id, title, description, content_type, content_url, duration_minutes, order_index
+        SELECT id, module_id, title, description, content_type, content_url, content_text,
+               duration_minutes, order_index
         FROM lessons
         WHERE module_id = ?
         ORDER BY order_index ASC
       `, [mod.id]);
+
+      // Aliases expected by the CourseDetailPage lesson list
+      for (const l of lessons) {
+        l.duration_mins = l.duration_minutes;
+      }
 
       if (req.user) {
         for (const l of lessons) {
           const prog = await db.get(`
             SELECT completed, notes, time_spent_minutes FROM lesson_progress WHERE user_id = ? AND lesson_id = ?
           `, [req.user.id, l.id]);
+
+          const is_completed = prog?.completed ? 1 : 0;
           l.user_progress = prog || { completed: 0, notes: '', time_spent_minutes: 0 };
+          l.is_completed = is_completed;
         }
       }
 
