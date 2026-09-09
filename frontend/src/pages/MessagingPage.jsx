@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { useToast } from '../context/ToastContext';
-import { MessageSquare, Send, User, RefreshCw } from 'lucide-react';
+import { Send, UserPlus } from 'lucide-react';
 
 export default function MessagingPage() {
   const toast = useToast();
   const [conversations, setConversations] = useState([]);
+  const [contacts, setContacts] = useState([]);
   const [activePartner, setActivePartner] = useState(null);
   const [threadMessages, setThreadMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,10 +21,13 @@ export default function MessagingPage() {
     setLoading(true);
     try {
       const res = await api.getConversations();
+      const contactsRes = await api.getMessageContacts();
       if (res.success) {
-        setConversations(res.conversations || []);
-        if (res.conversations.length > 0) {
-          loadThread(res.conversations[0]);
+        const existing = res.conversations || [];
+        setConversations(existing);
+        setContacts(contactsRes.contacts || []);
+        if (existing.length > 0) {
+          loadThread(existing[0].user);
         }
       }
     } catch (e) {
@@ -50,9 +54,9 @@ export default function MessagingPage() {
     if (!newMsg.trim() || !activePartner) return;
     setSending(true);
     try {
-      const res = await api.sendMessage({ receiver_id: activePartner.id, message: newMsg });
+      const res = await api.sendMessage({ receiver_id: activePartner.id, content: newMsg });
       if (res.success) {
-        setThreadMessages(prev => [...prev, res.message]);
+        if (res.message) setThreadMessages(prev => [...prev, res.message]);
         setNewMsg('');
       }
     } catch (e) {
@@ -61,6 +65,8 @@ export default function MessagingPage() {
       setSending(false);
     }
   };
+
+  const newContacts = contacts.filter(contact => !conversations.some(conv => conv.user?.id === contact.id));
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -73,21 +79,38 @@ export default function MessagingPage() {
         {/* CONVERSATION PARTNERS SIDEBAR */}
         <div style={{ width: '240px', borderRight: '1px solid var(--border-color)', paddingRight: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase' }}>Conversations</span>
-          {conversations.map(conv => (
+          {conversations.map(conv => conv.user).map(partner => (
             <div
-              key={conv.id}
-              onClick={() => loadThread(conv)}
+              key={partner.id}
+              onClick={() => loadThread(partner)}
               style={{
                 padding: '0.625rem',
                 borderRadius: 'var(--radius-md)',
-                backgroundColor: activePartner?.id === conv.id ? 'var(--primary-light)' : 'transparent',
+                backgroundColor: activePartner?.id === partner.id ? 'var(--primary-light)' : 'transparent',
                 cursor: 'pointer',
-                border: activePartner?.id === conv.id ? '1px solid var(--primary)' : '1px solid transparent'
+                border: activePartner?.id === partner.id ? '1px solid var(--primary)' : '1px solid transparent'
               }}
             >
-              <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text-main)' }}>{conv.first_name} {conv.last_name}</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--secondary)' }}>{conv.role}</div>
+              <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text-main)' }}>{partner.first_name} {partner.last_name}</div>
+              <div style={{ fontSize: '0.7rem', color: 'var(--secondary)' }}>{partner.role}</div>
             </div>
+          ))}
+          <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', marginTop: '0.75rem' }}>People you can message</span>
+          {newContacts.length === 0 ? (
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', padding: '0.5rem 0' }}>No eligible contacts found.</div>
+          ) : newContacts.map(partner => (
+            <button
+              type="button"
+              key={`contact-${partner.id}`}
+              onClick={() => loadThread(partner)}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem', borderRadius: 'var(--radius-md)', backgroundColor: activePartner?.id === partner.id ? 'var(--primary-light)' : 'transparent', border: activePartner?.id === partner.id ? '1px solid var(--primary)' : '1px solid transparent', color: 'var(--text-main)', cursor: 'pointer', textAlign: 'left' }}
+            >
+              <UserPlus size={14} color="var(--primary)" />
+              <span>
+                <span style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700 }}>{partner.first_name} {partner.last_name}</span>
+                <span style={{ display: 'block', fontSize: '0.7rem', color: 'var(--secondary)' }}>{partner.role}</span>
+              </span>
+            </button>
           ))}
         </div>
 
@@ -100,7 +123,7 @@ export default function MessagingPage() {
               </div>
 
               <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingRight: '0.5rem' }}>
-                {threadMessages.map(m => (
+                {threadMessages.filter(Boolean).map(m => (
                   <div key={m.id} style={{
                     alignSelf: m.sender_id === activePartner.id ? 'flex-start' : 'flex-end',
                     backgroundColor: m.sender_id === activePartner.id ? '#0f172a' : 'var(--primary-hover)',
@@ -110,7 +133,7 @@ export default function MessagingPage() {
                     fontSize: '0.85rem',
                     color: 'var(--text-main)'
                   }}>
-                    {m.message}
+                    {m.content}
                   </div>
                 ))}
               </div>

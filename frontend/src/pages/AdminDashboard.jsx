@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 import { useToast } from '../context/ToastContext';
 import { StatCard, Badge } from '../components/common/UIComponents';
@@ -6,7 +7,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend
 } from 'recharts';
 import {
-  Shield, Users, BookOpen, Download, AlertTriangle, CheckCircle, Bell, ArrowRight, RefreshCw, Activity, Award
+  Shield, Users, BookOpen, Download, ArrowRight, Award, Megaphone, UserRound, ArrowUpRight
 } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -15,9 +16,6 @@ export default function AdminDashboard() {
   const [topGaps, setTopGaps] = useState([]);
   const [deptStats, setDeptStats] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const [announcement, setAnnouncement] = useState({ title: '', content: '', priority: 'normal' });
-  const [publishing, setPublishing] = useState(false);
 
   useEffect(() => {
     fetchAnalytics();
@@ -37,23 +35,6 @@ export default function AdminDashboard() {
       toast.error('Failed to load directorate analytics');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleCreateAnnouncement = async (e) => {
-    e.preventDefault();
-    if (!announcement.title || !announcement.content) return;
-    setPublishing(true);
-    try {
-      const res = await api.createAnnouncement(announcement);
-      if (res.success) {
-        toast.success('System announcement broadcasted to all MoES personnel!');
-        setAnnouncement({ title: '', content: '', priority: 'normal' });
-      }
-    } catch (e) {
-      toast.error('Failed to broadcast announcement');
-    } finally {
-      setPublishing(false);
     }
   };
 
@@ -86,30 +67,45 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div className="director-shell" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
       {/* EXECUTIVE HEADER */}
-      <div className="velora-card gradient-border-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+      <div className="velora-card director-hero" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem', padding: '1.75rem' }}>
         <div>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--warning)', textTransform: 'uppercase' }}>
-            Director General MoES Executive Suite
-          </span>
+          <span className="director-kicker">Directorate control room · 10 Sep 2026</span>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem' }}>
-            National Capacity Analytics & Monitoring
+            National capacity command center
           </h1>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-            Real-time readiness monitoring across all 5 MoES institutes and regional weather centers.
+            One view of people, learning delivery, and readiness across MoES institutes.
           </p>
         </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
+          <span className="badge badge-success">Systems operational</span>
+          <a href={api.exportAnalyticsCSV()} download="MoES_Capacity_Building_Report.csv" className="btn btn-secondary">
+            <Download size={16} /> Export report
+          </a>
+        </div>
+      </div>
 
-        <a
-          href={api.exportAnalyticsCSV()}
-          download="MoES_Capacity_Building_Report.csv"
-          className="btn btn-outline"
-          style={{ borderColor: 'var(--warning)', color: 'var(--warning)' }}
-        >
-          <Download size={16} /> Export Directorate Report CSV
-        </a>
+      <div>
+        <div className="director-section-label" style={{ marginBottom: '0.65rem' }}>Director modules</div>
+        <div className="director-module-grid">
+          <Link to="/admin/users" className="director-module">
+            <span className="director-module-icon"><UserRound size={18} /></span>
+            <span><strong style={{ display: 'block', fontSize: '0.9rem' }}>Personnel</strong><small style={{ color: 'var(--text-muted)' }}>Access, roles, and activity</small></span>
+            <ArrowUpRight size={15} style={{ marginLeft: 'auto', color: 'var(--text-dim)' }} />
+          </Link>
+          <Link to="/admin/announcements" className="director-module">
+            <span className="director-module-icon"><Megaphone size={18} /></span>
+            <span><strong style={{ display: 'block', fontSize: '0.9rem' }}>Broadcasts</strong><small style={{ color: 'var(--text-muted)' }}>Directives and updates</small></span>
+            <ArrowUpRight size={15} style={{ marginLeft: 'auto', color: 'var(--text-dim)' }} />
+          </Link>
+          <div className="director-module" style={{ cursor: 'default' }}>
+            <span className="director-module-icon"><Shield size={18} /></span>
+            <span><strong style={{ display: 'block', fontSize: '0.9rem' }}>Readiness</strong><small style={{ color: 'var(--text-muted)' }}>Live analytics snapshot</small></span>
+          </div>
+        </div>
       </div>
 
       {/* STAT CARDS */}
@@ -119,28 +115,28 @@ export default function AdminDashboard() {
           title="Total Registered Trainees"
           value={metrics.total_trainees || 0}
           subtitle="IMD & MoES Scientists"
-          color="#3b82f6"
+          color="#67e8d5"
         />
         <StatCard
           icon={Shield}
           title="Domain Trainers"
           value={metrics.total_trainers || 0}
           subtitle="Certified specialists"
-          color="#06b6d4"
+          color="#5bb8ff"
         />
         <StatCard
           icon={BookOpen}
           title="Published Courses"
           value={metrics.total_courses || 0}
           subtitle="Capacity modules"
-          color="#10b981"
+          color="#9be15d"
         />
         <StatCard
           icon={Award}
           title="Certificates Issued"
           value={metrics.total_certificates || 0}
           subtitle="Verified credentials"
-          color="#f59e0b"
+          color="#ffc857"
         />
       </div>
 
@@ -185,57 +181,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-      </div>
-
-      {/* ANNOUNCEMENT BROADCAST FORM */}
-      <div className="velora-card gradient-border-top">
-        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Bell size={18} color="var(--warning)" /> Broadcast System-Wide MoES Announcement
-        </h3>
-
-        <form onSubmit={handleCreateAnnouncement}>
-          <div className="grid-cols-2" style={{ gap: '1rem' }}>
-            <div className="form-group">
-              <label className="form-label">Announcement Title</label>
-              <input
-                type="text"
-                required
-                className="form-control"
-                placeholder="e.g. Mandatory Radar Meteorology Assessment Directive 2026"
-                value={announcement.title}
-                onChange={(e) => setAnnouncement({ ...announcement, title: e.target.value })}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Priority Level</label>
-              <select
-                className="form-control"
-                value={announcement.priority}
-                onChange={(e) => setAnnouncement({ ...announcement, priority: e.target.value })}
-              >
-                <option value="normal">Normal Broadcast</option>
-                <option value="high">High Directive</option>
-                <option value="urgent">Urgent Operational</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Announcement Content</label>
-            <textarea
-              required
-              rows={3}
-              className="form-control"
-              placeholder="Message will be pushed instantly to all trainee & trainer dashboards..."
-              value={announcement.content}
-              onChange={(e) => setAnnouncement({ ...announcement, content: e.target.value })}
-            />
-          </div>
-
-          <button type="submit" disabled={publishing} className="btn btn-primary">
-            {publishing ? 'Publishing...' : 'Broadcast Announcement Now'}
-          </button>
-        </form>
       </div>
 
     </div>

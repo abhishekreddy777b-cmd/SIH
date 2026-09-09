@@ -224,14 +224,28 @@ router.post('/', authenticateToken, requireRole('trainer', 'admin'), async (req,
     }
 
     // Create default Module 1
-    await db.run(`
+    const moduleResult = await db.run(`
       INSERT INTO course_modules (course_id, title, description, order_index)
       VALUES (?, 'Module 1: Introduction & Foundations', 'Getting started with fundamental concepts.', 1)
     `, [courseId]);
 
-    const course = await db.get('SELECT * FROM courses WHERE id = ?', [courseId]);
+    await db.run(`
+      INSERT INTO lessons (module_id, title, description, content_type, content_text, duration_minutes, order_index)
+      VALUES (?, 'Welcome and Course Orientation', 'Start here to understand the course goals and learning path.', 'reading', ?, 10, 1)
+    `, [moduleResult.id, description || 'Welcome to this MoES capacity-building course.']);
 
-    res.status(201).json({ success: true, message: 'Course created successfully.', course });
+    const course = await db.get('SELECT * FROM courses WHERE id = ?', [courseId]);
+    const defaultModule = await db.get(
+      'SELECT id FROM course_modules WHERE course_id = ? ORDER BY order_index ASC LIMIT 1',
+      [courseId]
+    );
+
+    res.status(201).json({
+      success: true,
+      message: 'Course created successfully.',
+      course,
+      module_id: defaultModule?.id || moduleResult.id
+    });
   } catch (err) {
     console.error('Create course error:', err);
     res.status(500).json({ success: false, message: 'Server error creating course.' });

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   LayoutGrid, Gauge, BookMarked, Zap, Video, Send,
-  BarChart2, Users, Megaphone, Target, FileCheck
+  BarChart2, Users, Megaphone, Bell, FileCheck, MessageSquare
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -16,23 +16,24 @@ export default function Sidebar() {
     { label: 'Course Library', path: '/courses', icon: BookMarked },
     { label: 'Assessments', path: '/assessments', icon: Zap },
     { label: 'Live Sessions', path: '/live-classes', icon: Video },
+    { label: 'Messages', path: '/messages', icon: MessageSquare },
     { label: 'Recommendations', path: '/recommendations', icon: Send },
-    { label: 'Certificates', path: '/certificates', icon: FileCheck }
+    { label: 'Certificates', path: '/certificates', icon: FileCheck },
+    { label: 'Announcements', path: '/announcements', icon: Bell }
   ];
 
   const trainerNav = [
     { label: 'Dashboard', path: '/trainer', icon: LayoutGrid },
     { label: 'Course Builder', path: '/trainer/courses/new', icon: BookMarked },
     { label: 'Live Classes', path: '/live-classes', icon: Video },
-    { label: 'Messages', path: '/messages', icon: Megaphone }
+    { label: 'Messages', path: '/messages', icon: Megaphone },
+    { label: 'Announcements', path: '/announcements', icon: Bell }
   ];
 
   const directorNav = [
     { label: 'Analytics Hub', path: '/admin', icon: BarChart2 },
     { label: 'Personnel', path: '/admin/users', icon: Users },
-    { label: 'Announcements', path: '/admin/announcements', icon: Megaphone },
-    { label: 'Competencies', path: '/competencies', icon: Target },
-    { label: 'Certificates', path: '/certificates', icon: FileCheck }
+    { label: 'Announcements', path: '/admin/announcements', icon: Megaphone }
   ];
 
   const navItems = user.role === 'admin'

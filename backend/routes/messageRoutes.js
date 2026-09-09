@@ -3,6 +3,44 @@ const router = express.Router();
 const db = require('../config/database');
 const { authenticateToken } = require('../middleware/auth');
 
+// GET /api/messages/contacts - Users the current user can message
+router.get('/contacts', authenticateToken, async (req, res) => {
+  try {
+    let contacts;
+    if (req.user.role === 'trainer') {
+      contacts = await db.all(`
+        SELECT DISTINCT u.id, u.first_name, u.last_name, u.role, u.avatar, u.department, u.designation
+        FROM users u
+        JOIN enrollments e ON e.user_id = u.id
+        JOIN courses c ON c.id = e.course_id
+        WHERE c.trainer_id = ? AND u.role = 'trainee' AND u.status = 'active'
+        ORDER BY u.first_name, u.last_name
+      `, [req.user.id]);
+    } else if (req.user.role === 'trainee') {
+      contacts = await db.all(`
+        SELECT DISTINCT u.id, u.first_name, u.last_name, u.role, u.avatar, u.department, u.designation
+        FROM users u
+        JOIN courses c ON c.trainer_id = u.id
+        JOIN enrollments e ON e.course_id = c.id
+        WHERE e.user_id = ? AND u.role = 'trainer' AND u.status = 'active'
+        ORDER BY u.first_name, u.last_name
+      `, [req.user.id]);
+    } else {
+      contacts = await db.all(`
+        SELECT id, first_name, last_name, role, avatar, department, designation
+        FROM users
+        WHERE id != ? AND status = 'active'
+        ORDER BY first_name, last_name
+      `, [req.user.id]);
+    }
+
+    res.json({ success: true, count: contacts.length, contacts });
+  } catch (err) {
+    console.error('Fetch message contacts error:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
 // GET /api/messages/conversations - User message conversations
 router.get('/conversations', authenticateToken, async (req, res) => {
   try {
@@ -76,19 +114,35 @@ router.get('/thread/:otherUserId', authenticateToken, async (req, res) => {
 // POST /api/messages/send - Send message
 router.post('/send', authenticateToken, async (req, res) => {
   try {
-    const { receiver_id, content } = req.body;
-    if (!receiver_id || !content || !content.trim()) {
+    const { receiver_id, content, message } = req.body;
+    const messageContent = content || message;
+    if (!receiver_id || !messageContent || !messageContent.trim()) {
       return res.status(400).json({ success: false, message: 'Receiver ID and content are required.' });
     }
 
     const result = await db.run(`
       INSERT INTO messages (sender_id, receiver_id, content)
       VALUES (?, ?, ?)
-    `, [req.user.id, receiver_id, content.trim()]);
+    `, [req.user.id, receiver_id, messageContent.trim()]);
 
-    const newMsg = await db.get('SELECT * FROM messages WHERE id = ?', [result.id]);
+    const newMsg = await db.get(`
+      SELECT * FROM messages
+      WHERE sender_id = ? AND receiver_id = ? AND content = ?
+      ORDER BY id DESC
+      LIMIT 1
+    `, [req.user.id, receiver_id, messageContent.trim()]);
 
-    res.status(201).json({ success: true, message: newMsg });
+    res.status(201).json({
+      success: true,
+      message: newMsg || {
+        id: result.id,
+        sender_id: req.user.id,
+        receiver_id,
+        content: messageContent.trim(),
+        read: 0,
+        created_at: new Date().toISOString()
+      }
+    });
   } catch (err) {
     console.error('Send message error:', err);
     res.status(500).json({ success: false, message: 'Server error.' });

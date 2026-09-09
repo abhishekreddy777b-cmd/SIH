@@ -62,10 +62,10 @@ export const api = {
   getCourseById: (id) => request(`/courses/${id}`),
   getTrainerCourses: () => request('/courses/trainer/my-courses'),
   createCourse: (courseData) => request('/courses', { method: 'POST', body: courseData }),
+  createLesson: (lessonData) => request('/lessons', { method: 'POST', body: lessonData }),
 
   getLessonById: (id) => request(`/lessons/${id}`),
   completeLesson: (id, payload) => request(`/lessons/${id}/complete`, { method: 'POST', body: payload }),
-  createLesson: (lessonData) => request('/lessons', { method: 'POST', body: lessonData }),
 
   // Enrollments
   getMyEnrollments: () => request('/enrollments/me'),
@@ -106,6 +106,7 @@ export const api = {
 
   // Messaging & Notes & Bookmarks
   getConversations: () => request('/messages/conversations'),
+  getMessageContacts: () => request('/messages/contacts'),
   getMessageThread: (userId) => request(`/messages/thread/${userId}`),
   sendMessage: (payload) => request('/messages/send', { method: 'POST', body: payload }),
 

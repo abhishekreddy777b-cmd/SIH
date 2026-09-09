@@ -31,6 +31,8 @@ import MessagingPage from './pages/MessagingPage';
 import NotesPage from './pages/NotesPage';
 import NotificationsPage from './pages/NotificationsPage';
 import UserProfilePage from './pages/UserProfilePage';
+import AnnouncementsPage from './pages/AnnouncementsPage';
+import PersonnelPage from './pages/PersonnelPage';
 
 function ProtectedRoute({ children, allowedRoles }) {
   const { user, loading } = useAuth();
@@ -86,6 +88,7 @@ export default function App() {
             <Route path="/messages" element={<ProtectedRoute><MainLayout><MessagingPage /></MainLayout></ProtectedRoute>} />
             <Route path="/notes" element={<ProtectedRoute><MainLayout><NotesPage /></MainLayout></ProtectedRoute>} />
             <Route path="/notifications" element={<ProtectedRoute><MainLayout><NotificationsPage /></MainLayout></ProtectedRoute>} />
+            <Route path="/announcements" element={<ProtectedRoute allowedRoles={['trainee', 'trainer', 'admin']}><MainLayout><AnnouncementsPage /></MainLayout></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><MainLayout><UserProfilePage /></MainLayout></ProtectedRoute>} />
 
             {/* Trainer Routes */}
@@ -94,8 +97,8 @@ export default function App() {
 
             {/* Admin Routes */}
             <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout><AdminDashboard /></MainLayout></ProtectedRoute>} />
-            <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout><AdminDashboard /></MainLayout></ProtectedRoute>} />
-            <Route path="/admin/announcements" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout><AdminDashboard /></MainLayout></ProtectedRoute>} />
+            <Route path="/admin/users" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout><PersonnelPage /></MainLayout></ProtectedRoute>} />
+            <Route path="/admin/announcements" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout><AnnouncementsPage /></MainLayout></ProtectedRoute>} />
 
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -147,6 +147,102 @@ a:hover {
   border: 1px solid rgba(0, 102, 204, 0.15);
 }
 
+/* Director portal surfaces */
+.director-shell {
+  --director-ink: #f6f8fb;
+  --director-muted: #9aa8b7;
+  --director-line: rgba(148, 163, 184, 0.16);
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+.director-hero {
+  background: linear-gradient(115deg, #101b2b 0%, #0a1425 58%, #122d3b 100%);
+  border: 1px solid rgba(71, 190, 176, 0.3);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.26);
+}
+
+.director-hero::after {
+  content: '';
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  right: 8%;
+  top: -100px;
+  border: 1px solid rgba(56, 189, 173, 0.18);
+  border-radius: 50%;
+  box-shadow: 0 0 0 22px rgba(56, 189, 173, 0.04), 0 0 0 44px rgba(56, 189, 173, 0.03);
+  pointer-events: none;
+}
+
+.director-kicker {
+  color: #67e8d5;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.director-module-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1.15fr 0.9fr;
+  gap: 0.85rem;
+}
+
+.director-module {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 76px;
+  padding: 1rem;
+  color: var(--text-main);
+  text-decoration: none;
+  background: rgba(10, 20, 40, 0.82);
+  border: 1px solid var(--director-line);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.director-module:hover {
+  color: var(--text-main);
+  border-color: rgba(103, 232, 213, 0.55);
+  background: rgba(17, 40, 53, 0.92);
+  transform: translateY(-2px);
+}
+
+.director-module-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: #67e8d5;
+  background: rgba(103, 232, 213, 0.1);
+  border: 1px solid rgba(103, 232, 213, 0.22);
+  border-radius: 8px;
+}
+
+.director-section-label {
+  color: var(--director-muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.director-metric {
+  border-top: 2px solid var(--metric-color, var(--primary));
+  padding-top: 1rem;
+}
+
+.director-metric .badge {
+  margin-bottom: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .director-module-grid { grid-template-columns: 1fr; }
+}
+
 /* Government Enterprise Header Accent */
 .gradient-border-top {
   position: relative;
