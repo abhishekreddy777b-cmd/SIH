@@ -30,13 +30,17 @@ async function getDB() {
 
 function saveDB() {
   if (!dbInstance) return;
-  const data = dbInstance.export();
-  const buffer = Buffer.from(data);
-  const dir = path.dirname(dbFilePath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+  try {
+    const data = dbInstance.export();
+    const buffer = Buffer.from(data);
+    const dir = path.dirname(dbFilePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(dbFilePath, buffer);
+  } catch (err) {
+    console.error('Warning: Unable to save database file to disk:', err.message);
   }
-  fs.writeFileSync(dbFilePath, buffer);
 }
 
 const dbHelper = {

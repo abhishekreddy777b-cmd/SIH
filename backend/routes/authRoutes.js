@@ -37,14 +37,14 @@ router.post('/login', async (req, res) => {
     const tokenPayload = { id: user.id, email: user.email, role: user.role };
     const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '7d' });
 
-    delete user.password;
+    const { password: _, ...userWithoutPassword } = user;
 
     res.json({
       success: true,
       message: 'Login successful.',
       token,
       user: {
-        ...user,
+        ...userWithoutPassword,
         profile
       }
     });
@@ -68,7 +68,8 @@ router.post('/register', async (req, res) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const assignedRole = ['trainee', 'trainer', 'admin'].includes(role) ? role : 'trainee';
+    // Public self-registration allows trainee or trainer roles (admin must be assigned by system/existing admin)
+    const assignedRole = ['trainee', 'trainer'].includes(role) ? role : 'trainee';
 
     await db.run(`
       INSERT INTO users (email, password, role, first_name, last_name, department, designation, location)
@@ -88,14 +89,14 @@ router.post('/register', async (req, res) => {
 
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
 
-    delete user.password;
+    const { password: __, ...userWithoutPassword } = user;
 
     res.status(201).json({
       success: true,
       message: 'Account created successfully.',
       token,
       user: {
-        ...user,
+        ...userWithoutPassword,
         profile
       }
     });

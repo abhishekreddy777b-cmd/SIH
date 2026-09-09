@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { api } from '../services/api';
@@ -14,6 +14,17 @@ export default function UserProfilePage() {
     department: user?.department || '',
     designation: user?.designation || ''
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
+        department: user.department || '',
+        designation: user.designation || ''
+      });
+    }
+  }, [user]);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {

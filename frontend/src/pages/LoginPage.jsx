@@ -66,21 +66,21 @@ export default function LoginPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
             <button
-              onClick={() => { switchDemoAccount('trainee'); navigate('/dashboard'); }}
+              onClick={async () => { await switchDemoAccount('trainee'); navigate('/dashboard'); }}
               className="btn btn-sm btn-secondary"
               style={{ justifyContent: 'flex-start' }}
             >
               <GraduationCap size={14} color="#60a5fa" /> Trainee (Arjun Sharma)
             </button>
             <button
-              onClick={() => { switchDemoAccount('trainer'); navigate('/trainer'); }}
+              onClick={async () => { await switchDemoAccount('trainer'); navigate('/trainer'); }}
               className="btn btn-sm btn-secondary"
               style={{ justifyContent: 'flex-start' }}
             >
               <BookOpen size={14} color="#34d399" /> Trainer (Dr. Rahul Mehta)
             </button>
             <button
-              onClick={() => { switchDemoAccount('admin'); navigate('/admin'); }}
+              onClick={async () => { await switchDemoAccount('admin'); navigate('/admin'); }}
               className="btn btn-sm btn-secondary"
               style={{ justifyContent: 'flex-start' }}
             >

@@ -117,7 +117,7 @@ export default function CoursesPage() {
                   {course.title}
                 </h3>
                 <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
-                  {course.description ? course.description.substring(0, 110) + '...' : ''}
+                  {course.description ? (course.description.length > 110 ? course.description.substring(0, 110) + '...' : course.description) : ''}
                 </p>
               </div>
 

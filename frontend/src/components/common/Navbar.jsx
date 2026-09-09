@@ -133,21 +133,21 @@ export default function Navbar() {
                 Quick Demo Access
               </div>
               <button
-                onClick={() => { switchDemoAccount('trainee'); setShowDemoMenu(false); navigate('/dashboard'); }}
+                onClick={async () => { await switchDemoAccount('trainee'); setShowDemoMenu(false); navigate('/dashboard'); }}
                 style={{ width: '100%', textAlign: 'left', padding: '0.65rem 0.75rem', borderRadius: '6px', background: user?.role === 'trainee' ? 'var(--primary-light)' : 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', marginTop: '0.35rem' }}
               >
                 <Briefcase size={15} color="#0066cc" />
                 <span>Scientist (Arjun)</span>
               </button>
               <button
-                onClick={() => { switchDemoAccount('trainer'); setShowDemoMenu(false); navigate('/trainer'); }}
+                onClick={async () => { await switchDemoAccount('trainer'); setShowDemoMenu(false); navigate('/trainer'); }}
                 style={{ width: '100%', textAlign: 'left', padding: '0.65rem 0.75rem', borderRadius: '6px', background: user?.role === 'trainer' ? 'var(--primary-light)' : 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', marginTop: '0.25rem' }}
               >
                 <BarChart3 size={15} color="#00b386" />
                 <span>Trainer (Dr. Rahul)</span>
               </button>
               <button
-                onClick={() => { switchDemoAccount('admin'); setShowDemoMenu(false); navigate('/admin'); }}
+                onClick={async () => { await switchDemoAccount('admin'); setShowDemoMenu(false); navigate('/admin'); }}
                 style={{ width: '100%', textAlign: 'left', padding: '0.65rem 0.75rem', borderRadius: '6px', background: user?.role === 'admin' ? 'var(--primary-light)' : 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', marginTop: '0.25rem' }}
               >
                 <Shield size={15} color="#ff9900" />
