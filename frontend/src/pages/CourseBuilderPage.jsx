@@ -4,15 +4,19 @@ import { api } from '../services/api';
 import { useToast } from '../context/ToastContext';
 import { PlusCircle, ArrowLeft, Save, Trash2 } from 'lucide-react';
 
+const createQuestion = () => ({
+  question: '',
+  options: ['', '', '', ''],
+  correct_option: 'A'
+});
+
 const createLessonDraft = () => ({
   title: '',
   content_type: 'reading',
   content_text: '',
   content_url: '',
   duration_minutes: 15,
-  question: '',
-  options: ['', '', '', ''],
-  correct_option: 'A'
+  questions: [createQuestion()]
 });
 
 export default function CourseBuilderPage() {
@@ -72,9 +76,7 @@ export default function CourseBuilderPage() {
             ? {
                 ...lesson,
                 content_text: JSON.stringify({
-                  question: lesson.question,
-                  options: lesson.options,
-                  correct_option: lesson.correct_option
+                  questions: lesson.questions
                 })
               }
             : lesson;
@@ -126,7 +128,7 @@ export default function CourseBuilderPage() {
                 <div key={index} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)' }}>
                   <div className="grid-cols-2" style={{ gap: '0.75rem' }}>
                     <input className="form-control" placeholder={lesson.content_type === 'quiz' ? 'Quiz title' : 'Lesson or material title'} value={lesson.title} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, title: e.target.value } : item))} />
-                    <select className="form-control" value={lesson.content_type} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_type: e.target.value } : item))}>
+                    <select className="form-control" value={lesson.content_type} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_type: e.target.value, questions: item.questions?.length ? item.questions : [createQuestion()] } : item))}>
                       <option value="reading">Reading Material</option>
                       <option value="document">Document</option>
                       <option value="video">Video</option>
@@ -136,24 +138,49 @@ export default function CourseBuilderPage() {
                   </div>
                   {lesson.content_type === 'quiz' ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '0.75rem' }}>
-                      <textarea className="form-control" rows={2} placeholder="Quiz question" value={lesson.question} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, question: e.target.value } : item))} />
-                      <div className="grid-cols-2" style={{ gap: '0.6rem' }}>
-                        {lesson.options.map((option, optionIndex) => (
-                          <input
-                            key={optionIndex}
-                            className="form-control"
-                            placeholder={`Option ${String.fromCharCode(65 + optionIndex)}`}
-                            value={option}
-                            onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, options: item.options.map((value, optionPosition) => optionPosition === optionIndex ? e.target.value : value) } : item))}
-                          />
-                        ))}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <label className="form-label" htmlFor={`question-count-${index}`} style={{ margin: 0 }}>Number of questions</label>
+                        <input
+                          id={`question-count-${index}`}
+                          className="form-control"
+                          type="number"
+                          min="1"
+                          max="50"
+                          value={lesson.questions.length}
+                          onChange={e => {
+                            const count = Math.min(50, Math.max(1, Number(e.target.value) || 1));
+                            setLessons(prev => prev.map((item, i) => {
+                              if (i !== index) return item;
+                              const questions = Array.from({ length: count }, (_, questionIndex) => item.questions[questionIndex] || createQuestion());
+                              return { ...item, questions };
+                            }));
+                          }}
+                          style={{ maxWidth: '110px' }}
+                        />
                       </div>
-                      <select className="form-control" value={lesson.correct_option} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, correct_option: e.target.value } : item))}>
-                        <option value="A">Correct option: A</option>
-                        <option value="B">Correct option: B</option>
-                        <option value="C">Correct option: C</option>
-                        <option value="D">Correct option: D</option>
-                      </select>
+                      {lesson.questions.map((question, questionIndex) => (
+                        <div key={questionIndex} style={{ padding: '0.85rem', border: '1px solid rgba(148,163,184,0.2)', borderRadius: '10px' }}>
+                          <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--secondary)', marginBottom: '0.5rem' }}>Question {questionIndex + 1}</div>
+                          <textarea className="form-control" rows={2} placeholder={`Question ${questionIndex + 1}`} value={question.question} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, questions: item.questions.map((entry, q) => q === questionIndex ? { ...entry, question: e.target.value } : entry) } : item))} />
+                          <div className="grid-cols-2" style={{ gap: '0.6rem', marginTop: '0.6rem' }}>
+                            {question.options.map((option, optionIndex) => (
+                              <input
+                                key={optionIndex}
+                                className="form-control"
+                                placeholder={`Question ${questionIndex + 1} - Option ${String.fromCharCode(65 + optionIndex)}`}
+                                value={option}
+                                onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, questions: item.questions.map((entry, q) => q === questionIndex ? { ...entry, options: entry.options.map((value, position) => position === optionIndex ? e.target.value : value) } : entry) } : item))}
+                              />
+                            ))}
+                          </div>
+                          <select className="form-control" style={{ marginTop: '0.6rem' }} value={question.correct_option} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, questions: item.questions.map((entry, q) => q === questionIndex ? { ...entry, correct_option: e.target.value } : entry) } : item))}>
+                            <option value="A">Question {questionIndex + 1} - Correct option: A</option>
+                            <option value="B">Question {questionIndex + 1} - Correct option: B</option>
+                            <option value="C">Question {questionIndex + 1} - Correct option: C</option>
+                            <option value="D">Question {questionIndex + 1} - Correct option: D</option>
+                          </select>
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <textarea className="form-control" rows={2} placeholder={lesson.content_type === 'assignment' ? 'Assignment instructions and submission requirements' : lesson.content_type === 'video' ? 'Video description or learning notes' : 'Study content or instructions'} value={lesson.content_text} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_text: e.target.value } : item))} style={{ marginTop: '0.75rem' }} />
