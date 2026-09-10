@@ -4,15 +4,24 @@ import { api } from '../services/api';
 import { useToast } from '../context/ToastContext';
 import { PlusCircle, ArrowLeft, Save, Trash2 } from 'lucide-react';
 
+const createLessonDraft = () => ({
+  title: '',
+  content_type: 'reading',
+  content_text: '',
+  content_url: '',
+  duration_minutes: 15,
+  question: '',
+  options: ['', '', '', ''],
+  correct_option: 'A'
+});
+
 export default function CourseBuilderPage() {
   const toast = useToast();
   const navigate = useNavigate();
 
   const [competencies, setCompetencies] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [lessons, setLessons] = useState([
-    { title: '', content_type: 'reading', content_text: '', content_url: '', duration_minutes: 15 }
-  ]);
+  const [lessons, setLessons] = useState([createLessonDraft()]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -59,7 +68,17 @@ export default function CourseBuilderPage() {
       const res = await api.createCourse(payload);
       if (res.success) {
         for (const lesson of lessons.filter(item => item.title.trim())) {
-          await api.createLesson({ ...lesson, module_id: res.module_id });
+          const lessonPayload = lesson.content_type === 'quiz'
+            ? {
+                ...lesson,
+                content_text: JSON.stringify({
+                  question: lesson.question,
+                  options: lesson.options,
+                  correct_option: lesson.correct_option
+                })
+              }
+            : lesson;
+          await api.createLesson({ ...lessonPayload, module_id: res.module_id });
         }
         toast.success('Course created successfully!');
         navigate('/trainer');
@@ -106,7 +125,7 @@ export default function CourseBuilderPage() {
               {lessons.map((lesson, index) => (
                 <div key={index} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)' }}>
                   <div className="grid-cols-2" style={{ gap: '0.75rem' }}>
-                    <input className="form-control" placeholder="Lesson or test title" value={lesson.title} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, title: e.target.value } : item))} />
+                    <input className="form-control" placeholder={lesson.content_type === 'quiz' ? 'Quiz title' : 'Lesson or material title'} value={lesson.title} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, title: e.target.value } : item))} />
                     <select className="form-control" value={lesson.content_type} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_type: e.target.value } : item))}>
                       <option value="reading">Reading Material</option>
                       <option value="document">Document</option>
@@ -115,15 +134,38 @@ export default function CourseBuilderPage() {
                       <option value="assignment">Assignment</option>
                     </select>
                   </div>
-                  <textarea className="form-control" rows={2} placeholder="Instructions, questions, or study content" value={lesson.content_text} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_text: e.target.value } : item))} style={{ marginTop: '0.75rem' }} />
+                  {lesson.content_type === 'quiz' ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '0.75rem' }}>
+                      <textarea className="form-control" rows={2} placeholder="Quiz question" value={lesson.question} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, question: e.target.value } : item))} />
+                      <div className="grid-cols-2" style={{ gap: '0.6rem' }}>
+                        {lesson.options.map((option, optionIndex) => (
+                          <input
+                            key={optionIndex}
+                            className="form-control"
+                            placeholder={`Option ${String.fromCharCode(65 + optionIndex)}`}
+                            value={option}
+                            onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, options: item.options.map((value, optionPosition) => optionPosition === optionIndex ? e.target.value : value) } : item))}
+                          />
+                        ))}
+                      </div>
+                      <select className="form-control" value={lesson.correct_option} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, correct_option: e.target.value } : item))}>
+                        <option value="A">Correct option: A</option>
+                        <option value="B">Correct option: B</option>
+                        <option value="C">Correct option: C</option>
+                        <option value="D">Correct option: D</option>
+                      </select>
+                    </div>
+                  ) : (
+                    <textarea className="form-control" rows={2} placeholder={lesson.content_type === 'assignment' ? 'Assignment instructions and submission requirements' : lesson.content_type === 'video' ? 'Video description or learning notes' : 'Study content or instructions'} value={lesson.content_text} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_text: e.target.value } : item))} style={{ marginTop: '0.75rem' }} />
+                  )}
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem' }}>
-                    <input className="form-control" placeholder="Resource URL (optional)" value={lesson.content_url} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_url: e.target.value } : item))} />
+                    <input className="form-control" placeholder={lesson.content_type === 'video' ? 'Video URL' : lesson.content_type === 'document' ? 'Document URL' : 'Resource URL (optional)'} value={lesson.content_url} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_url: e.target.value } : item))} />
                     <input className="form-control" type="number" min="1" placeholder="Minutes" value={lesson.duration_minutes} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, duration_minutes: parseInt(e.target.value) || 1 } : item))} style={{ maxWidth: '120px' }} />
                     {lessons.length > 1 && <button type="button" className="btn btn-sm btn-outline" onClick={() => setLessons(prev => prev.filter((_, i) => i !== index))} title="Remove item"><Trash2 size={14} /></button>}
                   </div>
                 </div>
               ))}
-              <button type="button" className="btn btn-sm btn-outline" onClick={() => setLessons(prev => [...prev, { title: '', content_type: 'reading', content_text: '', content_url: '', duration_minutes: 15 }])}>
+              <button type="button" className="btn btn-sm btn-outline" onClick={() => setLessons(prev => [...prev, createLessonDraft()])}>
                 <PlusCircle size={14} /> Add Material or Test
               </button>
             </div>

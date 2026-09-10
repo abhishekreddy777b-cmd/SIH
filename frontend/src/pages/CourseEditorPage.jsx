@@ -4,6 +4,12 @@ import { api } from '../services/api';
 import { useToast } from '../context/ToastContext';
 import { ArrowLeft, Save, Trash2, PlusCircle, UploadCloud, FileText, X } from 'lucide-react';
 
+const emptyQuizFields = {
+  question: '',
+  options: ['', '', '', ''],
+  correct_option: 'A'
+};
+
 export default function CourseEditorPage() {
   const toast = useToast();
   const navigate = useNavigate();
@@ -191,11 +197,20 @@ export default function CourseEditorPage() {
   const resetLessonDraft = (moduleId) => {
     setLessonDrafts(prev => ({
       ...prev,
-      [moduleId]: { title: '', description: '', content_type: 'reading', content_text: '', duration_minutes: 15 }
+      [moduleId]: { title: '', description: '', content_type: 'reading', content_text: '', duration_minutes: 15, ...emptyQuizFields }
     }));
   };
 
   const beginLessonEdit = (moduleId, lesson) => {
+    let quizFields = emptyQuizFields;
+    if (lesson.content_type === 'quiz') {
+      try {
+        quizFields = { ...emptyQuizFields, ...JSON.parse(lesson.content_text || '{}') };
+      } catch (error) {
+        console.warn('Unable to parse quiz content:', error);
+      }
+    }
+
     setEditingLesson({ moduleId, lessonId: lesson.id });
     setLessonDrafts(prev => ({
       ...prev,
@@ -204,7 +219,8 @@ export default function CourseEditorPage() {
         description: lesson.description || '',
         content_type: lesson.content_type || 'reading',
         content_text: lesson.content_text || '',
-        duration_minutes: Number(lesson.duration_minutes ?? lesson.duration_mins ?? 15)
+        duration_minutes: Number(lesson.duration_minutes ?? lesson.duration_mins ?? 15),
+        ...quizFields
       }
     }));
   };
@@ -226,7 +242,9 @@ export default function CourseEditorPage() {
         title: draft.title.trim(),
         description: draft.description || '',
         content_type: draft.content_type || 'reading',
-        content_text: draft.content_text || '',
+        content_text: draft.content_type === 'quiz'
+          ? JSON.stringify({ question: draft.question, options: draft.options, correct_option: draft.correct_option })
+          : draft.content_text || '',
         duration_minutes: Number(draft.duration_minutes) || 15
       };
 
@@ -570,7 +588,7 @@ export default function CourseEditorPage() {
         </div>
 
         {course.modules?.length ? course.modules.map((module, index) => {
-          const draft = lessonDrafts[module.id] || { title: '', description: '', content_type: 'reading', content_text: '', duration_minutes: 15 };
+          const draft = lessonDrafts[module.id] || { title: '', description: '', content_type: 'reading', content_text: '', duration_minutes: 15, ...emptyQuizFields };
 
           return (
             <div key={module.id} style={{ border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', backgroundColor: '#0f172a', marginBottom: '0.75rem' }}>
@@ -660,13 +678,46 @@ export default function CourseEditorPage() {
                   placeholder="Lesson summary or instructor notes"
                 />
 
-                <textarea
-                  rows={4}
-                  className="form-control"
-                  value={draft.content_text || ''}
-                  onChange={(e) => updateLessonDraft(module.id, 'content_text', e.target.value)}
-                  placeholder="Lesson body / content text"
-                />
+                {draft.content_type === 'quiz' ? (
+                  <>
+                    <textarea
+                      rows={3}
+                      className="form-control"
+                      value={draft.question || ''}
+                      onChange={(e) => updateLessonDraft(module.id, 'question', e.target.value)}
+                      placeholder="Quiz question"
+                    />
+                    <div className="grid-cols-2" style={{ gap: '0.6rem' }}>
+                      {(draft.options || ['', '', '', '']).map((option, optionIndex) => (
+                        <input
+                          key={optionIndex}
+                          className="form-control"
+                          value={option}
+                          onChange={(e) => updateLessonDraft(module.id, 'options', (draft.options || ['', '', '', '']).map((value, index) => index === optionIndex ? e.target.value : value))}
+                          placeholder={`Option ${String.fromCharCode(65 + optionIndex)}`}
+                        />
+                      ))}
+                    </div>
+                    <select
+                      className="form-control"
+                      value={draft.correct_option || 'A'}
+                      onChange={(e) => updateLessonDraft(module.id, 'correct_option', e.target.value)}
+                    >
+                      <option value="A">Correct option: A</option>
+                      <option value="B">Correct option: B</option>
+                      <option value="C">Correct option: C</option>
+                      <option value="D">Correct option: D</option>
+                    </select>
+                  </>
+                ) : (
+                  <textarea
+                    rows={4}
+                    className="form-control"
+                    value={draft.content_text || ''}
+                    onChange={(e) => updateLessonDraft(module.id, 'content_text', e.target.value)}
+                    placeholder={draft.content_type === 'video' ? 'Video description or learning notes' : 'Lesson body / content text'}
+                  />
+                )}
 
                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                   <button className="btn btn-primary" style={{ width: 'fit-content' }} onClick={() => handleAddLesson(module.id)}>
