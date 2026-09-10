@@ -13,21 +13,16 @@ export default function PersonnelPage() {
   const [updatingId, setUpdatingId] = useState(null);
   const [historyByUser, setHistoryByUser] = useState({});
   const [historyLoadingId, setHistoryLoadingId] = useState(null);
+  const [pendingStatus, setPendingStatus] = useState(null);
+  const [statusReason, setStatusReason] = useState('');
 
   useEffect(() => {
-    fetchUsers();
-  }, [roleFilter, statusFilter]);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      fetchUsers();
-    }, 250);
+    const timeoutId = setTimeout(() => fetchUsers(), searchTerm ? 300 : 0);
 
     return () => clearTimeout(timeoutId);
-  }, [searchTerm]);
+  }, [roleFilter, statusFilter, searchTerm]);
 
   const fetchUsers = async () => {
-    setLoading(true);
     try {
       const params = new URLSearchParams();
       if (roleFilter !== 'all') params.set('role', roleFilter);
@@ -67,11 +62,18 @@ export default function PersonnelPage() {
     });
   }, [users, searchTerm]);
 
-  const updateUserStatus = async (user, nextStatus) => {
+  const requestStatusChange = (user, nextStatus) => {
     if (nextStatus === user.status) return;
 
-    const reason = window.prompt(`Why is ${user.first_name || 'this user'} being marked as ${nextStatus}?`, 'Administrative moderation update');
-    if (reason === null) return;
+    setPendingStatus({ user, nextStatus });
+    setStatusReason('');
+  };
+
+  const updateUserStatus = async () => {
+    if (!pendingStatus) return;
+
+    const { user, nextStatus } = pendingStatus;
+    const reason = statusReason.trim() || 'Administrative moderation update';
 
     setUpdatingId(user.id);
 
@@ -79,8 +81,12 @@ export default function PersonnelPage() {
       const res = await api.updateUserStatus(user.id, nextStatus, reason.trim() || 'Administrative moderation update');
       if (res.success) {
         toast.success(`${user.first_name || 'User'} marked as ${nextStatus}.`);
-        fetchUsers();
+        setUsers((currentUsers) => currentUsers.map((currentUser) => (
+          currentUser.id === user.id ? { ...currentUser, status: nextStatus } : currentUser
+        )));
         await fetchModerationHistory(user.id);
+        setPendingStatus(null);
+        setStatusReason('');
       }
     } catch (e) {
       toast.error(e.message || 'Unable to update personnel status');
@@ -250,7 +256,7 @@ export default function PersonnelPage() {
                         <select
                           className="form-control"
                           value={user.status || 'active'}
-                          onChange={(e) => updateUserStatus(user, e.target.value)}
+                          onChange={(e) => requestStatusChange(user, e.target.value)}
                           disabled={updatingId === user.id}
                           style={{ minWidth: '150px' }}
                         >
@@ -299,6 +305,40 @@ export default function PersonnelPage() {
           </table>
         </div>
       </div>
+
+      {pendingStatus && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="status-change-title"
+          className="velora-card"
+          style={{ border: '1px solid var(--warning)', position: 'fixed', right: '2rem', bottom: '2rem', zIndex: 20, width: 'min(420px, calc(100vw - 2rem))', boxShadow: '0 18px 45px rgba(0, 0, 0, 0.35)' }}
+        >
+          <h2 id="status-change-title" style={{ fontSize: '1rem', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+            Change account status
+          </h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '0.75rem' }}>
+            {pendingStatus.user.first_name} {pendingStatus.user.last_name} will be marked as <strong>{pendingStatus.nextStatus}</strong>.
+          </p>
+          <label className="form-label" htmlFor="status-reason">Reason</label>
+          <textarea
+            id="status-reason"
+            className="form-control"
+            rows={3}
+            value={statusReason}
+            onChange={(e) => setStatusReason(e.target.value)}
+            placeholder="Enter the reason shown to the user when they sign in"
+          />
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.75rem' }}>
+            <button type="button" className="btn btn-secondary" onClick={() => setPendingStatus(null)} disabled={Boolean(updatingId)}>
+              Cancel
+            </button>
+            <button type="button" className="btn btn-primary" onClick={updateUserStatus} disabled={Boolean(updatingId)}>
+              {updatingId ? 'Saving...' : 'Save status'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
