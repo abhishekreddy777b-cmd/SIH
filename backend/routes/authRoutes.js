@@ -24,6 +24,22 @@ router.post('/login', async (req, res) => {
     }
 
     if (user.status !== 'active') {
+      if (user.status === 'suspended') {
+        const suspension = await db.get(`
+          SELECT reason
+          FROM user_moderation_history
+          WHERE user_id = ? AND new_status = 'suspended'
+          ORDER BY created_at DESC
+          LIMIT 1
+        `, [user.id]);
+
+        const reason = suspension?.reason || 'No suspension reason was provided.';
+        return res.status(403).json({
+          success: false,
+          message: `Your account has been suspended. Reason: ${reason}`
+        });
+      }
+
       return res.status(403).json({ success: false, message: 'Account is deactivated.' });
     }
 
