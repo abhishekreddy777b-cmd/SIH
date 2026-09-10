@@ -155,6 +155,19 @@ export default function LessonViewerPage() {
                       );
                     })}
                   </div>
+                  {quizResult && (
+                    <div style={{ marginTop: '0.85rem', padding: '0.7rem 0.8rem', borderRadius: '8px', backgroundColor: quizAnswers[index] === question.correct_option ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)', color: 'var(--text-main)', fontSize: '0.82rem' }}>
+                      <div style={{ fontWeight: 700, color: quizAnswers[index] === question.correct_option ? 'var(--success)' : 'var(--danger)', marginBottom: '0.25rem' }}>
+                        {quizAnswers[index] === question.correct_option ? 'Correct' : 'Incorrect'}
+                      </div>
+                      <div>
+                        Your answer: {quizAnswers[index] ? `${quizAnswers[index]}. ${question.options[quizAnswers[index].charCodeAt(0) - 65]}` : 'Not answered'}
+                      </div>
+                      <div>
+                        Correct answer: {question.correct_option}. {question.options[question.correct_option.charCodeAt(0) - 65]}
+                      </div>
+                    </div>
+                  )}
                 </fieldset>
               )) : (
                 <p style={{ color: 'var(--danger)' }}>This quiz has no questions yet.</p>
