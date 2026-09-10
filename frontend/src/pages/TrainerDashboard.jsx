@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 import { useToast } from '../context/ToastContext';
 import { StatCard, Badge, ProgressBar } from '../components/common/UIComponents';
-import { BookOpen, Users, PlusCircle, CheckCircle, Star, MessageSquare, ArrowRight, RefreshCw } from 'lucide-react';
+import { BookOpen, Users, PlusCircle, CheckCircle, Star, MessageSquare, ArrowRight, RefreshCw, Trash2 } from 'lucide-react';
 
 export default function TrainerDashboard() {
   const toast = useToast();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [courseToDelete, setCourseToDelete] = useState(null);
+  const [deletingCourseId, setDeletingCourseId] = useState(null);
 
   useEffect(() => {
     fetchTrainerCourses();
@@ -30,6 +32,24 @@ export default function TrainerDashboard() {
   };
 
   const totalTrainees = courses.reduce((acc, curr) => acc + (Number(curr.enrolled_count) || 0), 0);
+
+  const deleteCourse = async () => {
+    if (!courseToDelete) return;
+
+    setDeletingCourseId(courseToDelete.id);
+    try {
+      const res = await api.deleteCourse(courseToDelete.id);
+      if (res.success) {
+        setCourses((currentCourses) => currentCourses.filter((course) => course.id !== courseToDelete.id));
+        toast.success('Micro-course deleted successfully.');
+        setCourseToDelete(null);
+      }
+    } catch (e) {
+      toast.error(e.message || 'Failed to delete micro-course');
+    } finally {
+      setDeletingCourseId(null);
+    }
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -119,6 +139,17 @@ export default function TrainerDashboard() {
                     <Link to={`/courses/${course.id}`} className="btn btn-sm btn-outline">
                       View Course <ArrowRight size={14} />
                     </Link>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-outline"
+                      style={{ borderColor: 'var(--danger)', color: 'var(--danger)' }}
+                      onClick={() => setCourseToDelete(course)}
+                      disabled={deletingCourseId === course.id}
+                      aria-label={`Delete ${course.title}`}
+                      title="Delete micro-course"
+                    >
+                      <Trash2 size={14} />
+                    </button>
                   </div>
                 </div>
               ))
@@ -126,6 +157,31 @@ export default function TrainerDashboard() {
           </div>
         )}
       </div>
+
+      {courseToDelete && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-course-title"
+          className="velora-card"
+          style={{ border: '1px solid var(--danger)', position: 'fixed', right: '2rem', bottom: '2rem', zIndex: 20, width: 'min(420px, calc(100vw - 2rem))', boxShadow: '0 18px 45px rgba(0, 0, 0, 0.35)' }}
+        >
+          <h2 id="delete-course-title" style={{ fontSize: '1rem', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+            Delete micro-course?
+          </h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '0.75rem' }}>
+            This will permanently delete <strong>{courseToDelete.title}</strong>, including its modules and lessons.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+            <button type="button" className="btn btn-secondary" onClick={() => setCourseToDelete(null)} disabled={Boolean(deletingCourseId)}>
+              Cancel
+            </button>
+            <button type="button" className="btn btn-primary" style={{ backgroundColor: 'var(--danger)' }} onClick={deleteCourse} disabled={Boolean(deletingCourseId)}>
+              {deletingCourseId ? 'Deleting...' : 'Delete course'}
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   );
