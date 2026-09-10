@@ -69,11 +69,12 @@ const dbHelper = {
   run: async (sql, params = []) => {
     const db = await getDB();
     db.run(sql, params);
-    saveDB();
 
     // Fetch last inserted ID reliably
     const res = db.exec("SELECT last_insert_rowid() as id;");
     const lastId = res.length > 0 && res[0].values.length > 0 ? res[0].values[0][0] : 0;
+
+    saveDB();
 
     return { id: lastId };
   },
