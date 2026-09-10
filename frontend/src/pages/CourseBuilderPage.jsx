@@ -16,7 +16,8 @@ const createLessonDraft = () => ({
   content_text: '',
   content_url: '',
   duration_minutes: 15,
-  questions: [createQuestion()]
+  questions: [createQuestion()],
+  question_count: 1
 });
 
 export default function CourseBuilderPage() {
@@ -138,7 +139,7 @@ export default function CourseBuilderPage() {
                   </div>
                   {lesson.content_type === 'quiz' ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '0.75rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
                         <label className="form-label" htmlFor={`question-count-${index}`} style={{ margin: 0 }}>Number of questions</label>
                         <input
                           id={`question-count-${index}`}
@@ -146,17 +147,29 @@ export default function CourseBuilderPage() {
                           type="number"
                           min="1"
                           max="50"
-                          value={lesson.questions.length}
+                          value={lesson.question_count ?? lesson.questions.length}
                           onChange={e => {
-                            const count = Math.min(50, Math.max(1, Number(e.target.value) || 1));
+                            const rawCount = e.target.value;
                             setLessons(prev => prev.map((item, i) => {
                               if (i !== index) return item;
+                              if (rawCount === '') return { ...item, question_count: '' };
+                              const count = Math.min(50, Math.max(1, Number(rawCount)));
                               const questions = Array.from({ length: count }, (_, questionIndex) => item.questions[questionIndex] || createQuestion());
-                              return { ...item, questions };
+                              return { ...item, questions, question_count: count };
                             }));
                           }}
+                          onBlur={() => setLessons(prev => prev.map((item, i) => {
+                            if (i !== index) return item;
+                            const count = Math.min(50, Math.max(1, Number(item.question_count) || 1));
+                            return {
+                              ...item,
+                              question_count: count,
+                              questions: Array.from({ length: count }, (_, questionIndex) => item.questions[questionIndex] || createQuestion())
+                            };
+                          }))}
                           style={{ maxWidth: '110px' }}
                         />
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Max 50 questions</span>
                       </div>
                       {lesson.questions.map((question, questionIndex) => (
                         <div key={questionIndex} style={{ padding: '0.85rem', border: '1px solid rgba(148,163,184,0.2)', borderRadius: '10px' }}>
