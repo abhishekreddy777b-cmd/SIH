@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { useToast } from '../context/ToastContext';
-import { Send, UserPlus } from 'lucide-react';
+import { MessageSquare, Send, User, RefreshCw } from 'lucide-react';
 
 export default function MessagingPage() {
   const toast = useToast();
   const [conversations, setConversations] = useState([]);
-  const [contacts, setContacts] = useState([]);
   const [activePartner, setActivePartner] = useState(null);
   const [threadMessages, setThreadMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,11 +20,9 @@ export default function MessagingPage() {
     setLoading(true);
     try {
       const res = await api.getConversations();
-      const contactsRes = await api.getMessageContacts();
       if (res.success) {
         const list = res.conversations || [];
         setConversations(list);
-        setContacts(contactsRes.contacts || []);
         if (list.length > 0) {
           const firstPartner = list[0].user || list[0];
           loadThread(firstPartner);
@@ -78,8 +75,6 @@ export default function MessagingPage() {
     }
   };
 
-  const newContacts = contacts.filter(contact => !conversations.some(conv => conv.user?.id === contact.id));
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div className="velora-card gradient-border-top">
@@ -127,7 +122,7 @@ export default function MessagingPage() {
               </div>
 
               <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingRight: '0.5rem' }}>
-                {threadMessages.filter(Boolean).map(m => (
+                {threadMessages.map(m => (
                   <div key={m.id} style={{
                     alignSelf: m.sender_id === activePartner.id ? 'flex-start' : 'flex-end',
                     backgroundColor: m.sender_id === activePartner.id ? '#0f172a' : 'var(--primary-hover)',
