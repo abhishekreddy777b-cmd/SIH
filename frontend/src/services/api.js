@@ -127,6 +127,7 @@ export const api = {
 
   // Messaging & Notes & Bookmarks
   getConversations: () => request('/messages/conversations'),
+  getMessageContacts: () => request('/messages/contacts'),
   getMessageThread: (userId) => request(`/messages/thread/${userId}`),
   sendMessage: (payload) => request('/messages/send', { method: 'POST', body: payload }),
 

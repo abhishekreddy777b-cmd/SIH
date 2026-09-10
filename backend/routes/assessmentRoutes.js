@@ -154,8 +154,11 @@ router.post('/:id/submit', authenticateToken, async (req, res) => {
 
       answerResults.push({
         question_id: q.id,
-        selected_answer: selected,
-        is_correct: isCorrect ? 1 : 0
+        selected_answer: selected ?? null,
+        is_correct: isCorrect ? 1 : 0,
+        question_text: q.question_text,
+        correct_answer: q.correct_answer,
+        options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
       });
 
       if (q.competency_id) {
@@ -236,6 +239,7 @@ router.post('/:id/submit', authenticateToken, async (req, res) => {
       score,
       total_questions: questions.length,
       passed: Boolean(passed),
+      answer_review: answerResults,
       result: {
         attempt_id: attemptId,
         score,

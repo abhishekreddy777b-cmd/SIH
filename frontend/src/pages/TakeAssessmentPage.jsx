@@ -106,6 +106,24 @@ export default function TakeAssessmentPage() {
             Correct Answers: {result.score} out of {result.total_questions} questions.
           </p>
 
+          <div style={{ textAlign: 'left', marginBottom: '2rem' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.75rem' }}>Answer Review</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {(result.answer_review || []).map((answer, index) => {
+                const selected = answer.selected_answer === null || answer.selected_answer === undefined
+                  ? 'Not answered'
+                  : answer.options?.[answer.selected_answer] ?? answer.selected_answer;
+                return (
+                  <div key={answer.question_id} style={{ padding: '0.85rem', border: `1px solid ${answer.is_correct ? 'var(--success)' : 'var(--danger)'}`, borderRadius: 'var(--radius-md)', backgroundColor: '#0f172a' }}>
+                    <div style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.5rem' }}>{index + 1}. {answer.question_text}</div>
+                    <div style={{ fontSize: '0.78rem', color: answer.is_correct ? 'var(--success)' : 'var(--danger)' }}>Your answer: {selected}</div>
+                    {!answer.is_correct && <div style={{ fontSize: '0.78rem', color: 'var(--success)', marginTop: '0.25rem' }}>Correct answer: {answer.correct_answer}</div>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           <div style={{ backgroundColor: '#0f172a', borderRadius: 'var(--radius-md)', padding: '1rem', marginBottom: '2rem', textAlign: 'left', border: '1px solid var(--border-color)' }}>
             <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--secondary)', marginBottom: '0.35rem' }}>
               ⚡ Dynamic Competency Engine Status:

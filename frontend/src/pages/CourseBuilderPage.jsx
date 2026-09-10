@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../services/api';
 import { useToast } from '../context/ToastContext';
-import { PlusCircle, ArrowLeft, BookOpen, Save, Layers } from 'lucide-react';
+import { PlusCircle, ArrowLeft, Save, Trash2 } from 'lucide-react';
 
 export default function CourseBuilderPage() {
   const toast = useToast();
@@ -10,6 +10,9 @@ export default function CourseBuilderPage() {
 
   const [competencies, setCompetencies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [lessons, setLessons] = useState([
+    { title: '', content_type: 'reading', content_text: '', content_url: '', duration_minutes: 15 }
+  ]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -55,6 +58,9 @@ export default function CourseBuilderPage() {
 
       const res = await api.createCourse(payload);
       if (res.success) {
+        for (const lesson of lessons.filter(item => item.title.trim())) {
+          await api.createLesson({ ...lesson, module_id: res.module_id });
+        }
         toast.success('Course created successfully!');
         navigate('/trainer');
       }
@@ -92,6 +98,35 @@ export default function CourseBuilderPage() {
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Study Materials & Tests</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {lessons.map((lesson, index) => (
+                <div key={index} style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)' }}>
+                  <div className="grid-cols-2" style={{ gap: '0.75rem' }}>
+                    <input className="form-control" placeholder="Lesson or test title" value={lesson.title} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, title: e.target.value } : item))} />
+                    <select className="form-control" value={lesson.content_type} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_type: e.target.value } : item))}>
+                      <option value="reading">Reading Material</option>
+                      <option value="document">Document</option>
+                      <option value="video">Video</option>
+                      <option value="quiz">Quiz / Test</option>
+                      <option value="assignment">Assignment</option>
+                    </select>
+                  </div>
+                  <textarea className="form-control" rows={2} placeholder="Instructions, questions, or study content" value={lesson.content_text} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_text: e.target.value } : item))} style={{ marginTop: '0.75rem' }} />
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem' }}>
+                    <input className="form-control" placeholder="Resource URL (optional)" value={lesson.content_url} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, content_url: e.target.value } : item))} />
+                    <input className="form-control" type="number" min="1" placeholder="Minutes" value={lesson.duration_minutes} onChange={e => setLessons(prev => prev.map((item, i) => i === index ? { ...item, duration_minutes: parseInt(e.target.value) || 1 } : item))} style={{ maxWidth: '120px' }} />
+                    {lessons.length > 1 && <button type="button" className="btn btn-sm btn-outline" onClick={() => setLessons(prev => prev.filter((_, i) => i !== index))} title="Remove item"><Trash2 size={14} /></button>}
+                  </div>
+                </div>
+              ))}
+              <button type="button" className="btn btn-sm btn-outline" onClick={() => setLessons(prev => [...prev, { title: '', content_type: 'reading', content_text: '', content_url: '', duration_minutes: 15 }])}>
+                <PlusCircle size={14} /> Add Material or Test
+              </button>
+            </div>
           </div>
 
           <div className="grid-cols-2" style={{ gap: '1rem' }}>
