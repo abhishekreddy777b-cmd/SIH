@@ -67,7 +67,7 @@ router.post('/:id/complete', authenticateToken, async (req, res) => {
 
     // Check if lesson exists
     const lesson = await db.get(`
-      SELECT l.id, cm.course_id
+      SELECT l.id, l.content_type, cm.course_id
       FROM lessons l
       JOIN course_modules cm ON l.module_id = cm.id
       WHERE l.id = ?
@@ -79,10 +79,21 @@ router.post('/:id/complete', authenticateToken, async (req, res) => {
 
     // Insert or update lesson progress
     const existing = await db.get(`
-      SELECT id
+      SELECT id, notes
       FROM lesson_progress
       WHERE user_id = ? AND lesson_id = ?
     `, [userId, lessonId]);
+
+    if (lesson.content_type === 'quiz' && existing?.notes) {
+      try {
+        const savedNotes = JSON.parse(existing.notes);
+        if (savedNotes.quiz_submission) {
+          return res.status(409).json({ success: false, message: 'This quiz has already been submitted. Only one attempt is allowed.' });
+        }
+      } catch (error) {
+        // Existing non-quiz notes are not quiz submissions.
+      }
+    }
 
     if (existing) {
       await db.run(`

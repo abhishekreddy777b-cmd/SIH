@@ -31,8 +31,14 @@ export default function LessonViewerPage() {
       if (res.success) {
         setLesson(res.lesson);
         setIsCompleted(res.lesson.is_completed || false);
-        setQuizAnswers({});
-        setQuizResult(null);
+        try {
+          const savedQuiz = JSON.parse(res.lesson.user_progress?.notes || '{}');
+          setQuizAnswers(savedQuiz.quiz_submission?.answers || {});
+          setQuizResult(savedQuiz.quiz_submission?.result || null);
+        } catch (error) {
+          setQuizAnswers({});
+          setQuizResult(null);
+        }
       }
     } catch (e) {
       console.error(e);
@@ -78,13 +84,28 @@ export default function LessonViewerPage() {
   };
 
   const handleSubmitQuiz = () => {
-    if (!quizData.questions.length) return;
+    if (!quizData.questions.length || quizResult || isCompleted) return;
 
     const correctAnswers = quizData.questions.reduce((total, question, index) => (
       total + (quizAnswers[index] === question.correct_option ? 1 : 0)
     ), 0);
     const percentage = Math.round((correctAnswers / quizData.questions.length) * 100);
-    setQuizResult({ correctAnswers, totalQuestions: quizData.questions.length, percentage });
+    const result = { correctAnswers, totalQuestions: quizData.questions.length, percentage };
+
+    setCompleting(true);
+    api.completeLesson(id, {
+      time_spent_minutes: lesson.duration_mins || 15,
+      notes: JSON.stringify({ quiz_submission: { answers: quizAnswers, result } })
+    }).then((res) => {
+      if (!res.success) throw new Error(res.message || 'Quiz submission failed.');
+      setQuizResult(result);
+      setIsCompleted(true);
+      toast.success('Quiz submitted. This was your only attempt.');
+    }).catch((error) => {
+      toast.error(error.message || 'Quiz submission failed.');
+    }).finally(() => {
+      setCompleting(false);
+    });
   };
 
   if (loading || !lesson) {
@@ -113,14 +134,14 @@ export default function LessonViewerPage() {
 
         <button
           onClick={handleCompleteLesson}
-          disabled={completing || isCompleted}
+          disabled={completing || isCompleted || (lesson.content_type === 'quiz' && !quizResult)}
           className={`btn btn-sm ${isCompleted ? 'btn-secondary' : 'btn-primary'}`}
         >
           {isCompleted ? (
             <span style={{ color: 'var(--success)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
               <CheckCircle size={14} /> Completed
             </span>
-          ) : completing ? 'Updating...' : 'Mark Lesson Complete'}
+          ) : lesson.content_type === 'quiz' && !quizResult ? 'Submit quiz to complete' : completing ? 'Updating...' : 'Mark Lesson Complete'}
         </button>
       </div>
 
@@ -149,6 +170,7 @@ export default function LessonViewerPage() {
                             value={optionKey}
                             checked={quizAnswers[index] === optionKey}
                             onChange={() => setQuizAnswers(prev => ({ ...prev, [index]: optionKey }))}
+                            disabled={Boolean(quizResult) || completing}
                           />
                           <span><strong>{optionKey}.</strong> {option}</span>
                         </label>
@@ -172,8 +194,8 @@ export default function LessonViewerPage() {
               )) : (
                 <p style={{ color: 'var(--danger)' }}>This quiz has no questions yet.</p>
               )}
-              <button type="button" className="btn btn-primary" onClick={handleSubmitQuiz} disabled={!quizData.questions.length}>
-                Submit Quiz
+              <button type="button" className="btn btn-primary" onClick={handleSubmitQuiz} disabled={!quizData.questions.length || Boolean(quizResult) || completing}>
+                {quizResult ? 'Quiz Submitted' : completing ? 'Submitting...' : 'Submit Quiz'}
               </button>
               {quizResult && (
                 <div style={{ marginTop: '1rem', padding: '0.85rem', borderRadius: '8px', backgroundColor: quizResult.percentage >= 60 ? 'rgba(16,185,129,0.12)' : 'rgba(245,158,11,0.12)', color: 'var(--text-main)' }}>
