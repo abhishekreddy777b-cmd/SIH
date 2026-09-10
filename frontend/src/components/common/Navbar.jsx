@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import {
   Building2, Search, Bell, User, LogOut, Shield, Briefcase,
-  BarChart3, Users, ChevronDown, Zap
+  BarChart3, Users, ChevronDown, Zap, Sun, Moon
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -14,6 +14,12 @@ export default function Navbar() {
   const [unreadNotifs, setUnreadNotifs] = useState(0);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showDemoMenu, setShowDemoMenu] = useState(false);
+  const [theme, setTheme] = useState(() => localStorage.getItem('velora_theme') || 'light');
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('velora_theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     if (user) {
@@ -63,11 +69,11 @@ export default function Navbar() {
             width: '40px',
             height: '40px',
             borderRadius: '6px',
-            background: 'linear-gradient(135deg, #0066cc, #00a8cc)',
+            background: 'linear-gradient(135deg, #603619, #8a5b35)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 12px rgba(0, 102, 204, 0.5)',
+            boxShadow: '0 3px 10px rgba(74, 42, 22, 0.28)',
             fontWeight: 700,
             color: '#ffffff',
             fontSize: '1.2rem'
@@ -75,10 +81,10 @@ export default function Navbar() {
             🌊
           </div>
           <div>
-            <span style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#e6f0ff' }}>
+            <span style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
               MoES VELORA
             </span>
-            <span style={{ fontSize: '0.6rem', fontWeight: 700, display: 'block', color: 'var(--secondary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '-2px' }}>
+            <span style={{ fontSize: '0.6rem', fontWeight: 700, display: 'block', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '-2px' }}>
               Earth Systems Capacity Platform
             </span>
           </div>
@@ -102,6 +108,17 @@ export default function Navbar() {
 
       {/* Right Navigation & Demo Switcher */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+
+        <button
+          type="button"
+          className="btn btn-sm btn-outline"
+          onClick={() => setTheme(currentTheme => currentTheme === 'dark' ? 'light' : 'dark')}
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          style={{ padding: '0.45rem', minWidth: '34px' }}
+        >
+          {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+        </button>
 
         {/* DEMO ACCOUNT SWITCHER FOR JUDGES */}
         <div style={{ position: 'relative' }}>
@@ -134,21 +151,21 @@ export default function Navbar() {
               </div>
               <button
                 onClick={async () => { await switchDemoAccount('trainee'); setShowDemoMenu(false); navigate('/dashboard'); }}
-                style={{ width: '100%', textAlign: 'left', padding: '0.65rem 0.75rem', borderRadius: '6px', background: user?.role === 'trainee' ? 'var(--primary-light)' : 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', marginTop: '0.35rem' }}
+                style={{ width: '100%', textAlign: 'left', padding: '0.65rem 0.75rem', borderRadius: '6px', background: user?.role === 'trainee' ? 'var(--primary-light)' : 'transparent', border: 'none', color: 'var(--text-main)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', marginTop: '0.35rem' }}
               >
-                <Briefcase size={15} color="#0066cc" />
+                <Briefcase size={15} color="var(--primary)" />
                 <span>Scientist (Arjun)</span>
               </button>
               <button
                 onClick={async () => { await switchDemoAccount('trainer'); setShowDemoMenu(false); navigate('/trainer'); }}
-                style={{ width: '100%', textAlign: 'left', padding: '0.65rem 0.75rem', borderRadius: '6px', background: user?.role === 'trainer' ? 'var(--primary-light)' : 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', marginTop: '0.25rem' }}
+                style={{ width: '100%', textAlign: 'left', padding: '0.65rem 0.75rem', borderRadius: '6px', background: user?.role === 'trainer' ? 'var(--primary-light)' : 'transparent', border: 'none', color: 'var(--text-main)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', marginTop: '0.25rem' }}
               >
-                <BarChart3 size={15} color="#00b386" />
+                <BarChart3 size={15} color="var(--success)" />
                 <span>Trainer (Dr. Rahul)</span>
               </button>
               <button
                 onClick={async () => { await switchDemoAccount('admin'); setShowDemoMenu(false); navigate('/admin'); }}
-                style={{ width: '100%', textAlign: 'left', padding: '0.65rem 0.75rem', borderRadius: '6px', background: user?.role === 'admin' ? 'var(--primary-light)' : 'transparent', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', marginTop: '0.25rem' }}
+                style={{ width: '100%', textAlign: 'left', padding: '0.65rem 0.75rem', borderRadius: '6px', background: user?.role === 'admin' ? 'var(--primary-light)' : 'transparent', border: 'none', color: 'var(--text-main)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', marginTop: '0.25rem' }}
               >
                 <Shield size={15} color="#ff9900" />
                 <span>Director (MoES)</span>
@@ -212,6 +229,7 @@ export default function Navbar() {
                     {user.role === 'admin' ? 'Director' : user.role === 'trainer' ? 'Trainer' : 'Scientist'}
                   </span>
                 </div>
+
               </div>
 
               {showUserMenu && (

@@ -44,7 +44,7 @@ export default function RegisterPage() {
             width: '44px',
             height: '44px',
             borderRadius: '12px',
-            background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
+            background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',

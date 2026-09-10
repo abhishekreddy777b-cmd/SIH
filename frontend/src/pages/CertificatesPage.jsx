@@ -74,7 +74,7 @@ export default function CertificatesPage() {
                     width: '42px',
                     height: '42px',
                     borderRadius: '10px',
-                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                    background: 'linear-gradient(135deg, var(--success), #48633f)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',

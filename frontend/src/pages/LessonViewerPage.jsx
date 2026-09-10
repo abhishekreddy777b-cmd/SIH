@@ -205,11 +205,11 @@ export default function LessonViewerPage() {
             </div>
           ) : (
             <div className="velora-card" style={{ padding: 0, overflow: 'hidden', border: '1px solid var(--border-highlight)' }}>
-              <div style={{ width: '100%', aspectRatio: '16/9', backgroundColor: '#030712', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', background: 'radial-gradient(ellipse at center, #1e293b 0%, #030712 100%)' }}>
+              <div style={{ width: '100%', aspectRatio: '16/9', backgroundColor: 'var(--surface-deepest)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', background: 'radial-gradient(ellipse at center, #d8b995 0%, var(--surface-deepest) 100%)' }}>
                 <Video size={56} color="var(--primary)" style={{ marginBottom: '1rem', opacity: 0.8 }} />
                 <h3 style={{ fontSize: '1.1rem', color: 'var(--text-main)', fontWeight: 700 }}>{lesson.title}</h3>
                 <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>MoES Interactive Video Stream • Duration: {lesson.duration_mins} mins</p>
-                <div style={{ position: 'absolute', bottom: '1rem', left: '1rem', right: '1rem', display: 'flex', alignItems: 'center', gap: '1rem', backgroundColor: 'rgba(15, 23, 42, 0.8)', padding: '0.5rem 1rem', borderRadius: '8px' }}>
+                <div style={{ position: 'absolute', bottom: '1rem', left: '1rem', right: '1rem', display: 'flex', alignItems: 'center', gap: '1rem', backgroundColor: 'rgba(74, 42, 22, 0.78)', padding: '0.5rem 1rem', borderRadius: '8px' }}>
                   <PlayCircle size={24} color="var(--primary)" />
                   <div style={{ flex: 1, height: '4px', backgroundColor: '#374151', borderRadius: '2px' }}><div style={{ width: '45%', height: '100%', backgroundColor: 'var(--primary)', borderRadius: '2px' }} /></div>
                   <span style={{ fontSize: '0.7rem', color: 'var(--text-main)' }}>08:30 / {lesson.duration_mins}:00</span>

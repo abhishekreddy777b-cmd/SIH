@@ -115,20 +115,20 @@ export default function CompetenciesPage() {
                     {comp.description}
                   </p>
 
-                  <div style={{ backgroundColor: '#0f172a', borderRadius: 'var(--radius-md)', padding: '0.875rem', marginBottom: '1rem', border: '1px solid var(--border-color)' }}>
+                  <div style={{ backgroundColor: 'var(--surface-deep)', borderRadius: 'var(--radius-md)', padding: '0.875rem', marginBottom: '1rem', border: '1px solid var(--border-color)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 600, marginBottom: '0.35rem' }}>
                       <span style={{ color: 'var(--text-muted)' }}>Current Score: <strong style={{ color: 'var(--text-main)' }}>{currentScore}/100</strong></span>
                       <span style={{ color: 'var(--text-dim)' }}>MoES Target: <strong style={{ color: 'var(--secondary)' }}>{targetScore}/100</strong></span>
                     </div>
 
-                    <ProgressBar progress={currentScore} height="8px" color={hasGap ? 'linear-gradient(90deg, #f59e0b, #ef4444)' : 'linear-gradient(90deg, #10b981, #06b6d4)'} />
+                    <ProgressBar progress={currentScore} height="8px" color={hasGap ? 'linear-gradient(90deg, var(--warning), var(--danger))' : 'linear-gradient(90deg, var(--success), var(--secondary))'} />
 
                     {hasGap ? (
                       <div style={{ fontSize: '0.75rem', color: '#f87171', marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                         <AlertTriangle size={12} /> Deficit Gap: {gapAmount} pts below benchmark
                       </div>
                     ) : (
-                      <div style={{ fontSize: '0.75rem', color: '#34d399', marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--success)', marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                         <CheckCircle size={12} /> Meets MoES Benchmark Standard
                       </div>
                     )}

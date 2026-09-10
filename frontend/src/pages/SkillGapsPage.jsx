@@ -132,7 +132,7 @@ export default function SkillGapsPage() {
 
                   {/* RECOMMENDATION ACTION BOX */}
                   <div style={{
-                    backgroundColor: '#0f172a',
+                    backgroundColor: 'var(--surface-deep)',
                     borderRadius: 'var(--radius-md)',
                     padding: '1rem',
                     minWidth: '280px',

@@ -47,6 +47,7 @@ export default function MessagingPage() {
       const res = await api.getMessageThread(partnerUser.id);
       if (res.success) {
         setThreadMessages(res.messages || []);
+          window.dispatchEvent(new Event('messages-read'));
       }
     } catch (e) {
       console.error(e);
@@ -125,7 +126,8 @@ export default function MessagingPage() {
                 {threadMessages.map(m => (
                   <div key={m.id} style={{
                     alignSelf: m.sender_id === activePartner.id ? 'flex-start' : 'flex-end',
-                    backgroundColor: m.sender_id === activePartner.id ? '#0f172a' : 'var(--primary-hover)',
+                    backgroundColor: m.sender_id === activePartner.id ? 'var(--bg-card-hover)' : '#c49a72',
+                    border: '1px solid var(--border-highlight)',
                     padding: '0.625rem 0.875rem',
                     borderRadius: 'var(--radius-md)',
                     maxWidth: '70%',

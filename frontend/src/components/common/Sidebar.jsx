@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { api } from '../../services/api';
 import {
   LayoutGrid, Gauge, BookMarked, Zap, Video, Send,
   BarChart2, Users, Megaphone, Bell, FileCheck, MessageSquare
@@ -8,6 +10,36 @@ import {
 
 export default function Sidebar() {
   const { user } = useAuth();
+  const [unreadMessages, setUnreadMessages] = useState(0);
+
+  useEffect(() => {
+    if (!user) return undefined;
+
+    const fetchUnreadMessages = async () => {
+      try {
+        const res = await api.getConversations();
+        if (res.success) {
+          const unreadCount = (res.conversations || []).reduce(
+            (total, conversation) => total + (Number(conversation.unread_count) || 0),
+            0
+          );
+          setUnreadMessages(unreadCount);
+        }
+      } catch (error) {
+        console.error('Failed to load unread messages:', error);
+      }
+    };
+
+    fetchUnreadMessages();
+    const intervalId = window.setInterval(fetchUnreadMessages, 15000);
+    window.addEventListener('messages-read', fetchUnreadMessages);
+
+    return () => {
+      window.clearInterval(intervalId);
+      window.removeEventListener('messages-read', fetchUnreadMessages);
+    };
+  }, [user]);
+
   if (!user) return null;
 
   const scientistNav = [
@@ -83,7 +115,27 @@ export default function Sidebar() {
             })}
           >
             <Icon size={17} />
-            <span>{item.label}</span>
+            <span style={{ flex: 1 }}>{item.label}</span>
+            {item.label === 'Messages' && unreadMessages > 0 && (
+              <span
+                aria-label={`${unreadMessages} unread messages`}
+                style={{
+                  minWidth: '20px',
+                  height: '20px',
+                  padding: '0 0.35rem',
+                  borderRadius: '999px',
+                  backgroundColor: 'var(--danger)',
+                  color: '#fff',
+                  fontSize: '0.65rem',
+                  fontWeight: 800,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                {unreadMessages > 99 ? '99+' : unreadMessages}
+              </span>
+            )}
           </NavLink>
         );
       })}

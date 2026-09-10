@@ -80,21 +80,21 @@ export default function TrainerDashboard() {
           title="Courses Authored"
           value={courses.length}
           subtitle="Active learning modules"
-          color="#34d399"
+          color="var(--success)"
         />
         <StatCard
           icon={Users}
           title="Active Trainees"
           value={totalTrainees}
           subtitle="Enrolled MoES personnel"
-          color="#3b82f6"
+          color="var(--primary)"
         />
         <StatCard
           icon={Star}
           title="Avg Trainer Rating"
           value="4.9 / 5.0"
           subtitle="Trainee evaluation score"
-          color="#fbbf24"
+          color="var(--warning)"
         />
       </div>
 
@@ -119,7 +119,7 @@ export default function TrainerDashboard() {
               </div>
             ) : (
               courses.map(course => (
-                <div key={course.id} style={{ padding: '1rem 1.25rem', borderRadius: 'var(--radius-md)', backgroundColor: '#0f172a', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                <div key={course.id} style={{ padding: '1rem 1.25rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--surface-deep)', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
                       <Badge variant="primary">{course.category}</Badge>

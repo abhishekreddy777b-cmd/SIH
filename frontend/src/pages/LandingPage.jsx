@@ -100,12 +100,12 @@ export default function LandingPage() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
           {[
-            { label: '45+ MoES Competencies', value: 'Tracked & Benchmarked', icon: Gauge, color: '#0066cc' },
-            { label: 'Dynamic Skill Gap Engine', value: 'Target vs Current Analysis', icon: Workflow, color: '#00a8cc' },
-            { label: 'Capacity Recommendations', value: 'Personalized Learning Paths', icon: Zap, color: '#0099ff' },
-            { label: 'Live Training Sessions', value: 'Interactive Classroom Hub', icon: Cloud, color: '#00b386' },
+            { label: '45+ MoES Competencies', value: 'Tracked & Benchmarked', icon: Gauge, color: '#70401f' },
+            { label: 'Dynamic Skill Gap Engine', value: 'Target vs Current Analysis', icon: Workflow, color: '#96613b' },
+            { label: 'Capacity Recommendations', value: 'Personalized Learning Paths', icon: Zap, color: '#805438' },
+            { label: 'Live Training Sessions', value: 'Interactive Classroom Hub', icon: Cloud, color: '#5f7956' },
             { label: 'Timed Assessments', value: 'Auto-Score with Competency Boost', icon: TrendingUp, color: '#ff9900' },
-            { label: 'Verifiable Certificates', value: 'Cryptographic Registry', icon: FileCheck, color: '#0066cc' }
+            { label: 'Verifiable Certificates', value: 'Cryptographic Registry', icon: FileCheck, color: '#70401f' }
           ].map((stat, idx) => {
             const Icon = stat.icon;
             return (

@@ -134,7 +134,7 @@ export default function CourseDetailPage() {
 
         {/* ENROLLMENT ACTION BOX */}
         <div style={{
-          backgroundColor: '#0f172a',
+          backgroundColor: 'var(--surface-deep)',
           borderRadius: 'var(--radius-lg)',
           padding: '1.5rem',
           minWidth: '280px',
@@ -174,7 +174,7 @@ export default function CourseDetailPage() {
         {assignments.length ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
             {assignments.map((assignment) => (
-              <div key={assignment.id} style={{ border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', backgroundColor: '#0f172a' }}>
+              <div key={assignment.id} style={{ border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', backgroundColor: 'var(--surface-deep)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                   <div>
                     <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '1rem' }}>{assignment.title}</div>
@@ -240,7 +240,7 @@ export default function CourseDetailPage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {course.modules?.map((mod, modIdx) => (
-            <div key={mod.id} style={{ borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: '#0f172a', overflow: 'hidden' }}>
+            <div key={mod.id} style={{ borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--surface-deep)', overflow: 'hidden' }}>
               <div style={{ padding: '1rem 1.25rem', backgroundColor: 'var(--bg-card)', borderBottom: '1px solid var(--border-color)', fontWeight: 700, color: 'var(--text-main)', display: 'flex', justifyContent: 'space-between' }}>
                 <span>Module {modIdx + 1}: {mod.title}</span>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{mod.lessons?.length || 0} Lessons</span>

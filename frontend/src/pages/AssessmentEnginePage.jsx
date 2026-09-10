@@ -57,7 +57,7 @@ export default function AssessmentEnginePage() {
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <div style={{ padding: '0.5rem 1rem', borderRadius: 'var(--radius-md)', backgroundColor: '#0f172a', border: '1px solid var(--border-color)', fontSize: '0.8125rem' }}>
+          <div style={{ padding: '0.5rem 1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--surface-deep)', border: '1px solid var(--border-color)', fontSize: '0.8125rem' }}>
             Attempts Logged: <strong style={{ color: 'var(--text-main)' }}>{attempts.length}</strong>
           </div>
         </div>
@@ -98,10 +98,10 @@ export default function AssessmentEnginePage() {
 
                 <div>
                   {attempt ? (
-                    <div style={{ backgroundColor: '#0f172a', padding: '0.875rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ backgroundColor: 'var(--surface-deep)', padding: '0.875rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
                         <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase', display: 'block' }}>Last Attempt Score</span>
-                        <strong style={{ fontSize: '1.1rem', color: attempt.passed ? '#34d399' : '#f87171' }}>
+                        <strong style={{ fontSize: '1.1rem', color: attempt.passed ? 'var(--success)' : 'var(--danger)' }}>
                           {attempt.percentage !== undefined ? attempt.percentage : attempt.score_percentage}%
                         </strong>
                       </div>

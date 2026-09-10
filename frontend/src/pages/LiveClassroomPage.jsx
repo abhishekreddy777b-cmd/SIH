@@ -148,7 +148,7 @@ export default function LiveClassroomPage() {
 
           {/* LIVE INTERACTIVE POLL */}
           {activeClass?.polls?.map(poll => (
-            <div key={poll.id} className="velora-card gradient-border-top" style={{ backgroundColor: '#0f172a' }}>
+            <div key={poll.id} className="velora-card gradient-border-top" style={{ backgroundColor: 'var(--surface-deep)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
                 <BarChart2 size={18} color="var(--secondary)" />
                 <h4 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>
@@ -187,7 +187,7 @@ export default function LiveClassroomPage() {
               <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center' }}>No messages yet. Start the conversation!</p>
             ) : (
               activeClass?.messages?.map((msg, idx) => (
-                <div key={idx} style={{ padding: '0.625rem', borderRadius: 'var(--radius-md)', backgroundColor: '#0f172a', border: '1px solid var(--border-color)' }}>
+                <div key={idx} style={{ padding: '0.625rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--surface-deep)', border: '1px solid var(--border-color)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
                     <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--secondary)' }}>
                       {msg.user_name || `${msg.first_name || ''} ${msg.last_name || ''}`.trim() || 'Officer'}

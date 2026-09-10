@@ -591,7 +591,7 @@ export default function CourseEditorPage() {
           const draft = lessonDrafts[module.id] || { title: '', description: '', content_type: 'reading', content_text: '', duration_minutes: 15, ...emptyQuizFields };
 
           return (
-            <div key={module.id} style={{ border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', backgroundColor: '#0f172a', marginBottom: '0.75rem' }}>
+            <div key={module.id} style={{ border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', backgroundColor: 'var(--surface-deep)', marginBottom: '0.75rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', gap: '0.75rem' }}>
                 <strong style={{ color: 'var(--text-main)' }}>Module {index + 1}: {module.title}</strong>
 
@@ -798,7 +798,7 @@ export default function CourseEditorPage() {
 
         <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {assignments.length ? assignments.map((assignment) => (
-            <div key={assignment.id} style={{ border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', backgroundColor: '#0f172a' }}>
+            <div key={assignment.id} style={{ border: '1px solid var(--border-color)', borderRadius: '12px', padding: '1rem', backgroundColor: 'var(--surface-deep)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap' }}>
                 <div>
                   <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '1rem' }}>{assignment.title}</div>
@@ -913,7 +913,7 @@ export default function CourseEditorPage() {
         {uploads.length ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {uploads.map((file) => (
-              <div key={file.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '0.85rem 1rem', backgroundColor: '#0f172a' }}>
+              <div key={file.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '0.85rem 1rem', backgroundColor: 'var(--surface-deep)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
                   <FileText size={18} color="var(--primary)" />
                   <div style={{ minWidth: 0 }}>

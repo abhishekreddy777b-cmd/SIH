@@ -38,7 +38,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const COLORS = ['#3b82f6', '#06b6d4', '#10b981', '#f59e0b', '#8b5cf6'];
+  const COLORS = ['#70401f', '#96613b', '#5f7956', '#a56d2e', '#8b6245'];
 
   if (loading || !metrics) {
     return <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--text-muted)' }}>Loading MoES Executive Analytics...</div>;
@@ -145,8 +145,8 @@ export default function AdminDashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
                 <XAxis dataKey="name" stroke="#9ca3af" tick={{ fontSize: 11 }} />
                 <YAxis stroke="#9ca3af" />
-                <Tooltip contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px' }} />
-                <Bar dataKey="trainees" fill="#3b82f6" radius={[6, 6, 0, 0]} />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--surface-deep)', borderColor: 'var(--border-highlight)', borderRadius: '8px' }} />
+                <Bar dataKey="trainees" fill="#70401f" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -165,7 +165,7 @@ export default function AdminDashboard() {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '8px' }} />
+                <Tooltip contentStyle={{ backgroundColor: 'var(--surface-deep)', borderColor: 'var(--border-highlight)', borderRadius: '8px' }} />
                 <Legend formatter={(value) => <span style={{ color: '#9ca3af', fontSize: '12px' }}>{value}</span>} />
               </PieChart>
             </ResponsiveContainer>

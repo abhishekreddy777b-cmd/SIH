@@ -114,7 +114,7 @@ export default function TakeAssessmentPage() {
                   ? 'Not answered'
                   : answer.options?.[answer.selected_answer] ?? answer.selected_answer;
                 return (
-                  <div key={answer.question_id} style={{ padding: '0.85rem', border: `1px solid ${answer.is_correct ? 'var(--success)' : 'var(--danger)'}`, borderRadius: 'var(--radius-md)', backgroundColor: '#0f172a' }}>
+                  <div key={answer.question_id} style={{ padding: '0.85rem', border: `1px solid ${answer.is_correct ? 'var(--success)' : 'var(--danger)'}`, borderRadius: 'var(--radius-md)', backgroundColor: 'var(--surface-deep)' }}>
                     <div style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.5rem' }}>{index + 1}. {answer.question_text}</div>
                     <div style={{ fontSize: '0.78rem', color: answer.is_correct ? 'var(--success)' : 'var(--danger)' }}>Your answer: {selected}</div>
                     {!answer.is_correct && <div style={{ fontSize: '0.78rem', color: 'var(--success)', marginTop: '0.25rem' }}>Correct answer: {answer.correct_answer}</div>}
@@ -124,7 +124,7 @@ export default function TakeAssessmentPage() {
             </div>
           </div>
 
-          <div style={{ backgroundColor: '#0f172a', borderRadius: 'var(--radius-md)', padding: '1rem', marginBottom: '2rem', textAlign: 'left', border: '1px solid var(--border-color)' }}>
+          <div style={{ backgroundColor: 'var(--surface-deep)', borderRadius: 'var(--radius-md)', padding: '1rem', marginBottom: '2rem', textAlign: 'left', border: '1px solid var(--border-color)' }}>
             <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--secondary)', marginBottom: '0.35rem' }}>
               ⚡ Dynamic Competency Engine Status:
             </h4>
@@ -164,7 +164,7 @@ export default function TakeAssessmentPage() {
           display: 'flex',
           alignItems: 'center',
           gap: '0.5rem',
-          backgroundColor: '#0f172a',
+          backgroundColor: 'var(--surface-deep)',
           padding: '0.5rem 1rem',
           borderRadius: 'var(--radius-md)',
           border: '1px solid var(--border-color)',
@@ -212,7 +212,7 @@ export default function TakeAssessmentPage() {
                     style={{
                       padding: '0.75rem 1rem',
                       borderRadius: 'var(--radius-md)',
-                      backgroundColor: isSelected ? 'var(--primary-light)' : '#0f172a',
+                      backgroundColor: isSelected ? 'var(--primary-light)' : 'var(--surface-deep)',
                       border: `1px solid ${isSelected ? 'var(--primary)' : 'var(--border-color)'}`,
                       color: isSelected ? '#fff' : 'var(--text-muted)',
                       cursor: 'pointer',

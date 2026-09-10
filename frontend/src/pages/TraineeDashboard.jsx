@@ -122,28 +122,28 @@ export default function ScientistDashboard() {
           title="Competency Index"
           value={`${avgCompetencyScore}%`}
           subtitle="Current average score"
-          color="#0066cc"
+          color="var(--primary)"
         />
         <StatCard
           icon={AlertTriangle}
           title="Active Gaps"
           value={activeGapsCount}
           subtitle="Below benchmark threshold"
-          color={activeGapsCount > 0 ? "#ff9900" : "#00b386"}
+          color={activeGapsCount > 0 ? 'var(--warning)' : 'var(--success)'}
         />
         <StatCard
           icon={BookMarked}
           title="Enrolled Courses"
           value={enrollments.length}
           subtitle="Active learning tracks"
-          color="#00a8cc"
+          color="var(--secondary)"
         />
         <StatCard
           icon={Clock}
           title="Training Hours"
           value={`${user?.learning_hours || 18.5}h`}
           subtitle="Logged engagement"
-          color="#0099ff"
+          color="var(--accent)"
         />
       </div>
 
@@ -291,7 +291,7 @@ export default function ScientistDashboard() {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
                 {liveClasses.slice(0, 2).map(lc => (
-                  <div key={lc.id} style={{ padding: '0.875rem', borderRadius: 'var(--radius-md)', backgroundColor: '#0f172a', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div key={lc.id} style={{ padding: '0.875rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--surface-deep)', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: lc.status === 'live' ? 'var(--danger)' : 'var(--success)' }} className={lc.status === 'live' ? 'pulse-glow' : ''}></span>

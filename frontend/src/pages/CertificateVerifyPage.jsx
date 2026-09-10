@@ -75,7 +75,7 @@ export default function CertificateVerifyPage() {
             This certifies that the recipient successfully fulfilled all curriculum & assessment requirements.
           </p>
 
-          <div style={{ backgroundColor: '#0f172a', borderRadius: 'var(--radius-lg)', padding: '1.5rem', border: '1px solid var(--border-color)', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '0.875rem', marginBottom: '1.5rem' }}>
+          <div style={{ backgroundColor: 'var(--surface-deep)', borderRadius: 'var(--radius-lg)', padding: '1.5rem', border: '1px solid var(--border-color)', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '0.875rem', marginBottom: '1.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
               <span style={{ color: 'var(--text-muted)', fontSize: '0.8125rem' }}>Recipient Name:</span>
               <strong style={{ color: 'var(--text-main)' }}>{certData.recipient_name}</strong>

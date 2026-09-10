@@ -48,16 +48,16 @@ export const ToastProvider = ({ children }) => {
             borderRadius: '10px',
             background: t.type === 'success' ? '#064e3b' : t.type === 'error' ? '#7f1d1d' : t.type === 'warning' ? '#78350f' : '#1e3a8a',
             color: '#ffffff',
-            border: `1px solid ${t.type === 'success' ? '#10b981' : t.type === 'error' ? '#ef4444' : t.type === 'warning' ? '#f59e0b' : '#3b82f6'}`,
+            border: `1px solid ${t.type === 'success' ? 'var(--success)' : t.type === 'error' ? 'var(--danger)' : t.type === 'warning' ? 'var(--warning)' : 'var(--primary)'}`,
             boxShadow: '0 10px 15px -3px rgba(0,0,0,0.5)',
             fontSize: '0.875rem',
             fontWeight: 500,
             animation: 'fadeIn 0.2s ease-out'
           }}>
-            {t.type === 'success' && <CheckCircle size={18} color="#10b981" />}
+            {t.type === 'success' && <CheckCircle size={18} color="var(--success)" />}
             {t.type === 'error' && <AlertCircle size={18} color="#ef4444" />}
             {t.type === 'warning' && <AlertCircle size={18} color="#f59e0b" />}
-            {t.type === 'info' && <Info size={18} color="#3b82f6" />}
+            {t.type === 'info' && <Info size={18} color="var(--primary)" />}
             <span style={{ flex: 1 }}>{t.message}</span>
             <X size={16} style={{ cursor: 'pointer', opacity: 0.7 }} onClick={() => removeToast(t.id)} />
           </div>

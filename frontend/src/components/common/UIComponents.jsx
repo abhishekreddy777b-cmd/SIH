@@ -21,14 +21,14 @@ export function ProgressBar({ progress = 0, height = '8px', showPercent = false,
       <div style={{
         width: '100%',
         height,
-        backgroundColor: '#1f2937',
+        backgroundColor: 'var(--bg-card-hover)',
         borderRadius: '999px',
         overflow: 'hidden'
       }}>
         <div style={{
           width: `${clamped}%`,
           height: '100%',
-          background: color || 'linear-gradient(90deg, #3b82f6, #06b6d4)',
+          background: color || 'linear-gradient(90deg, var(--primary), var(--secondary))',
           borderRadius: '999px',
           transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
         }} />
@@ -37,13 +37,13 @@ export function ProgressBar({ progress = 0, height = '8px', showPercent = false,
   );
 }
 
-export function StatCard({ icon: Icon, title, value, subtitle, trend, color = '#3b82f6' }) {
+export function StatCard({ icon: Icon, title, value, subtitle, trend, color = 'var(--primary)' }) {
   return (
     <div className="velora-card">
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div>
           <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)' }}>{title}</span>
-          <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff', margin: '0.25rem 0' }}>{value}</h3>
+          <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', margin: '0.25rem 0' }}>{value}</h3>
           {subtitle && <p style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>{subtitle}</p>}
         </div>
         {Icon && (
@@ -63,7 +63,7 @@ export function StatCard({ icon: Icon, title, value, subtitle, trend, color = '#
         )}
       </div>
       {trend && (
-        <div style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)', fontSize: '0.75rem', color: trend.positive ? '#34d399' : '#f87171' }}>
+        <div style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)', fontSize: '0.75rem', color: trend.positive ? 'var(--success)' : 'var(--danger)' }}>
           {trend.text}
         </div>
       )}

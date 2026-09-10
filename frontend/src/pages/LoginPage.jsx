@@ -39,7 +39,7 @@ export default function LoginPage() {
             width: '48px',
             height: '48px',
             borderRadius: '12px',
-            background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
+            background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -55,7 +55,7 @@ export default function LoginPage() {
 
         {/* DEMO JUDGE QUICK SWITCHER */}
         <div style={{
-          backgroundColor: '#0f172a',
+          backgroundColor: 'var(--surface-deep)',
           borderRadius: 'var(--radius-md)',
           padding: '0.875rem',
           marginBottom: '1.5rem',
@@ -70,14 +70,14 @@ export default function LoginPage() {
               className="btn btn-sm btn-secondary"
               style={{ justifyContent: 'flex-start' }}
             >
-              <GraduationCap size={14} color="#60a5fa" /> Trainee (Arjun Sharma)
+              <GraduationCap size={14} color="var(--primary)" /> Trainee (Arjun Sharma)
             </button>
             <button
               onClick={async () => { await switchDemoAccount('trainer'); navigate('/trainer'); }}
               className="btn btn-sm btn-secondary"
               style={{ justifyContent: 'flex-start' }}
             >
-              <BookOpen size={14} color="#34d399" /> Trainer (Dr. Rahul Mehta)
+              <BookOpen size={14} color="var(--success)" /> Trainer (Dr. Rahul Mehta)
             </button>
             <button
               onClick={async () => { await switchDemoAccount('admin'); navigate('/admin'); }}
